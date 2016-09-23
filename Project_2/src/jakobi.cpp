@@ -7,7 +7,7 @@
 using namespace std;
 
 void show_matrix (int, double**);
-double max_offdiag(int, double**);
+void max_offdiag(int, double**, int &, int &);
 
 int main(int argc, char* argv[]){
 	int N = atof(argv[1]);
@@ -22,9 +22,10 @@ int main(int argc, char* argv[]){
 	}
 	A[2][2]=10000;
 	A[1][4]=-28.0;
-	double max_element = max_offdiag(N, A);
+	int max_i, max_j;
+	max_offdiag(N, A, max_i, max_j);
 	show_matrix(N, A);
-	cout << "Max element is " << max_element << endl;
+	cout << "Max element is " << max_i << "  " << max_j << endl;
 	for (int i=0;i<N;i++){
 		delete A[i];
 	}
@@ -42,16 +43,17 @@ void show_matrix (int n, double ** matrix){
 }
 
 /* Returns maximal offdiagonal element */
-double max_offdiag(int n, double ** matrix){
+void max_offdiag(int n, double ** matrix, int& max_i, int& max_j){
 	double max = 0.0;
 	for (int i=0;i<n;i++){
 		for (int j=0;j<n;j++){
 			if (abs(i-j)>=1){
 				if (abs(matrix[i][j]) >= max ){
 				max = abs(matrix[i][j]);
+				max_i=i;
+				max_j=j;
 				}
 			}
 		}
 	}
-	return max;
 }
