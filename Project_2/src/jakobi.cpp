@@ -20,6 +20,10 @@ int main(int argc, char* argv[]){
 		}
 	}
 	show_matrix(N, B);
+	for (int i=0;i<N;i++){
+		delete B[i];
+	}
+	delete[] B;
 }
 
 void show_matrix (int n, double ** matrix){
