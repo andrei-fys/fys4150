@@ -7,7 +7,7 @@
 using namespace std;
 
 void show_matrix (int, double**);
-void max_offdiag(int, double**, int &, int &);
+double max_offdiag(int, double**, int &, int &);
 void Jacobi_goes_round(int, double **, int, int);
 
 int main(int argc, char* argv[]){
@@ -62,7 +62,7 @@ void show_matrix (int n, double ** matrix){
 }
 
 /* Returns maximal offdiagonal element */
-void max_offdiag(int n, double ** matrix, int& max_i, int& max_j){
+double max_offdiag(int n, double ** matrix, int& max_i, int& max_j){
 	double max = 0.0;
 	for (int i=0;i<n;i++){
 		for (int j=0;j<n;j++){
@@ -75,6 +75,7 @@ void max_offdiag(int n, double ** matrix, int& max_i, int& max_j){
 			}
 		}
 	}
+	return max;
 }
 
 void Jacobi_goes_round(int n, double** a, int k, int l){
