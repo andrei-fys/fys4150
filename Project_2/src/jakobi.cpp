@@ -10,8 +10,24 @@ void show_matrix (int, double**);
 void max_offdiag(int, double**, int &, int &);
 
 int main(int argc, char* argv[]){
+	// first arg is number of G.P.; second - ro_max
 	int N = atof(argv[1]);
 	double ** A = new double*[N];
+	double ro_null = 0.0;
+	double ro_max = atof(argv[2]);
+	double fake_zero = 1e-7;
+	double h = (ro_max - ro_null)/(N - 1);
+	double h_1 = 1.0/(h*h);
+	double h_2 = 2.0/(h*h);
+	//Dirichlet bound. cond.
+	double * ro = new double[N];
+	ro[0] = 0.0;
+	ro[N-1] = 0.0;
+	for (int i=1; i<=N-2; i++) {
+		ro[i] = ro[i-1] + i*h;
+	}
+
+
 	for (int i=0;i<N;i++){
 		A[i] = new double[N];
 	}
