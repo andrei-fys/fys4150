@@ -23,7 +23,6 @@ int main(int argc, char* argv[]){
 	double h = (ro_max - ro_null)/(N);
 	double h_1 = 1.0/(h*h);
 	double h_2 = 2.0/(h*h);
-	//Dirichlet bound. cond.
 	double * ro = new double[N];
 	for (int i=0; i<=N-1; i++) {
 		ro[i] = ro_null + i*h;
@@ -38,13 +37,21 @@ int main(int argc, char* argv[]){
 			if (abs(i - j) == 1) A[i][j] = -h_1;
 		}
 	}
-	//A[3][4]=-2000.0;
 	int max_i, max_j;
-	max_offdiag(N, A, max_i, max_j);
+	double max;
+	int counter = 0;
+	max = max_offdiag(N, A, max_i, max_j);
 	show_matrix(N, A);
+	cout << "Max " << max << endl;
+	cout << "ZERO "<< fake_zero << endl;
+	while ( max > fake_zero) {
+	max = max_offdiag(N, A, max_i, max_j);
 	Jacobi_goes_round(N, A, max_i, max_j);
+	max = max_offdiag(N, A, max_i, max_j);
+	counter++;
+	}
 	show_matrix(N, A);
-	cout << "Max element is " << max_i << "  " << max_j << endl;
+	cout << "Counter is " << counter << endl;
 	for (int i=0;i<N;i++){
 		delete A[i];
 	}
