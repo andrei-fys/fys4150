@@ -26,7 +26,12 @@ int main(int argc, char* argv[]){
 	for (int i=1; i<=N-2; i++) {
 		ro[i] = ro[i-1] + i*h;
 	}
-
+	double * V = new double[N];
+	V[0] = 0.0;
+	V[N-1] = 0.0;
+	for (int i=1; i<=N-2; i++) {
+		V[i] = ro[i]*ro[i];
+	}
 
 	for (int i=0;i<N;i++){
 		A[i] = new double[N];
