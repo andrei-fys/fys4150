@@ -7,6 +7,7 @@
 using namespace std;
 
 void show_matrix (int, double**);
+void show_matrix_diag (int, double**);
 double max_offdiag(int, double**, int &, int &);
 void Jacobi_goes_round(int, double **, int, int);
 
@@ -19,7 +20,7 @@ int main(int argc, char* argv[]){
 	}
 	double ro_null = 0.0;
 	double ro_max = atof(argv[2]);
-	double fake_zero = 1e-7;
+	double fake_zero = 1e-8;
 	double h = (ro_max - ro_null)/(N);
 	double h_1 = 1.0/(h*h);
 	double h_2 = 2.0/(h*h);
@@ -41,21 +42,19 @@ int main(int argc, char* argv[]){
 	double max;
 	int counter = 0;
 	max = max_offdiag(N, A, max_i, max_j);
-	show_matrix(N, A);
-	cout << "Max " << max << endl;
-	cout << "ZERO "<< fake_zero << endl;
-	while ( max > fake_zero) {
+	while ( max > fake_zero && (double) counter < max_iter)  {
 	max = max_offdiag(N, A, max_i, max_j);
 	Jacobi_goes_round(N, A, max_i, max_j);
-	max = max_offdiag(N, A, max_i, max_j);
 	counter++;
 	}
-	show_matrix(N, A);
+	show_matrix_diag(N, A);
 	cout << "Counter is " << counter << endl;
 	for (int i=0;i<N;i++){
 		delete A[i];
 	}
 	delete[] A;
+	delete[] ro;
+	delete[] V;
 }
 
 /* Just prints matrix */
@@ -66,6 +65,31 @@ void show_matrix (int n, double ** matrix){
 		}
 	cout << endl;
 	}
+}
+
+void show_matrix_diag (int n, double ** matrix){
+	double * diag = new double[n];
+	for (int i=0;i<n;i++){
+		for (int j=0;j<n;j++){
+			if (i == j){
+				diag[i] = matrix[i][j];
+			}
+		}
+	}
+	double a;
+	for (int i=0;i<n;i++){
+		for (int j=1;j<n;j++){
+			if (diag[i] > diag[j]){
+			a=diag[i];
+			diag[i]=diag[j];
+			diag[j]=a;
+			}
+		}
+	}
+	for (int i=0;i<n;i++){
+		cout << diag[i]<< " " << endl;
+	}
+	delete[] diag;
 }
 
 /* Returns maximal offdiagonal element */
@@ -88,12 +112,12 @@ double max_offdiag(int n, double ** matrix, int& max_i, int& max_j){
 void Jacobi_goes_round(int n, double** a, int k, int l){
 	double tau = (a[l][l]-a[k][k])/(2.0*a[k][l]);
 	double t;
-	if (tau < 0){
-		t = -tau - sqrt(1 + tau*tau);
+	if (tau >= 0){
+		t = 1.0/(tau + sqrt(1.0 + tau*tau));
 	} else {
-		t = -tau + sqrt(1 + tau*tau);
+		t = -1.0/(-tau + sqrt(1.0 + tau*tau));
 	}
-	double c = 1/(sqrt(1 + t*t));
+	double c = 1.0/(sqrt(1.0 + t*t));
 	double s = c*t;
 	double ** b = new double*[n];
 	for (int i=0;i<n;i++){
@@ -104,19 +128,18 @@ void Jacobi_goes_round(int n, double** a, int k, int l){
 			b[i][j]=a[i][j];
 		}
 	}
+	b[k][k]=a[k][k]*c*c - 2.0*a[k][l]*c*s + a[l][l]*s*s;
+	b[l][l]=a[l][l]*c*c + 2.0*a[k][l]*c*s + a[k][k]*s*s;
+	b[l][k]=b[k][l]=0.0;
 	for (int i = 0; i <= n-1; i++) {
-		for (int j = 0; j <= n-1; j++){
-			b[k][k]=a[k][k]*c*c - 2*a[k][l]*c*s + a[l][l]*s*s;
-			b[l][l]=a[l][l]*c*c + 2*a[k][l]*c*s + a[k][k]*s*s;
-			//b[k][l]=(a[k][k] - a[l][l])*c*s + a[k][l]*(c*c - s*s);
-			b[l][k]=b[k][l]=0.0;
-			if (i != k && i != l ) {
-			b[i][i]=a[i][i];
-			b[i][k]=a[i][k]*c - a[i][l]*s;
-			b[i][l]=a[i][l]*c + a[i][k]*s;
-			}
+		if ( i != k && i != l ) {
+		b[i][i]=a[i][i];
+		b[i][k]=a[i][k]*c - a[i][l]*s;
+		b[i][l]=a[i][l]*c + a[i][k]*s;
+		b[k][i]=b[i][k];
+		b[l][i]=b[i][l];
 		}
-	}	
+	}
 	for (int i = 0; i <= n-1; i++) {
 		for (int j = 0; j <= n-1; j++){
 			a[i][j]=b[i][j];
@@ -126,5 +149,4 @@ void Jacobi_goes_round(int n, double** a, int k, int l){
 		delete b[i];
 	}
 	delete[] b;
-
 }
