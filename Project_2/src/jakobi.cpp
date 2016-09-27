@@ -42,7 +42,7 @@ int main(int argc, char* argv[]){
 	double max;
 	int counter = 0;
 	max = max_offdiag(N, A, max_i, max_j);
-	while ( max > fake_zero && (double) counter < max_iter)  {
+	while ( max > fake_zero )  {
 	max = max_offdiag(N, A, max_i, max_j);
 	Jacobi_goes_round(N, A, max_i, max_j);
 	counter++;
@@ -77,8 +77,8 @@ void show_matrix_diag (int n, double ** matrix){
 		}
 	}
 	double a;
-	for (int i=0;i<n;i++){
-		for (int j=1;j<n;j++){
+	for (int i=1;i<n;i++){
+		for (int j=0;j<n;j++){
 			if (diag[i] > diag[j]){
 			a=diag[i];
 			diag[i]=diag[j];
