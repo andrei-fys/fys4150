@@ -10,6 +10,7 @@ void show_matrix (int, double**);
 void show_matrix_diag (int, double**);
 double max_offdiag(int, double**, int &, int &);
 void Jacobi_goes_round(int, double**, double**, int, int);
+void show_eigen (int , double**, double*);
 
 int main(int argc, char* argv[]){
 	// first arg is number of G.P.; second - ro_max
@@ -55,6 +56,7 @@ int main(int argc, char* argv[]){
 	counter++;
 	}
 	show_matrix_diag(N, A);
+	show_eigen (N, U, ro);
 	cout << "Counter is " << counter << endl;
 	for (int i=0;i<N;i++){
 		delete A[i];
@@ -72,6 +74,12 @@ void show_matrix (int n, double ** matrix){
 		}
 	cout << endl;
 	}
+}
+
+void show_eigen (int n, double ** matrix, double * grid){
+	for (int i=0;i<n;i++){
+		cout << grid[i] << "," << matrix[i][0] << endl ;
+		}
 }
 
 void show_matrix_diag (int n, double ** matrix){
