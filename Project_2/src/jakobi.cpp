@@ -18,6 +18,10 @@ int main(int argc, char* argv[]){
 	for (int i=0;i<N;i++){
 		A[i] = new double[N];
 	}
+	double ** U = new double*[N];
+	for (int i=0;i<N;i++){
+		U[i] = new double[N];
+	}
 	double ro_null = 0.0;
 	double ro_max = atof(argv[2]);
 	double fake_zero = 1e-8;
@@ -34,7 +38,10 @@ int main(int argc, char* argv[]){
 	}
 	for (int i = 0; i <= N-1; i++) {
 		for (int j = 0; j <= N-1; j++){
-			if (i == j) A[i][j] = h_2 + V[i];
+			if (i == j) {
+				A[i][j] = h_2 + V[i];
+				U[i][j] = 1.0;
+			}
 			if (abs(i - j) == 1) A[i][j] = -h_1;
 		}
 	}
