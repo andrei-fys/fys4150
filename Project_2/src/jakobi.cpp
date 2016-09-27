@@ -9,7 +9,7 @@ using namespace std;
 void show_matrix (int, double**);
 void show_matrix_diag (int, double**);
 double max_offdiag(int, double**, int &, int &);
-void Jacobi_goes_round(int, double **, int, int);
+void Jacobi_goes_round(int, double**, double**, int, int);
 
 int main(int argc, char* argv[]){
 	// first arg is number of G.P.; second - ro_max
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]){
 	max = max_offdiag(N, A, max_i, max_j);
 	while ( max > fake_zero )  {
 	max = max_offdiag(N, A, max_i, max_j);
-	Jacobi_goes_round(N, A, max_i, max_j);
+	Jacobi_goes_round(N, A, U, max_i, max_j);
 	counter++;
 	}
 	show_matrix_diag(N, A);
@@ -116,7 +116,7 @@ double max_offdiag(int n, double ** matrix, int& max_i, int& max_j){
 	return max;
 }
 
-void Jacobi_goes_round(int n, double** a, int k, int l){
+void Jacobi_goes_round(int n, double** a, double** u, int k, int l){
 	double tau = (a[l][l]-a[k][k])/(2.0*a[k][l]);
 	double t;
 	if (tau >= 0){
@@ -138,6 +138,7 @@ void Jacobi_goes_round(int n, double** a, int k, int l){
 	b[k][k]=a[k][k]*c*c - 2.0*a[k][l]*c*s + a[l][l]*s*s;
 	b[l][l]=a[l][l]*c*c + 2.0*a[k][l]*c*s + a[k][k]*s*s;
 	b[l][k]=b[k][l]=0.0;
+	double u_ik, u_il;
 	for (int i = 0; i <= n-1; i++) {
 		if ( i != k && i != l ) {
 		b[i][i]=a[i][i];
@@ -146,6 +147,10 @@ void Jacobi_goes_round(int n, double** a, int k, int l){
 		b[k][i]=b[i][k];
 		b[l][i]=b[i][l];
 		}
+	u_ik=u[i][k];
+	u_il=u[i][l];
+	u[i][k]=u_ik*c - u_il*s;
+	u[i][l]=u_il*c + u_ik*s;
 	}
 	for (int i = 0; i <= n-1; i++) {
 		for (int j = 0; j <= n-1; j++){
