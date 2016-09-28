@@ -10,8 +10,7 @@ void show_matrix (int, double**);
 void show_matrix_diag (int, double**);
 double max_offdiag(int, double**, int &, int &);
 void Jacobi_goes_round(int, double**, double**, int, int);
-void show_eigen (int , double**, double*);
-void three_lowest_elements_index(int, double **);
+void three_lowest_eigenstates(int, double**, double**, double*);
 
 int main(int argc, char* argv[]){
 	// first arg is number of G.P.; second - ro_max
@@ -56,8 +55,8 @@ int main(int argc, char* argv[]){
 	Jacobi_goes_round(N, A, U, max_i, max_j);
 	counter++;
 	}
-	show_matrix_diag(N, A);
-	three_lowest_elements_index(N,A);
+	//show_matrix_diag(N, A);
+	three_lowest_eigenstates(N, A, U, ro);
 	//show_eigen (N, U, ro);
 	cout << "Counter is " << counter << endl;
 	for (int i=0;i<N;i++){
@@ -78,24 +77,14 @@ void show_matrix (int n, double ** matrix){
 	}
 }
 
-void three_lowest_elements_index(int n, double ** matrix){
-//	int index = 0;
-//	for (int i=1;i<n;i++){
-//		for (int j=1;j<n;j++){
-//			if (i == j){
-//				if (matrix[i][j] < matrix[index][inxed]){
-//					index = i;
-//				}
-//			}
-//		}
-//	}
+void three_lowest_eigenstates(int n, double ** matrix, double ** e_matrix, double * grid){
 	double * diag = new double[n];
-	double * diag_not_sorted = new double[n];
+	//double * diag_not_sorted = new double[n];
 	for (int i=0;i<n;i++){
 		for (int j=0;j<n;j++){
 			if (i == j){
 				diag[i] = matrix[i][j];
-				diag_not_sorted[i] = diag[i];
+				//diag_not_sorted[i] = diag[i];
 			}
 		}
 	}
@@ -109,15 +98,17 @@ void three_lowest_elements_index(int n, double ** matrix){
 		}
 	diag[index]=diag[index]*1000.0;
 	three_first[k]=index;
-	cout << three_first[k] << endl;
+	//cout << three_first[k] << endl;
+	}
+	for (int k=0;k<3;k++){
+		int d=three_first[k];
+		for (int i=0;i<n;i++){
+			cout << grid[i] << "," << e_matrix[i][d] << endl ;
+		}
+		cout << "---------------------------------------------" << endl;
 	}
 }
 
-void show_eigen (int n, double ** matrix, double * grid){
-	for (int i=0;i<n;i++){
-		cout << grid[i] << "," << matrix[i][2] << endl ;
-		}
-}
 
 void show_matrix_diag (int n, double ** matrix){
 	double * diag = new double[n];
@@ -128,16 +119,16 @@ void show_matrix_diag (int n, double ** matrix){
 			}
 		}
 	}
-//	double a;
-//	for (int i=1;i<n;i++){
-//		for (int j=0;j<n;j++){
-//			if (diag[i] > diag[j]){
-//			a=diag[i];
-//			diag[i]=diag[j];
-//			diag[j]=a;
-//			}
-//		}
-//	}
+	double a;
+	for (int i=1;i<n;i++){
+		for (int j=0;j<n;j++){
+			if (diag[i] > diag[j]){
+			a=diag[i];
+			diag[i]=diag[j];
+			diag[j]=a;
+			}
+		}
+	}
 	for (int i=0;i<n;i++){
 		cout << diag[i]<< " " << endl;
 	}
