@@ -11,6 +11,7 @@ void show_matrix_diag (int, double**);
 double max_offdiag(int, double**, int &, int &);
 void Jacobi_goes_round(int, double**, double**, int, int);
 void show_eigen (int , double**, double*);
+void three_lowest_elements_index(int, double **);
 
 int main(int argc, char* argv[]){
 	// first arg is number of G.P.; second - ro_max
@@ -56,7 +57,8 @@ int main(int argc, char* argv[]){
 	counter++;
 	}
 	show_matrix_diag(N, A);
-	show_eigen (N, U, ro);
+	three_lowest_elements_index(N,A);
+	//show_eigen (N, U, ro);
 	cout << "Counter is " << counter << endl;
 	for (int i=0;i<N;i++){
 		delete A[i];
@@ -76,9 +78,44 @@ void show_matrix (int n, double ** matrix){
 	}
 }
 
+void three_lowest_elements_index(int n, double ** matrix){
+//	int index = 0;
+//	for (int i=1;i<n;i++){
+//		for (int j=1;j<n;j++){
+//			if (i == j){
+//				if (matrix[i][j] < matrix[index][inxed]){
+//					index = i;
+//				}
+//			}
+//		}
+//	}
+	double * diag = new double[n];
+	double * diag_not_sorted = new double[n];
+	for (int i=0;i<n;i++){
+		for (int j=0;j<n;j++){
+			if (i == j){
+				diag[i] = matrix[i][j];
+				diag_not_sorted[i] = diag[i];
+			}
+		}
+	}
+	int three_first[3];
+	for (int k=0;k<3;k++){
+		int index = 0;
+		for (int i=1;i<n;i++){
+			if (diag[i] < diag[index]){
+			index=i;
+			}
+		}
+	diag[index]=diag[index]*1000.0;
+	three_first[k]=index;
+	cout << three_first[k] << endl;
+	}
+}
+
 void show_eigen (int n, double ** matrix, double * grid){
 	for (int i=0;i<n;i++){
-		cout << grid[i] << "," << matrix[i][0] << endl ;
+		cout << grid[i] << "," << matrix[i][2] << endl ;
 		}
 }
 
@@ -91,16 +128,16 @@ void show_matrix_diag (int n, double ** matrix){
 			}
 		}
 	}
-	double a;
-	for (int i=1;i<n;i++){
-		for (int j=0;j<n;j++){
-			if (diag[i] > diag[j]){
-			a=diag[i];
-			diag[i]=diag[j];
-			diag[j]=a;
-			}
-		}
-	}
+//	double a;
+//	for (int i=1;i<n;i++){
+//		for (int j=0;j<n;j++){
+//			if (diag[i] > diag[j]){
+//			a=diag[i];
+//			diag[i]=diag[j];
+//			diag[j]=a;
+//			}
+//		}
+//	}
 	for (int i=0;i<n;i++){
 		cout << diag[i]<< " " << endl;
 	}
