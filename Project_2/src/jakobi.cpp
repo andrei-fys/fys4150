@@ -61,7 +61,9 @@ int main(int argc, char* argv[]){
 	cout << "Counter is " << counter << endl;
 	for (int i=0;i<N;i++){
 		delete A[i];
+		delete U[i];
 	}
+	delete[] U;
 	delete[] A;
 	delete[] ro;
 	delete[] V;
@@ -107,6 +109,7 @@ void three_lowest_eigenstates(int n, double ** matrix, double ** e_matrix, doubl
 		}
 		cout << "---------------------------------------------" << endl;
 	}
+	delete[] diag;
 }
 
 
