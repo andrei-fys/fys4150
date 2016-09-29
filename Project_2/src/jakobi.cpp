@@ -106,6 +106,7 @@ void three_lowest_eigenstates(int n, double ** matrix, double ** e_matrix, doubl
 		ofstream ofile;
 		ofile.open("one_electron"+(char)k);
 		int d=three_first[k];
+		cout << "Egenvalue "<< matrix[d][d] << endl;
 		for (int i=0;i<n;i++){
 			ofile << grid[i] << "," << e_matrix[i][d]*e_matrix[i][d] << endl ;
 		}
