@@ -151,27 +151,28 @@ or if we wish to be more detailed, we can write the tridiagonal matrix $%
 \]
 
 The boundary conditions in this case are for $i=n_{\mathrm{step}}$ and for $%
-i=0$. The solution is zero in both cases.
+i=0$. The solution is zero in both cases.\\*
+Below we present the Jacobi algorithm for the eigenvalue problem. This algorithm is easy to implement and program. the reciepe is presented below:
+\\*
+Baby-steps for Jacobi algorithm:
 
-We solve the eigenvalue equation (8) using the Jacobi rotation
-algorithm. In order to implement this algorithm we make following
-steps:
+\begin{enumerate}
+\item One should choose a parameter $\varepsilon $ in order to define tolerance. The parameter should be as close to zero as possible, as soon as we cannot get exact zero value.
 
-1) Choose a small parameter $\varepsilon $ which will define tolerance, as
-soon as we cannot get exactly zero value. 
-
-2) Find the largest non-diagonal matrix element $\left\vert
+\item After this one should find the largest non-diagonal matrix element $\left\vert
 a_{kl}\right\vert =\max\nolimits_{i\neq j}\left\vert a_{ij}\right\vert $and
-compare it to $\varepsilon $.  In our case all matrix elements are equal in
-the beginning, so we can just choose any of them.
+compare it to $\varepsilon $. The program should run until $\varepsilon $ is smaller then any of the off-diagonal elements.
 
-3) We compute all the elements of plane rotation matrix, such as $%
+\item As soon as our element is larger then epsilon we need to perform a so-called rotation of the matrix. In order to do this we first define the angle of rotation and construct the rotation matrix (Jacobi matrix). The angle $\theta $ of rotation should be chosen so the largest off-diagonal element become zero.
+We did not compute exactly $\theta $, but use $%
 \tan \theta =t=s/c$, with $s=\sin \theta $ and $c=\cos \theta $ and $\cot
-2\theta =\tau $. In our case $\tau $ can be defined as follows:
+2\theta =\tau $. 
+In our case $\tau $ can be defined as follows:
 
 \begin{equation}
 \tau =\frac{a_{ll}-a_{kk}}{2a_{kl}}
 \end{equation}%
+
 We define the angle $\theta $ so that the non-diagonal matrix
 elements of the transformed matrix $a_{kl}$ become non-zero and we obtain
 the quadratic equation (using $\cot 2\theta =1/2(\cot \theta -\tan \theta )$
@@ -192,7 +193,8 @@ c=\frac{1}{\sqrt{1+t^{2}}}
 \end{equation}
 and $s=tc$. 
 
-4)After we get $s$ and $c$ we need to calculate new matrix elements
+\item 
+After we get $s$ and $c$ we need to calculate new matrix elements
 
 
 
@@ -205,14 +207,14 @@ and $s=tc$.
 \acute{a}_{li} &=&\acute{a}_{il}
 \end{eqnarray}
 
-5) We run the algorithm, until $\max \left\vert a_{ij}\right\vert \leq
+\item We run the algorithm, until $\max \left\vert a_{ij}\right\vert \leq
 \varepsilon ,i\neq j.$
 
 
 For this algorithm we have to calculate values that depend on angle $\theta $%
 . As we can see from equation for $\tau$ (9) we need  $|\theta |$ to be $\leq
 \pi /4$. 
-
+\end{enumerate}
 \subsection{Two electron case}
 For the two electron case  we will use the same algorithm, but with some
 sufficient changes. Here we need to consider two cases with and without
