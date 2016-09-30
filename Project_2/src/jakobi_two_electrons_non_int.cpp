@@ -29,13 +29,15 @@ int main(int argc, char* argv[]){
 	double h = (ro_max - ro_null)/(N);
 	double h_1 = 1.0/(h*h);
 	double h_2 = 2.0/(h*h);
+	double omega = atof(argv[3]);
+	double omega_2 = omega*omega;
 	double * ro = new double[N];
 	for (int i=0; i<=N-1; i++) {
 		ro[i] = ro_null + i*h;
 	}
 	double * V = new double[N];
 	for (int i=0; i<=N-1; i++) {
-		V[i] = ro[i]*ro[i];
+		V[i] = ro[i]*ro[i]*omega_2;
 	}
 	for (int i = 0; i <= N-1; i++) {
 		for (int j = 0; j <= N-1; j++){
@@ -104,7 +106,7 @@ void three_lowest_eigenstates(int n, double ** matrix, double ** e_matrix, doubl
 	}
 	for (int k=0;k<3;k++){
 		ofstream ofile;
-		ofile.open("one_electron"+(char)k);
+		ofile.open("two_electrons"+(char)k);
 		int d=three_first[k];
 		cout << matrix[d][d] << endl;
 		for (int i=0;i<n;i++){

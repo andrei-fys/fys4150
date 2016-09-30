@@ -77,4 +77,24 @@ for (( i=0; i < ${#omega[@]}; i++))
       echo "$IFS"
     done
 
-./compare_plot.py results/one_electron_1_200 results/two_electrons_1_0.01 results/two_electrons_1_0.5 results/two_electrons_1_1 results/two_electrons_1_5
+
+
+progname="jakobi_two_electrons_non_int"
+g++ -o $progname $progname.cpp
+for (( i=0; i < ${#omega[@]}; i++))
+    do
+      echo "IFS is $IFS"
+	  ./$progname "$matrix_size" "${ro_max_arr[i]}" "${omega[i]}" > "two_electrons_non_int_${omega[i]}"
+      echo "$IFS"
+	  mv two_electrons_non_int_"${omega[i]}" $results_dir
+	  mv two_electrons "$results_dir"/two_electrons_1_non_int_"${omega[i]}"
+	  mv wo_electrons "$results_dir"/two_electrons_2_non_int_"${omega[i]}"
+	  mv o_electrons "$results_dir"/two_electrons_3_non_int_"${omega[i]}"
+      echo "$IFS"
+    done
+
+
+	./compare_plot.py results/two_electrons_1_non_int_0.01 results/two_electrons_1_0.01 two_nint_001.pdf 
+	./compare_plot.py results/two_electrons_1_non_int_0.5 results/two_electrons_1_0.5 two_nint_05.pdf 
+	./compare_plot.py results/two_electrons_1_non_int_1 results/two_electrons_1_1 two_nint_1.pdf 
+	./compare_plot.py results/two_electrons_1_non_int_5 results/two_electrons_1_5 two_nint_5.pdf 
