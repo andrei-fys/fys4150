@@ -23,15 +23,18 @@ In this work we solve the Schr\"{o}dinger's equation for electrons confined in a
 
 
 \section{Introduction}
-This project is devoted to three-dimensional Schr\"{o}dinger's equation for electrons a harmonic oscillator potential. We solved this equation for one and for two electrons (both with and without Coloumb interaction between particles). We also have considered different strengths of harmonic oscillator for both cases. 
-Particles inside the harmonic oscillator potential is quite common problem in physics. Harmonic oscillator confine particles in small areas in the space and form so-called quantum dots that a widely used in experiments and also in industry (for example for the displays). 
-Our work has the following structure:
+This project is devoted to three-dimensional Schr\"{o}dinger's equation for electrons a harmonic oscillator potential. We solved this equation for one and for two electrons (both with and without Coloumb interaction between particles). We also have considered different strengths of harmonic oscillator for both cases. \\*
+Particles inside the harmonic oscillator potential is quite common problem in physics. Harmonic oscillator confine particles in small areas in the space and form so-called quantum dots that a widely used in experiments and also in industry (for example for the displays). \\*
+In this project we have solved the three-dimensional Schr\"{o}dinger's equation numerically by discretizing it with three point formula. After this the problem becomes the eigenvalue problem for three diagonal matrix that we have solved with Jacobi rotations method for eigenvalues. This method is one of the most straight forward methods for such problem. However as we have seen not the most efficient and quite time consuming. \\*
+Our work has the following structure:\\*
+In the Problem formulation mathematical method \label{Part1} part we discuss the problem and the approximation of the derivatives together with the numerical method algorithm. \\*
+In the Results and Discussion part we   
 
 \newpage
-\section{Problem formulation mathematical method}
+\section{Problem formulation mathematical method}\label{Part1}
 In this project we consider have solved Schr\"{o}dinger's equation for electrons confined in a small area. First we took a one electron case and after this moved to a two-electrons repelling due to Coloubm interaction. 
 
-
+\subsection{One electron case}
 We are first interested in the solution of the radial part of Schr\"{o}dinger's equation for one electron. 
 
 \begin{equation*}
@@ -210,7 +213,7 @@ For this algorithm we have to calculate values that depend on angle $\theta $%
 . As we can see from equation for $\tau$ (9) we need  $|\theta |$ to be $\leq
 \pi /4$. 
 
-
+\subsection{Two electron case}
 For the two electron case  we will use the same algorithm, but with some
 sufficient changes. Here we need to consider two cases with and without
 Coulomb interaction.
