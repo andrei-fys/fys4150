@@ -198,14 +198,14 @@ After we get $s$ and $c$ we need to calculate new matrix elements
 
 
 
-\begin{eqnarray}
+\begin{eqnarray*}
 \acute{a}_{kk} &=&c^{2}a_{kk}-2csa_{kl}+s^{2}a_{ll} \\
 \acute{a}_{ll} &=&s^{2}a_{kk}+2csa_{kl}+c^{2}a_{ll} \\
 \acute{a}_{ik} &=&ca_{ik}-sa_{il} \\
 \acute{a}_{il} &=&ca_{il}+sa_{ik} \\
 \acute{a}_{ki} &=&\acute{a}_{ik} \\
 \acute{a}_{li} &=&\acute{a}_{il}
-\end{eqnarray}
+\end{eqnarray*}
 
 \item We run the algorithm, until $\max \left\vert a_{ij}\right\vert \leq
 \varepsilon ,i\neq j.$
@@ -229,8 +229,7 @@ equation
 	u(r_{1},r_{2})=E^{(2)}u(r_{1},r_{2})
 \end{equation}
 
-%\begin{enumerate}
-	%\item 
+
 	A two-electron wave function $u(r_{1},r_{2})$ for the case with no
 	interaction can be written out as the product of two single-electron wave
 	functions.
@@ -260,10 +259,9 @@ equation
 	
 	and $\beta e^{2}=1.44$ eVnm.
 	
-	We will solve this eigenvalue problem the same way as we did it for one
-	electron case, using the $\omega _{r}^{2}\rho ^{2}+\frac{1}{\rho }$ as a new
-	potential.
-%\end{enumerate}
+We will solve this eigenvalue problem the same way as we did it for one
+electron case. The only difference now is the potential. We used $\omega _{r}^{2}\rho ^{2} $ as a new potential for non-interacting case and  $\omega _{r}^{2}\rho ^{2}+\frac{1}{\rho }$ for interaction case. This lead to some interesting effects we will discuss in the next par of the report.
+
 \newpage
 \section{Results and discussion}
 
