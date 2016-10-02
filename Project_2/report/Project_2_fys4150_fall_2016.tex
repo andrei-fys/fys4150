@@ -7,6 +7,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\usepackage{amsthm}
 
 \begin{document}
 \setlength\parindent{1pt}
@@ -17,7 +18,7 @@ FYS 4150
 
 \maketitle
 \begin{abstract}
-In this work we solve the Schr\"{o}dinger's equation for electrons confined in a small area by applying the Jacobi method for the matrix diagonalization. 
+In this work we have solved the Schr\"{o}dinger's equation for electrons in three dimensional harmonic oscillator well. The solution obtained by approximating the derivatives with three point formula. We have used the Jacobi method for the matrix diagonalization to find eigenvalues and eigenvectors. The results have been obtained for one and two electron cases. For two electrons we have studied both cases with and without interaction. All results found were in agreement with those obtained analytically. The method is rather time consuming, but stable and provide a good numerical precision. 
 \end{abstract}
 \clearpage 
 
@@ -27,11 +28,12 @@ This project is devoted to three-dimensional Schr\"{o}dinger's equation for elec
 Particles inside the harmonic oscillator potential is quite common problem in physics. Harmonic oscillator confine particles in small areas in the space and form so-called quantum dots that a widely used in experiments and also in industry (for example for the displays). \\*
 In this project we have solved the three-dimensional Schr\"{o}dinger's equation numerically by discretizing it with three point formula. After this the problem becomes the eigenvalue problem for three diagonal matrix that we have solved with Jacobi rotations method for eigenvalues. This method is one of the most straight forward methods for such problem. However as we have seen not the most efficient and quite time consuming. \\*
 Our work has the following structure:\\*
-In the Problem formulation mathematical method \label{Part1} part we discuss the problem and the approximation of the derivatives together with the numerical method algorithm. \\*
-In the Results and Discussion part we   
+In the Problem formulation and mathematical method \label{Part1} part we discuss the problem and the approximation of the derivatives together with the numerical method algorithm. \\*
+In the Results and Discussion part we   have presented all the data, discuss the method and the obtained results. \\*
+In Conclusion we made a brief overview of what have been done in the project. 
 
 \newpage
-\section{Problem formulation mathematical method}\label{Part1}
+\section{Problem formulation and mathematical method}\label{Part1}
 In this project we consider have solved Schr\"{o}dinger's equation for electrons confined in a small area. First we took a one electron case and after this moved to a two-electrons repelling due to Coloubm interaction. 
 
 \subsection{One electron case}
@@ -152,7 +154,16 @@ or if we wish to be more detailed, we can write the tridiagonal matrix $%
 
 The boundary conditions in this case are for $i=n_{\mathrm{step}}$ and for $%
 i=0$. The solution is zero in both cases.\\*
-Below we present the Jacobi algorithm for the eigenvalue problem. This algorithm is easy to implement and program. the reciepe is presented below:
+\subsection{Jacobi algorithm for one electron case}
+According to diagonalization theorem :
+
+\begin{theorem}
+If we have a matrix $ A $ of $ n \times n$ dimensions this matrix diagonable if and only if $ A $ has $ n $ linearly independent eigenvectors of $ A $. Suppose $ v_{1} \dots v_{n} $ is a linearly independent set of eigenvectors of $ A $ with corresponding eigenvalues $ \lambda_{1} \dots \lambda_{n} $. Then the matrix $ P = (v_{1} |\dots |v_{n}) $ is invertible so that we have the following equality:
+\begin{equation}
+P^{-1}AP=Diag(\lambda_{1},\dots,\lambda_{n});
+\end{equation}
+\end{theorem}
+In our project we assumed that our matrix is diagonable and used Jacobi diagonalization method to find the corresponding eigenvector and eigenvalues. Below we present the Jacobi algorithm for the eigenvalue problem. 
 \\*
 Baby-steps for Jacobi algorithm:
 
@@ -185,6 +196,12 @@ resulting in
 \begin{equation}
 t=-\tau \pm \sqrt{1+\tau ^{2}}
 \end{equation}
+This equation for $ t $ may lead to some problems when we use it in our program. One can mention that for large $ \tau $ the nominator is close to zero, wich is not good when it come to machine representation of the numbers. We also have to take into account that we want to avoid rotation for more the $ |\frac{\pi}{4}|$. In order to avoid the roundoff errors in the computer and to secure rotation only for small angels $ \theta $ we will rewrite the formula in a following way.
+\begin{gather*}
+t=\frac{-1}{\tau+\sqrt{1+\tau^{2}}}\,\ \text{for} \  \tau>0 \\
+t=\frac{-1}{-\tau+\sqrt{1+\tau^{2}}}\,\ \text{for} \ \tau<0
+\end{gather*}
+
 
 and $c$ and $s$ are given by
 
@@ -208,13 +225,9 @@ After we get $s$ and $c$ we need to calculate new matrix elements
 \end{eqnarray*}
 
 \item We run the algorithm, until $\max \left\vert a_{ij}\right\vert \leq
-\varepsilon ,i\neq j.$
-
-
-For this algorithm we have to calculate values that depend on angle $\theta $%
-. As we can see from equation for $\tau$ (9) we need  $|\theta |$ to be $\leq
-\pi /4$. 
+\varepsilon ,i\neq j.$ 
 \end{enumerate}
+
 \subsection{Two electron case}
 For the two electron case  we will use the same algorithm, but with some
 sufficient changes. Here we need to consider two cases with and without
@@ -264,7 +277,7 @@ electron case. The only difference now is the potential. We used $\omega _{r}^{2
 
 \newpage
 \section{Results and discussion}
-
+In Table 1\ref{tab:one} we presented the eigenvalues for the one electron case for different matrix sizes. We know form analytical solution that the correct eigenvalues are $ \lambda_{1}=3 $, $ \lambda_{2}=7 $ and $ \lambda_{3}=11 $. As we can see we have results close to these even for rather small matrix sizes. For matrix size $ 400 \times 400 $ we have a relative error less then $ 1\% $ for the first $ \lambda $.
 \begin{table}
   \caption{One electron Jacobi.}
   \label{tab:one}
@@ -351,8 +364,8 @@ electron case. The only difference now is the potential. We used $\omega _{r}^{2
     \label{fig:omega_5}
   \end{center}
 \end{figure}
-\newpage
 
+\newpage
 
 \section{Conclusion and further research}
 
