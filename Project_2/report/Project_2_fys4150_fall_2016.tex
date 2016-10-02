@@ -278,7 +278,13 @@ electron case. The only difference now is the potential. We used $\omega _{r}^{2
 
 \newpage
 \section{Results and discussion}
-In Table \ref{tab:one} we presented the eigenvalues for the one electron case for different matrix sizes. We know form analytical solution that the correct eigenvalues are $ \lambda_{1}=3 $, $ \lambda_{2}=7 $ and $ \lambda_{3}=11 $. As we can see we have results close to these even for rather small matrix sizes. For matrix size $ 400 \times 400 $ we have a relative error less then $ 1\% $ for the first $ \lambda $. That is quite good result. However, the number of rotations increase dramatically when we increase the matrix size. This make Jacobi algorithm very time consuming and not applicable for large matrices.
+In Table \ref{tab:one} we presented the eigenvalues for the one electron case for different matrix sizes. We know form analytical solution that the correct eigenvalues are $ \lambda_{1}=3 $, $ \lambda_{2}=7 $ and $ \lambda_{3}=11 $. As we can see we have results close to these even for rather small matrix sizes. For matrix size $ 400 \times 400 $ we have a relative error less then $ 1\% $ for the first $ \lambda $. That is quite good result. However, the number of rotations increase dramatically when we increase the matrix size. This make Jacobi algorithm very time consuming and not applicable for large matrices. \\*
+On the Figure \ref{fig:one_electron} we have presented the eigenvectors (squared) corresponding to the three firs eigenvalues for one electron case. It is easy to see from the plot that $\rho_{max}$ for first three eigenvectors should not be larger then 5. \\*
+Table \ref{tab:two} present data for the first three eigenvalues for the two electrons in the harmonic oscillator potential for different values of $\omega$, so-called oscillator strength. The data obtained for this case are in agreement with those in \cite{three}. If we consider harmonic oscillator as an area where electrons are confined, the smaller the $\omega$ is the wider is an area. In particular it means that we need to use different $\rho_{max}$ for different $\omega$. This is quite obvious from the Figure \ref{fig1}. On Figure 2a) \ref{fig1:a} the oscillator strength $\omega$ is small and this corresponds to much bigger values for radial coordinate $\rho$. On the other hand for the case of strong harmonic oscillator potential (large $\omega$ ) the values for radial coordinate $\rho$ are much smaller. This is quite obvious and was expected to be like this. \\*
+If we now consider the Coulomb interaction between particles we can expect the strong repulsion between particles for strong potential. However this is not the case. As we can see from \ref{fig2} the situation is the opposite. On this figure we have plotted only the eigenvectors for the first energy state (first $\lambda$) for two different cases - with and without Coulomb interaction. As we can see from the plot \ref{fig1:a} for small value of $\omega$ the difference between two cases are quite large. On the plots for other values of $\omega$ the difference is smaller and on plot \ref{fig2:d} probability functions are very close to each other despite the relative distance between the particles is much smaller. Why is it like this? This is true due to the different types of potentials we have here. Both harmonic oscillator and Coulomb potentials depend on $\rho$, but the harmonic oscillator potential is "stronger" because it's proportional to the $\rho^{2}$ while the Coulomb potential is just $\rho^{-1}$. So, for large $\omega$ the influence of the harmonic oscillator potential is stronger then Coulomb, even if relative distance become smaller.
+
+
+
 \begin{table}
   \caption{Three first eigenvalues for one electron in harmonic oscillator potential obtained using Jacobi algorithm. Matrix size $200 \times 200$}
   \label{tab:one}
@@ -320,7 +326,7 @@ In Table \ref{tab:one} we presented the eigenvalues for the one electron case fo
 \begin{figure}
   \begin{center}
     \includegraphics[scale=0.7]{one_electron}
-    \caption {Probability function ($|\Psi^{2|$}) dependence from radial coordinate $\rho $ for one electron in harmonic oscillator potential.}
+    \caption {Probability function ($|\Psi^{2}|$) dependence from radial coordinate $\rho $ for one electron in harmonic oscillator potential.}
     \label{fig:one_electron}
   \end{center}
 \end{figure}
@@ -330,30 +336,30 @@ In Table \ref{tab:one} we presented the eigenvalues for the one electron case fo
   \begin{subfigure}[b]{0.6\linewidth}
     \centering
     \includegraphics[width=1.1\linewidth]{two_001} 
-    \caption{two_001} 
+    \caption{The $\omega$ is 0.01} 
     \label{fig1:a} 
     \vspace{1ex}
   \end{subfigure}%% 
   \begin{subfigure}[b]{0.6\linewidth}
     \centering
     \includegraphics[width=1.1\linewidth]{two_05} 
-    \caption{two_05} 
+    \caption{The $\omega$ is 0.5} 
     \label{fig1:b} 
     \vspace{1ex}
   \end{subfigure} 
   \begin{subfigure}[b]{0.6\linewidth}
     \centering
     \includegraphics[width=1.1\linewidth]{two_1} 
-    \caption{two_1} 
+    \caption{The $\omega$ is 1} 
     \label{fig1:c} 
   \end{subfigure}%%
   \begin{subfigure}[b]{0.6\linewidth}
     \centering
     \includegraphics[width=1.1\linewidth]{two_5} 
-    \caption{two_5} 
+    \caption{The $\omega$ is 5} 
     \label{fig1:d} 
   \end{subfigure} 
-  \caption{ Total energy $E_{tot}$, maximal force, $F_{max}$ and pressure $P$ of $SiO_2$ calculated with different values of energy cut-off $E_{cut}$.}
+  \caption{ Probability functions corresponding to the three first eigenvalues for two electrons in harmonic oscillator potential without Coulomb interaction for different strengths of harmonic oscillator potential $\omega$}
   \label{fig1} 
 \end{figure}
 
@@ -365,40 +371,42 @@ In Table \ref{tab:one} we presented the eigenvalues for the one electron case fo
   \begin{subfigure}[b]{0.6\linewidth}
     \centering
     \includegraphics[width=1.1\linewidth]{two_nint_001} 
-    \caption{two_nint_001} 
-    \label{fig1:a} 
+    \caption{The $\omega$ is 0.01} 
+    \label{fig2:a} 
     \vspace{1ex}
   \end{subfigure}%% 
   \begin{subfigure}[b]{0.6\linewidth}
     \centering
     \includegraphics[width=1.1\linewidth]{two_nint_05} 
-    \caption{two_nint_05} 
-    \label{fig1:b} 
+    \caption{ The $\omega$ is 0.5} 
+    \label{fig2:b} 
     \vspace{1ex}
   \end{subfigure} 
   \begin{subfigure}[b]{0.6\linewidth}
     \centering
     \includegraphics[width=1.1\linewidth]{two_nint_1} 
-    \caption{two_nint_1} 
-    \label{fig1:c} 
+    \caption{The $\omega$ is 1} 
+    \label{fig2:c} 
   \end{subfigure}%%
   \begin{subfigure}[b]{0.6\linewidth}
     \centering
     \includegraphics[width=1.1\linewidth]{two_nint_5} 
-    \caption{two_nint_5} 
-    \label{fig1:d} 
+    \caption{The $\omega$ is 5} 
+    \label{fig2:d} 
   \end{subfigure} 
-  \caption{ Total energy $E_{tot}$, maximal force, $F_{max}$ and pressure $P$ of $SiO_2$ calculated with different values of energy cut-off $E_{cut}$.}
-  \label{fig1} 
+  \caption{ Probability functions corresponding to the first eigenvalue for two electrons in harmonic oscillator potential with and without Coulomb interaction for different strengths of harmonic oscillator potential $\omega$}
+  \label{fig2} 
 \end{figure}
 
 
 \newpage
-
+\clearpage
 \section{Conclusion and further research}
 In this project we studied several problems. The one electron in harmonic oscillator potential, which is analytically solvable, and two electron in the harmonic oscillator potential. The latter we have studied for different strengths of harmonic oscillator. We also considered case with and without Coulomb interaction.
 For the one electron case both eigenvalues and eigenvectors are in a good agreement with analytically obtained results.
 
+
+\clearpage
 \newpage
 \begin{thebibliography}{2}
 \bibitem{one} 
@@ -407,11 +415,15 @@ Morten Hjorth-Jensen.
 }. 
 Lecture Notes Fall 2015, August 2015.
 
-
 \bibitem{two} 
 W. Press, B. Flannery, S. Teukolsky, W. Vetterling 
 \textit{Numerical Recipes in C++, The art of scientific Computing}. 
 Cambridge University Press, 1999.
+
+\bibitem {three}
+M. Taut. 
+\textit{Two electrons in an external oscillator potential: Particular analytic solutions of a Coulomb correlation problem}.
+Phys. Rev. A, 11.1993.
  
 \end{thebibliography}
 
