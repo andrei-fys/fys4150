@@ -19,8 +19,8 @@ ax1.plot(data2[:,0],data2[:,1],color="black", linestyle="--",label=r'$int$')
 #plt.grid()
 plt.legend(loc="upper right", fontsize=18)
 
-plt.xlabel(r'$\rho$', fontsize=20)
-plt.ylabel(r'$\Psi^2$', fontsize=20)
+plt.xlabel(r'$\rho$', fontsize=24)
+plt.ylabel(r'$\Psi^2$', fontsize=24)
 
 plt.draw()
 #plt.show()
