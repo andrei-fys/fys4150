@@ -276,18 +276,14 @@ electron case. The only difference now is the potential. We used $\omega _{r}^{2
 \section{Results and discussion}\label{results}
 In Table \ref{tab:one} we presented the eigenvalues for the one electron case for different matrix sizes. We know form analytical solution that the correct eigenvalues are $ \lambda_{1}=3 $, $ \lambda_{2}=7 $ and $ \lambda_{3}=11 $. As we can see we have results close to these even for rather small matrix sizes. For matrix size $ 400 \times 400 $ we have a relative error less then $ 1\% $ for the first $ \lambda $. That is quite good result. However, the number of rotations increase dramatically when we increase the matrix size. This make Jacobi algorithm very time consuming and not applicable for large matrices. \\*
 On the Figure \ref{fig:one_electron} we have presented the eigenvectors (squared) corresponding to the three firs eigenvalues for one electron case. It is easy to see from the plot that $\rho_{max}$ for first three eigenvectors should not be larger then 5. \\*
-Table \ref{tab:two} present data for the first three eigenvalues for the two electrons in the harmonic oscillator potential for different values of $\omega$, so-called oscillator strength. The data obtained for this case are in agreement with those in \cite{three}. If we consider harmonic oscillator as an area where electrons are confined, the smaller the $\omega$ is the wider is an area. In particular it means that we need to use different $\rho_{max}$ for different $\omega$. This is quite obvious from the Figure \ref{fig1}. On Figure 2a) \ref{fig1:a} the oscillator strength $\omega$ is small and this corresponds to much bigger values for radial coordinate $\rho$. On the other hand for the case of strong harmonic oscillator potential (large $\omega$ ) the values for radial coordinate $\rho$ are much smaller. This is quite obvious and was expected to be like this. \\*
-If we now consider the Coulomb interaction between particles we can expect the strong repulsion between particles for strong potential. However this is not the case. As we can see from \ref{fig2} the situation is the opposite. On this figure we have plotted only the eigenvectors for the first energy state (first $\lambda$) for two different cases - with and without Coulomb interaction. As we can see from the plot \ref{fig1:a} for small value of $\omega$ the difference between two cases are quite large. On the plots for other values of $\omega$ the difference is smaller and on plot \ref{fig2:d} probability functions are very close to each other despite the relative distance between the particles is much smaller. Why is it like this? This is true due to the different types of potentials we have here. Both harmonic oscillator and Coulomb potentials depend on $\rho$, but the harmonic oscillator potential is "stronger" because it's proportional to the $\rho^{2}$ while the Coulomb potential is just $\rho^{-1}$. So, for large $\omega$ the influence of the harmonic oscillator potential is stronger then Coulomb, even if relative distance become smaller.
 
-
-
-\begin{table}
-  \caption{Three first eigenvalues for one electron in harmonic oscillator potential obtained using Jacobi algorithm. Matrix size $200 \times 200$}
+\begin{table}[h!]
+  \caption{Three first eigenvalues for one electron in harmonic oscillator potential obtained using Jacobi algorithm. $N$ is a matrix size, $R$ - number of Jacobi rotations.}
   \label{tab:one}
   \begin{center}
     \begin{tabular}{c|c|c|c|c}
     \hline
-		$N$ & $Number of rotations$ & $\lambda_1$ & $\lambda_2$ & $\lambda_3$ \\
+		$N$ & $R$ & $\lambda_1$ & $\lambda_2$ & $\lambda_3$ \\
         \hline
 	$	50 $  & $ 4036  $ & $2.77921$ & $6.65469$ & $10.5485$ \\
 	$	100$  & $ 16521 $ & $2.88836$ & $6.82895$ & $10.7813$ \\
@@ -299,13 +295,16 @@ If we now consider the Coulomb interaction between particles we can expect the s
   \end{center}
 \end{table}
 
-\begin{table}
-  \caption{Three first eigenvalues for two electrons in harmonic oscillator potential for different values of $\omega$. Results are obtained using Jacobi algorithm. Matrix size $200 \times 200$}
+Table \ref{tab:two} present data for the first three eigenvalues for the two electrons in the harmonic oscillator potential for different values of $\omega$ or in other words oscillator strength. Results are in agreement with those in \cite{three}. If we consider harmonic oscillator as an area where electrons are confined, the smaller the $\omega$ is the wider the area of electron localization. In particular it means that we need to pick different $\rho_{max}$ for different $\omega$. This is quite obvious from the Figure \ref{fig1}. On Figure 2a) \ref{fig1:a} the oscillator strength $\omega$ is small and this corresponds to much bigger values for radial coordinate $\rho$. On the other hand for the case of strong harmonic oscillator potential (large $\omega$ ) the values for radial coordinate $\rho$ are much smaller.\\*
+If we now consider the Coulomb interaction between particles we can expect the strong repulsion between particles for strong potential. However this is not the case. As we can see from \ref{fig2} the situation is the opposite. On this figure we have plotted only the eigenvectors for the first energy state (first $\lambda$) for two different cases - with and without Coulomb interaction. As we can see from the plot \ref{fig1:a} for small value of $\omega$ the difference between two cases are quite large. On the plots for other values of $\omega$ the difference is smaller and on plot \ref{fig2:d} probability functions are very close to each other despite the relative distance between the particles is much smaller. Why is it like this? This is true due to the different types of potentials we have here. Both harmonic oscillator and Coulomb potentials depend on $\rho$, but the harmonic oscillator potential is "stronger" because it's proportional to the $\rho^{2}$ while the Coulomb potential is just $\rho^{-1}$. So, for large $\omega$ the influence of the harmonic oscillator potential is stronger then Coulomb, even if relative distance become smaller.
+
+\begin{table}[h!]
+  \caption{Three first eigenvalues for two electrons in harmonic oscillator potential for different values of $\omega$. Results are obtained using Jacobi algorithm. Matrix size is $200 \times 200$, $R$ is number if Jacobi transformations.}
   \label{tab:two}
 	\begin{center}
     \begin{tabular}{c|c|c|c|c}
     \hline
-		$\omega$ & $Number\ of\ rotations$ & $\lambda_1$ & $\lambda_2$ & $\lambda_3$ \\
+		$\omega$ & $R$ & $\lambda_1$ & $\lambda_2$ & $\lambda_3$ \\
         \hline
 		$0.01$ & $59717$ & $0.105776$ & $0.141516$  & $0.178049$ \\ 
 		$0.5$  & $64207$ & $2.25271 $ & $4.17817 $  & $6.13601$ \\ 
