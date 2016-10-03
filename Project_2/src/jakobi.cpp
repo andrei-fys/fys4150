@@ -50,11 +50,13 @@ int main(int argc, char* argv[]){
 	double max;
 	int counter = 0;
 	max = max_offdiag(N, A, max_i, max_j);
+	// ----- Jacobi start -----
 	while ( max > fake_zero )  {
 	max = max_offdiag(N, A, max_i, max_j);
 	Jacobi_goes_round(N, A, U, max_i, max_j);
 	counter++;
 	}
+	// ----- Jacobi finish -----
 	//show_matrix_diag(N, A);
 	three_lowest_eigenstates(N, A, U, ro);
 	//show_eigen (N, U, ro);
@@ -69,7 +71,7 @@ int main(int argc, char* argv[]){
 	delete[] V;
 }
 
-/* Just prints matrix */
+/* Just prints matrix to output for debug purposes */
 void show_matrix (int n, double ** matrix){
 	for (int i=0;i<n;i++){
 		for (int j=0;j<n;j++){
@@ -78,7 +80,7 @@ void show_matrix (int n, double ** matrix){
 	cout << endl;
 	}
 }
-
+/* Writes to file eigenvectors and grid points for three lowest eigenvalues */
 void three_lowest_eigenstates(int n, double ** matrix, double ** e_matrix, double * grid){
 	double * diag = new double[n];
 	//double * diag_not_sorted = new double[n];
@@ -115,7 +117,7 @@ void three_lowest_eigenstates(int n, double ** matrix, double ** e_matrix, doubl
 	delete[] diag;
 }
 
-
+/* Shows sorted matrix diagonal elements */
 void show_matrix_diag (int n, double ** matrix){
 	double * diag = new double[n];
 	for (int i=0;i<n;i++){
@@ -141,7 +143,8 @@ void show_matrix_diag (int n, double ** matrix){
 	delete[] diag;
 }
 
-/* Returns maximal offdiagonal element */
+/* Returns maximal offdiagonal element changes indexes for max element
+   takes as input: matrix size, matrix, links to indexes */
 double max_offdiag(int n, double ** matrix, int& max_i, int& max_j){
 	double max = 0.0;
 	for (int i=0;i<n;i++){
@@ -157,7 +160,9 @@ double max_offdiag(int n, double ** matrix, int& max_i, int& max_j){
 	}
 	return max;
 }
-
+/* Performes Jacobi transformations
+ takes as input: matrix size, matrix, identity matrix for eigenvectors, indexes
+ for abs(max) element */
 void Jacobi_goes_round(int n, double** a, double** u, int k, int l){
 	double tau = (a[l][l]-a[k][k])/(2.0*a[k][l]);
 	double t;
