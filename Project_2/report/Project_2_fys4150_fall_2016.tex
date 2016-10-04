@@ -160,6 +160,27 @@ If we have a matrix $ A $ of $ n \times n$ dimensions this matrix diagonable if 
 P^{-1}AP=Diag(\lambda_{1},\dots,\lambda_{n});
 \end{equation}
 \end{theorem}
+It is unlikely to find such matrix $ P$ in real life, but we can iteratively move towards it performing transformations, such that $ U^{-1}=U^{T}$. Here $ U $ is a matrix acting on original matrix for eigenvalue problem. Such transformation doesn't change the eigenvalues of the original matrix. After performing a bunch of such transformations we will get a diagonal matrix with eigenvalues along diagonal. However, the eigenvectors are changed after such transformation. The only thing we may check in this case is orthogonality that should preserve in any case. It is not difficult to show that this is true:
+Let $\textbf{v}_{i}  $ be eigenvectors of original matrix. It means that:
+\begin{equation}
+\[
+\mathbf{v}_j^T\mathbf{v}_i = \delta_{ij}.
+\]
+\end{equation}
+If we now perform unitary transformation for such dot product we get
+\begin{equation}
+\[
+\mathbf{w}_i=\mathbf{U}\mathbf{v}_i,
+\]\\*
+\[
+\mathbf{w}_j^T\mathbf{w}_i=(\mathbf{U}\mathbf{v}_j)^T(\mathbf{U}\mathbf{v}_i)=UU^T\mathbf{v}_j^T\mathbf{v}_i=\mathbb{I}\delta_{ij}=\delta_{ij}.
+\]
+\end{equation}
+
+
+That means that unitary transformation preserves the dot product and orthogonality. We may use this to built the unit test for the program, that are discussed below.
+
+
 In our project we assumed that our matrix is diagonable and used Jacobi diagonalization method to find the corresponding eigenvectors and eigenvalues. Below we present the Jacobi algorithm for the eigenvalue problem. 
 \\*
 
