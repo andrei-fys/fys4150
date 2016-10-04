@@ -84,24 +84,28 @@ void show_matrix (int n, double ** matrix){
 }
 
 void unit_test_1 (int n){
-        double ** matrix = new double*[n];
-        for (int i=0;i<n;i++){
-            matrix[i] = new double[n];
-        }
-        for (int i=0;i<n;i++){
-            for (int j=0;j<n;j++){
-                matrix[i][j]=4;
-            }
-        }
-        matrix[2][2]=1000.0;
-        matrix[3][2]=-200.0;
-        int m_i, m_j;
-        double max = max_offdiag(n, matrix, m_i, m_j);
-        if (max == 200){
-            cout << "Unit test 1: max_offdiag function succeded"<< endl;
-        } else {
-                 cout << "Unit test 1: max_offdiag function FAILED"<< endl;
-        }
+	double ** matrix = new double*[n];
+	for (int i=0;i<n;i++){
+		matrix[i] = new double[n];
+	}
+	for (int i=0;i<n;i++){
+		for (int j=0;j<n;j++){
+			matrix[i][j]=4;
+		}
+	}
+	matrix[2][2]=1000.0;
+	matrix[3][2]=-200.0;
+	int m_i, m_j;
+	double max = max_offdiag(n, matrix, m_i, m_j);
+	if (max == 200){
+		cout << "Unit test 1: max_offdiag function succeded"<< endl;
+	} else {
+		cout << "Unit test 1: max_offdiag function FAILED"<< endl;
+	}
+	for (int i=0;i<n;i++){
+		delete matrix[i];
+	}
+	delete[] matrix;
 
 }
 
