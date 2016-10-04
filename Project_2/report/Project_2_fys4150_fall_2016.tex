@@ -160,7 +160,7 @@ If we have a matrix $ A $ of $ n \times n$ dimensions this matrix diagonable if 
 P^{-1}AP=Diag(\lambda_{1},\dots,\lambda_{n});
 \end{equation}
 \end{theorem}
-It is unlikely to find such matrix $ P$ in real life, but we can iteratively move towards it performing transformations, such that $ U^{-1}=U^{T}$. Here $ U $ is a matrix acting on original matrix for eigenvalue problem. Such transformation doesn't change the eigenvalues of the original matrix. After performing a bunch of such transformations we will get a diagonal matrix with eigenvalues along diagonal. However, the eigenvectors are changed after such transformation. The only thing we may check in this case is orthogonality that should preserve in any case. It is not difficult to show that this is true.
+It is unlikely to find such matrix $ P$ in real life, but we can iteratively move towards it performing unitary transformations, such that $ U^{-1}=U^{T}$. Here $ U $ is a matrix acting on original matrix for eigenvalue problem. One can easily show that unitary transformations don't change the eigenvalues of the matrix but change eigenvectors \cite{one}. After performing a series of such transformations one gets a diagonal matrix with eigenvalues along main diagonal. Eigenvectors are changed after every transformation, however orthogonality property preserves in any case. It is not difficult to show that this is true.
 Let $\textbf{v}_{i}  $ be eigenvectors of original matrix. It means that:
 \begin{equation}
 \mathbf{v}_j^T\mathbf{v}_i = \delta_{ij}.
@@ -454,9 +454,7 @@ P. Patel
 \textit
 {The First Full-Color Display with Quantum Dots
 }
-MIT Technology Review, February 22, 2011. 
-
-, 
+MIT Technology Review, February 22, 2011.
 
 \bibitem {wigner}
 E.P. Wigner
