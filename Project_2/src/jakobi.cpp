@@ -11,9 +11,11 @@ void show_matrix_diag (int, double**);
 double max_offdiag(int, double**, int &, int &);
 void Jacobi_goes_round(int, double**, double**, int, int);
 void three_lowest_eigenstates(int, double**, double**, double*);
+void unit_test_1(int);
 
 int main(int argc, char* argv[]){
 	// first arg is number of G.P.; second - ro_max
+	//unit_test_1(6);
 	int N = atof(argv[1]);
 	double ** A = new double*[N];
 	for (int i=0;i<N;i++){
@@ -80,6 +82,30 @@ void show_matrix (int n, double ** matrix){
 	cout << endl;
 	}
 }
+
+void unit_test_1 (int n){
+        double ** matrix = new double*[n];
+        for (int i=0;i<n;i++){
+            matrix[i] = new double[n];
+        }
+        for (int i=0;i<n;i++){
+            for (int j=0;j<n;j++){
+                matrix[i][j]=4;
+            }
+        }
+        matrix[2][2]=1000.0;
+        matrix[3][2]=-200.0;
+        int m_i, m_j;
+        double max = max_offdiag(n, matrix, m_i, m_j);
+        if (max == 200){
+            cout << "Unit test 1: max_offdiag function succeded"<< endl;
+        } else {
+                 cout << "Unit test 1: max_offdiag function FAILED"<< endl;
+        }
+
+}
+
+
 /* Writes to file eigenvectors and grid points for three lowest eigenvalues */
 void three_lowest_eigenstates(int n, double ** matrix, double ** e_matrix, double * grid){
 	double * diag = new double[n];
