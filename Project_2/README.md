@@ -14,3 +14,7 @@ Just to test simple cases:
  $ ./jacobi 100 5.0
 
 ```
+To check benchmarks:
+```
+ $ ./benchmark.sh
+```
