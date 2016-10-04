@@ -1,6 +1,7 @@
 Schroedinger’s equation for two electrons in a three-dimensional harmonic oscillator well
 
 Jacobi's rotation algorithm for solving eigenvalue problem
+
 Next commandoes will generate all results and plots:
 ```
  $ sudo apt-get install python3-numpy python3-matplotlib g++ git
