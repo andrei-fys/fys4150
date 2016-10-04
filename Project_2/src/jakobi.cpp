@@ -12,9 +12,11 @@ double max_offdiag(int, double**, int &, int &);
 void Jacobi_goes_round(int, double**, double**, int, int);
 void three_lowest_eigenstates(int, double**, double**, double*);
 void unit_test_1(int);
+void unit_test_2(int, double**, double);
 
 int main(int argc, char* argv[]){
 	// first arg is number of G.P.; second - ro_max
+	/* UNIT TEST #1: uncomment line bellow */
 	//unit_test_1(6);
 	int N = atof(argv[1]);
 	double ** A = new double*[N];
@@ -57,11 +59,14 @@ int main(int argc, char* argv[]){
 	max = max_offdiag(N, A, max_i, max_j);
 	Jacobi_goes_round(N, A, U, max_i, max_j);
 	counter++;
+	// UNIT TEST #2: uncomment lines bellow
+	/*
+	if ( counter % 50 == 0){
+		unit_test_2(N, U, fake_zero);
+	} */
 	}
 	// ----- Jacobi finish -----
-	//show_matrix_diag(N, A);
 	three_lowest_eigenstates(N, A, U, ro);
-	//show_eigen (N, U, ro);
 	cout << "Counter is " << counter << endl;
 	for (int i=0;i<N;i++){
 		delete A[i];
@@ -82,7 +87,8 @@ void show_matrix (int n, double ** matrix){
 	cout << endl;
 	}
 }
-
+/* Checks if max_offdiag function works correct */
+/* Uncomment before git push */
 void unit_test_1 (int n){
 	double ** matrix = new double*[n];
 	for (int i=0;i<n;i++){
@@ -106,9 +112,19 @@ void unit_test_1 (int n){
 		delete matrix[i];
 	}
 	delete[] matrix;
-
 }
 
+/* Checks if orthogonality is preserved */
+/* Uncomment before git push */
+void unit_test_2 (int n, double ** matrix, double tolerance){
+	double sum = 0.0;
+	for (int i=0; i<n; i++){
+		sum += matrix[i][3]*matrix[i][4];
+	}
+	if (sum > tolerance){
+		cout << "Orthogonality test FAILED" << endl;
+	}
+}
 
 /* Writes to file eigenvectors and grid points for three lowest eigenvalues */
 void three_lowest_eigenstates(int n, double ** matrix, double ** e_matrix, double * grid){
