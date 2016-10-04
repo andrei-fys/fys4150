@@ -419,9 +419,9 @@ Wigner predicted\cite{wigner} that electrons can localize forming an ordered spa
 \clearpage
 \section{Conclusion and further research}\label{conc}
 
-In this project we studied several problems. We have solved the Schr\"{o}dinger's equation for one and two electrons in three dimensional harmonic oscillator well. We reformulated it in the discretized form and then used Jacobi method to find eigenvalues and eigenvectors.\\*
-The one electron in harmonic oscillator potential is analytically solvable problem. That's a good problem to test our numerical algorithm to be stable and precise. The results we have obtained numerically turned out to be in a good agreement with analytical solution, that means that our program working correctly. \\*
-For two electrons in the harmonic oscillator potential we have analytically solution just for a definite number of oscillator frequencies. The obtained results turned to be close to those obtained analytically in \cite{three}. We may say that our discretization method and the Jacobi algorithm provide quite good results for studied problem and we may use such method for more complicated problems. 
+In this project we solved the Schr\"{o}dinger's equation for one and two electrons in three dimensional harmonic oscillator well numerically after it has been reformulated in the discretized form with help of Jacobi method of finding eigenvalues and eigenvectors.\\*
+The one electron in harmonic oscillator potential is analytically solvable problem. That's a good problem to test our numerical algorithm to be stable and precise. The results we have obtained numerically turned out to be in a good agreement with analytical solution, that means that our implementation of Jacobi algorithm is correct. \\*
+For two electrons in the harmonic oscillator potential we have analytical solution just for a definite number of oscillator frequencies. Gained results turned to be close to those obtained analytically in \cite{three}. We may say that our discretization method and the Jacobi algorithm provide quite good results for studied problem. Nevertheless Jacobi method is a overkill in our case as matrix has threediagonal form after discretization and eigenvalues can be found in more efficient way\cite{log}. 
 
 \clearpage
 \newpage
@@ -463,6 +463,13 @@ E.P. Wigner
 }
 Phys. Rev. B 46, 1002 (1934) 
 
+\bibitem {log}
+Ed S. Coakley, Vladimir Rokhlin
+\textit
+{A fast divide-and-conquer algorithm for computing the spectra of real
+symmetric tridiagonal matrices
+}
+Appl. Comput. Harmon. Anal. 34 (2013) 379–414
 
  
 \end{thebibliography}
