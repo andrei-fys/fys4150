@@ -15,7 +15,7 @@ int main (int argc, char* argv[])
 	double *grid_points = new double[N]; 
 	output_filename=argv[2];
 	double t_start = 0.0;
-	double t_finish = 1.0;
+	double t_finish = atof(argv[3]);
 	double h=((double) (t_finish - t_start)/N);
 	
 	for (int i=0; i<N; i++) {
@@ -32,7 +32,7 @@ int main (int argc, char* argv[])
 	x[0]=1.0;
 	y[0]=0.0;
 	Vx[0]=0.0;
-	Vy[0]=2*M_PI;
+	Vy[0]=2.0*M_PI;
 
 	g_start = clock();
 	// EULER START
