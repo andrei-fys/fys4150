@@ -108,5 +108,5 @@ int celestial::Verlet(int N, double t_finish, char output_filename )
 
 int celestial::print()
 {
-    cout << " X_0 === " << startx << endl;
+    cout << "M = " << mass << "X0 = " << startx <<"Y0 = "<< starty <<"Vx,Vy = "<< startvx0 <<","<< startvy0 << endl;
 }

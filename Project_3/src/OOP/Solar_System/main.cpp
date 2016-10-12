@@ -20,7 +20,7 @@ int main()
     //Calls Verlet and Euler methods
     Earth.Verlet(N, t_max, outfile_verlet);
     Earth.Euler(N, t_max, outfile_euler);
-    //Earth.print();
+    Earth.print();
     return 0;
 }
 
