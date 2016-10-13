@@ -13,9 +13,9 @@ Planet::Planet(double x0, double y0, double z0,
     v[1] = vy0;
     v[2] = vz0;
 
-    f[0] = 0;
-    f[1] = 0;
-    f[2] = 0;
+    f[0] = fx0;
+    f[1] = fy0;
+    f[2] = fz0;
 
     mass = mass0;
 }
