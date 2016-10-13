@@ -12,6 +12,7 @@ struct Planet
     double r[3];
     double v[3];
     double f[3];
+    double old_a[3];
     double mass;
     //string m_name;
 };

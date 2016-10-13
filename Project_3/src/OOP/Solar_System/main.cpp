@@ -6,33 +6,6 @@
 
 using namespace std;
 
-//int main()
-//{
-//    double M = 1.0;
-//    double x_0=1.0;
-//    double y_0=0.0;
-//    double Vx_0=0.0;
-//    double Vy_0=2.0*M_PI;
-//    //Create object
-//    celestial Earth(M, x_0, y_0, Vx_0, Vy_0);
-//    //Create object
-//    celestial Juipiter(M, x_0, y_0, Vx_0, Vy_0);
-
-
-//    double t_max = 1.0;
-//    int N = 100;
-//    char outfile_verlet = 'verlet';
-//    char outfile_euler = 'euler';
-//    char outfile_verlet_two_body = 'verlet_two_body';
-//    //Calls Verlet and Euler methods
-//    //Earth.Verlet(N, t_max, outfile_verlet);
-//    //Earth.Euler(N, t_max, outfile_euler);
-//    //Earth.print();
-//    Juipiter.VerletTwoBody(N, t_max, outfile_verlet_two_body);
-//   // TwoBody.print();
-//    return 0;
-//}
-
 void computeForces(vector<Planet*> bodies) {
     // Reset all the forces
     for(Planet *planet : bodies) {
@@ -75,7 +48,26 @@ void integrateEuler(vector<Planet*> bodies, double dt) {
             planet->r[i] += planet->v[i] * dt;
             planet->v[i] += (planet->f[i] / planet->mass) * dt;
         }
-        //cout << planet->r[0] << ',' << planet->r[1] <<  endl;
+    }
+}
+
+void integrateVerlet(vector<Planet*> bodies, double dt) {
+
+    computeForces(bodies);
+
+    for(Planet *planet : bodies) {
+        for(int i=0; i<3; i++) {
+            planet->old_a[i] = planet->f[i] / planet->mass;
+            planet->r[i] += planet->v[i] * dt + ((dt * dt) / 2)* planet->f[i]/planet->mass;
+        }
+    }
+
+    computeForces(bodies);
+
+    for(Planet *planet : bodies) {
+        for(int i=0; i<3; i++) {
+            planet->v[i] += (((planet->f[i] / planet->mass) + planet->old_a[i]) * dt/2.0);
+        }
     }
 }
 
@@ -83,30 +75,33 @@ void integrateEuler(vector<Planet*> bodies, double dt) {
 int main() {
     Planet *sun = new Planet(0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0);
     Planet *earth = new Planet(1, 0, 0, 0, 2*M_PI, 0, 0, 0, 0, 3e-6);
-
-   // Planet *jupiter = new Planet (5.2, 0, 0, 0, 0.88*M_PI, 0, 0, 0, 0, 0.95e-3);
+    Planet *jupiter = new Planet (5.2, 0, 0, 0, 0.88*M_PI, 0, 0, 0, 0, 0.95e-3);
 
     vector<Planet*> bodies;
 
     bodies.push_back(sun);
     bodies.push_back(earth);
+    bodies.push_back(jupiter);
 
-
-    int N = 500;
-    double T = 1.0;
+    int N = 10000;
+    double T = 30.0;
     double dt = (double) (T / N);
-    //char filename = 'sun';
-    //char filename1 = 'earth';
     for(int i=0; i<N; i++) {
         integrateEuler(bodies, dt);
-        //cout << sun->r[0] << ',' << sun->r[1] <<  endl;
-        //cout << earth->r[0] << ',' << earth->r[1] <<  endl;
+        //integrateVerlet(bodies, dt);
         ofstream ofile;
         ofile.open("earth", std::ios::app);
-        ofile << earth->r[0] << ',' << earth->r[1] << endl;
+        ofile << earth->r[0] << ',' << earth->r[1] << ',' << earth->r[2] << endl;
         ofile.close();
-        //file_writer(filename, sun->r[0], sun->r[1] );
-        //file_writer(filename1, earth->r[0], earth->r[1] );
+
+        ofile.open("sun", std::ios::app);
+        ofile << sun->r[0] << ',' << sun->r[1] << ',' << sun->r[2] << endl;
+        ofile.close();
+
+        ofile.open("jupiter", std::ios::app);
+        ofile << jupiter->r[0] << ',' << jupiter->r[1] << ',' << jupiter->r[2] << endl;
+        ofile.close();
+
     }
 
 }

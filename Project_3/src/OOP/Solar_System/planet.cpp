@@ -17,5 +17,9 @@ Planet::Planet(double x0, double y0, double z0,
     f[1] = fy0;
     f[2] = fz0;
 
+    old_a[0] = 0.0;
+    old_a[1] = 0.0;
+    old_a[2] = 0.0;
+
     mass = mass0;
 }
