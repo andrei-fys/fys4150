@@ -80,6 +80,7 @@ void writeToFile(vector<Celestial*> bodies, string filename)
     for(Celestial *celestial : bodies) {
 
         m_file << celestial->body_radius << " " << celestial->body_name << " " << celestial->r[0] << " " << celestial->r[1] << " " << celestial->r[2] << "\n";
+        celestial->writeMyCoordinates();
     }
 }
 
@@ -88,14 +89,14 @@ int main() {
     Celestial *sun = new Celestial(0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0, "Sun", 109.3*earth_radius_au);
     Celestial *earth = new Celestial(1, 0, 0, 0, 2*M_PI, 0, 0, 0, 0, 3e-6, "Earth", 1.0*earth_radius_au);
     Celestial *jupiter = new Celestial (5.2, 0, 0, 0, 0.88*M_PI, 0, 0, 0, 0, 0.95e-3, "Jupiter", 10.97*earth_radius_au );
-    Celestial *venus = new Celestial (0.72, 0, 0, 0, 2.3*M_PI, 0, 0, 0, 0, 0.4e-6, "Venus", 0.9499*earth_radius_au);
+    //Celestial *venus = new Celestial (0.72, 0, 0, 0, 2.3*M_PI, 0, 0, 0, 0, 0.4e-6, "Venus", 0.9499*earth_radius_au);
 
     vector<Celestial*> bodies;
 
     bodies.push_back(sun);
     bodies.push_back(earth);
     bodies.push_back(jupiter);
-    bodies.push_back(venus);
+    //bodies.push_back(venus);
 
     int N = 10000;
     double T = 30.0;

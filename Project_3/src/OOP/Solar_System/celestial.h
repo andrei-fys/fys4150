@@ -1,6 +1,8 @@
 #ifndef CELESTIAL_H
 #define CELESTIAL_H
 #include <string>
+#include <fstream>
+
 struct Celestial
 {
     Celestial(double x0, double y0, double z0,
@@ -9,6 +11,7 @@ struct Celestial
            double mass,
            std::string body_name,
            double radius);
+    void writeMyCoordinates();
 
     double r[3];
     double v[3];
@@ -17,6 +20,8 @@ struct Celestial
     double mass;
     std::string body_name;
     double body_radius;
+    std::ofstream my_file;
+
 };
 
 #endif // CELESTIAL_H

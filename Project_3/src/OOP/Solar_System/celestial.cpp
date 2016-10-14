@@ -26,6 +26,12 @@ Celestial::Celestial(double x0, double y0, double z0,
     mass = mass0;
     body_name = p_name;
     body_radius = radius;
+    my_file.open(body_name);
+}
+
+void Celestial::writeMyCoordinates()
+{
+    my_file << r[0] << "," << r[1] << std::endl;
 }
 
 
