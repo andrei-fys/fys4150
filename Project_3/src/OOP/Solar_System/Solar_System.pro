@@ -4,10 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    celestial.cpp \
-    planet.cpp
+    celestial.cpp
 
 HEADERS += \
-    celestial.h \
-    planet.h
+    celestial.h
 

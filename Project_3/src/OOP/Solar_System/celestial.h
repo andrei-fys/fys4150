@@ -1,21 +1,22 @@
 #ifndef CELESTIAL_H
 #define CELESTIAL_H
-
-class celestial
+#include <string>
+struct Celestial
 {
-private:
+    Celestial(double x0, double y0, double z0,
+           double vx0, double vy0, double vz0,
+           double fx0, double fy0, double fz0,
+           double mass,
+           std::string body_name,
+           double radius);
 
-public:
-    double mass, startx, starty, startvx0, startvy0;
-    celestial(double M, double x0, double y0, double Vx0, double Vy0);
-    int Euler(int, double, char);
-    int Verlet(int, double, char);
-    int VerletTwoBody(int, double, char);
-    int print();
-
-//signals:
-
-//public slots:
+    double r[3];
+    double v[3];
+    double f[3];
+    double old_a[3];
+    double mass;
+    std::string body_name;
+    double body_radius;
 };
 
 #endif // CELESTIAL_H
