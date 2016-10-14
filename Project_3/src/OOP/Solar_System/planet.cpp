@@ -1,9 +1,11 @@
 #include "planet.h"
-
+#include <string>
 Planet::Planet(double x0, double y0, double z0,
                double vx0, double vy0, double vz0,
                double fx0, double fy0, double fz0,
-               double mass0)
+               double mass0,
+               std::string p_name,
+               double radius)
 {
     r[0] = x0;
     r[1] = y0;
@@ -22,4 +24,9 @@ Planet::Planet(double x0, double y0, double z0,
     old_a[2] = 0.0;
 
     mass = mass0;
+    body_name = p_name;
+    body_radius = radius;
 }
+
+
+

@@ -3,7 +3,7 @@
 #include "planet.h"
 #include <math.h>
 #include <fstream>
-
+#include <string>
 using namespace std;
 
 void computeForces(vector<Planet*> bodies) {
@@ -71,37 +71,41 @@ void integrateVerlet(vector<Planet*> bodies, double dt) {
     }
 }
 
+void writeToFile(vector<Planet*> bodies, string filename)
+{
+    ofstream m_file;
+    m_file.open(filename, std::ios::app);
+    m_file << bodies.size() << "\n";
+    m_file << "some comment" << "\n";
+    for(Planet *planet : bodies) {
+
+        m_file << planet->body_radius << " " << planet->body_name << " " << planet->r[0] << " " << planet->r[1] << " " << planet->r[2] << "\n";
+    }
+}
 
 int main() {
-    Planet *sun = new Planet(0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0);
-    Planet *earth = new Planet(1, 0, 0, 0, 2*M_PI, 0, 0, 0, 0, 3e-6);
-    Planet *jupiter = new Planet (5.2, 0, 0, 0, 0.88*M_PI, 0, 0, 0, 0, 0.95e-3);
+    double earth_radius_au = 4.3e-5;
+    Planet *sun = new Planet(0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0, "Sun", 109.3*earth_radius_au);
+    Planet *earth = new Planet(1, 0, 0, 0, 2*M_PI, 0, 0, 0, 0, 3e-6, "Earth", 1.0*earth_radius_au);
+    Planet *jupiter = new Planet (5.2, 0, 0, 0, 0.88*M_PI, 0, 0, 0, 0, 0.95e-3, "Jupiter", 10.97*earth_radius_au );
+
+    Planet *venus = new Planet (0.72, 0, 0, 0, 2.3*M_PI, 0, 0, 0, 0, 0.4e-6, "Venus", 0.9499*earth_radius_au);
 
     vector<Planet*> bodies;
 
     bodies.push_back(sun);
     bodies.push_back(earth);
     bodies.push_back(jupiter);
+    bodies.push_back(venus);
 
     int N = 10000;
     double T = 30.0;
     double dt = (double) (T / N);
+    string my_file = "system";
     for(int i=0; i<N; i++) {
-        integrateEuler(bodies, dt);
-        //integrateVerlet(bodies, dt);
-        ofstream ofile;
-        ofile.open("earth", std::ios::app);
-        ofile << earth->r[0] << ',' << earth->r[1] << ',' << earth->r[2] << endl;
-        ofile.close();
-
-        ofile.open("sun", std::ios::app);
-        ofile << sun->r[0] << ',' << sun->r[1] << ',' << sun->r[2] << endl;
-        ofile.close();
-
-        ofile.open("jupiter", std::ios::app);
-        ofile << jupiter->r[0] << ',' << jupiter->r[1] << ',' << jupiter->r[2] << endl;
-        ofile.close();
-
+        //integrateEuler(bodies, dt);
+        integrateVerlet(bodies, dt);
+        writeToFile(bodies, my_file);
     }
 
 }
