@@ -26,18 +26,57 @@ void computeForces(vector<Celestial*> bodies) {
             double r = sqrt(dr2);
             double G = 4.0*M_PI*M_PI;
             double F = G * celestial1->mass * celestial2->mass / (r*r*r);
+            double P_energ = G * celestial1->mass * celestial2->mass / (r);
             double fx = F*dx;
             double fy = F*dy;
             double fz = F*dz;
             celestial1->f[0] += fx;
             celestial1->f[1] += fy;
             celestial1->f[2] += fz;
+            celestial1->P = P_energ;
 
             celestial2->f[0] -= fx;
             celestial2->f[1] -= fy;
             celestial2->f[2] -= fz;
+            celestial2->P = P_energ;
         }
     }
+}
+
+
+void computeEnergies(vector<Celestial*> bodies, double timePoint) {
+    for(Celestial *celestial : bodies) {
+        celestial->K = celestial->mass*0.5*(pow(celestial->v[0],2) + pow(celestial->v[1],2) + pow(celestial->v[2],2));
+    }
+    double K_sum, P_sum, E_tot;
+    for(Celestial *celestial : bodies) {
+        K_sum += celestial->K;
+        P_sum += celestial->P;
+        E_tot += K_sum + P_sum;
+    }
+    ofstream e_file;
+    e_file.open("Energy", std::ios::app);
+    e_file << timePoint <<","<< K_sum << "," << P_sum << "," << E_tot << "\n";
+    e_file.close();
+
+}
+
+void computeAngularMomentum(vector<Celestial*> bodies, double timePoint)
+{
+    for(Celestial *celestial : bodies) {
+            double V = sqrt(celestial->v[0]*celestial->v[0] + celestial->v[1]*celestial->v[1] + celestial->v[2]*celestial->v[2]);
+            double R = sqrt(celestial->r[0]*celestial->r[0] + celestial->r[1]*celestial->r[1] + celestial->r[2]*celestial->r[2]);
+            celestial->L = V*R*celestial->mass;
+    }
+    double L_sum;
+    for(Celestial *celestial : bodies) {
+        L_sum += celestial->L;
+    }
+    ofstream l_file;
+    l_file.open("Angular", std::ios::app);
+    l_file << timePoint <<","<< L_sum << "\n";
+    l_file.close();
+
 }
 
 void integrateEuler(vector<Celestial*> bodies, double dt) {
@@ -98,13 +137,15 @@ int main() {
     bodies.push_back(jupiter);
     //bodies.push_back(venus);
 
-    int N = 10000;
+    int N = 100000;
     double T = 30.0;
     double dt = (double) (T / N);
     string my_file = "system";
     for(int i=0; i<N; i++) {
         //integrateEuler(bodies, dt);
         integrateVerlet(bodies, dt);
+        computeEnergies(bodies, i*dt);
+        computeAngularMomentum(bodies, i*dt);
         writeToFile(bodies, my_file);
     }
 
