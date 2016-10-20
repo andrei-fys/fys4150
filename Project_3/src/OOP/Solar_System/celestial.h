@@ -10,7 +10,8 @@ struct Celestial
            double fx0, double fy0, double fz0,
            double mass,
            std::string body_name,
-           double radius);
+           double radius,
+           double c_spin);
     void writeMyCoordinates();
 
     double r[3];
@@ -24,6 +25,7 @@ struct Celestial
     double K;
     double P;
     double L;
+    double spin;
 
 };
 

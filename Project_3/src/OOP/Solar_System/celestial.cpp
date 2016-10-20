@@ -5,7 +5,8 @@ Celestial::Celestial(double x0, double y0, double z0,
                double fx0, double fy0, double fz0,
                double mass0,
                std::string p_name,
-               double radius)
+               double radius,
+               double c_spin)
 {
     r[0] = x0;
     r[1] = y0;
@@ -27,6 +28,7 @@ Celestial::Celestial(double x0, double y0, double z0,
     body_name = p_name;
     body_radius = radius;
     my_file.open(body_name);
+    spin = c_spin;
 }
 
 void Celestial::writeMyCoordinates()
