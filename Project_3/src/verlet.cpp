@@ -14,27 +14,29 @@ int main (int argc, char* argv[])
 	int N = atof(argv[1]);
 	double *grid_points = new double[N]; 
 	output_filename=argv[2];
-	double t_start = 0.0;
-	double t_finish = atof(argv[3]);
+	double t_start = 0.0; //initial time is zero
+	double t_finish = atof(argv[3]); //finish time from keyboard
 	double h=((double) (t_finish - t_start)/N);
 	
-	for (int i=0; i<N; i++) {
+	for (int i=0; i<N; i++) { //discretization of time domain
 		grid_points[i] =  t_start + i*h;
 	}
 	
-	double *x = new double[N];
-	double *y = new double[N];
-	double *Vx = new double[N];
-	double *Vy = new double[N];
-	double a = 2.0*M_PI*M_PI*h;
-	double b = 1.0 - a*h;
+	double *x = new double[N]; //x coordinate array
+	double *y = new double[N]; //y coordinate array
+	double *Vx = new double[N]; //x component of velocity
+	double *Vy = new double[N]; //y component of velocity
+	double a = 2.0*M_PI*M_PI*h; //dummy const, loop optimization
+	double b = 1.0 - a*h;       //dummy const, loop optimization
 	clock_t g_start, g_finish;
-	x[0]=1.0;
+	x[0]=1.0;                   //initial conditions
 	y[0]=0.0;
 	Vx[0]=0.0;
 	Vy[0]=2.0*M_PI;
 
 	g_start = clock();
+	//Very simple algorithm. Initial conditions are taken as a starting point
+	//then iterating over time domain
 	// EULER START
 	for (int i=0;i<N;i++){
 		x[i+1]=x[i]*b + Vx[i]*h;
