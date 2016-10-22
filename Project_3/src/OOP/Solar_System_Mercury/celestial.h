@@ -21,10 +21,6 @@ struct Celestial
     double mass;
     std::string body_name;
     double body_radius;
-    std::ofstream my_file;
-    double K;
-    double P;
-    double L;
     double spin;
 
 };
