@@ -85,12 +85,10 @@ int main() {
 
     // Set some helper variables before we start the time integration.
     double thetaPrevious 	= 0;	   // The perihelion angle of the previous time step.
-    //double theta 		    = 0;       // The perihelion angle of the current time step.
     double thetaCurrent;
 
     double rPreviousPrevious 	= 0;	// Mercury-Sun-distance two times steps ago.
     double rPrevious   	 	    = 0;    // Mercury-Sun-distance of the previous time step.
-    //double r 		 	        = 0;    // Mercury-Sun-distance of the current time step.
 
     ofstream perihelion_file;
 
