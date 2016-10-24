@@ -85,8 +85,8 @@ and
 \[
 {F_{G,z}}=-Gz\frac{M_{\mathrm{E}}M_{\odot}}{r^3}.
 \]
-Now let us take into considerations values of astronomical constants. If one uses SI units the mass of the Sun is $M_{\odot}=2\times 10^{30}$ kg, the mass of Earth is $M_{\mathrm{E}}=6\times 10^{24}$ kg, gravitational constant $G=6.67408 \times 10^{-11}$ $m^3 \cdot kg^{-1} \cdot s^{-2}$ and distance between the Earth and the Sun is $r=1.5 \times 10^{11}$ m. If all mentioned values will be used in SI units during numerical calculations we can easily get domination of loss of numerical precision errors. Looking at order of magnitude of mentioned constants we presume that the best units to use in this case are astronomical units. Clarifying and summarizing just mentioned
-above we will use $1AU=1.5 \times 10^{11}$ m as lengths units, $Earth's\ years$ as time units and all masses will be expressed in terms of the Sun masses $M_{\odot}$. Careful reader may notice that we didn't tell anything about the gravitational constant. It will be mentioned in the text bellow.
+Now let us take into considerations values of astronomical constants. If one uses SI units the mass of the Sun is $M_{\odot}=2\times 10^{30}$ kg, the mass of Earth is $M_{\mathrm{E}}=6\times 10^{24}$ kg, gravitational constant $G=6.67408 \times 10^{-11}$ $m^3 \cdot kg^{-1} \cdot s^{-2}$ and distance between the Earth and the Sun is $r=1.5 \times 10^{11}$ m. If all mentioned values will be used in SI units during numerical calculations we can easily get loss of numerical precision due to round-off errors. Considering order of magnitude of mentioned constants we presume that the best units to use in this case are astronomical units. Clarifying and summarizing just mentioned
+above we will use $1AU=1.5 \times 10^{11}$ m as lengths units, $Earth's\ years$ as time units and all masses will be expressed in terms of the Sun masses $M_{\odot}$. Careful reader may notice that we didn't tell anything about the gravitational constant. We are going to derive it using an assumption of circular orbit of the Earth.
 Considering that in our model of the solar system planets are moving uniformly depicting a circle we can write:
 \[
 \frac{M_{\mathrm{E}}v^2}{r}=G\frac{M_{\mathrm{E}}M_{\odot}}{r^2},
@@ -136,15 +136,17 @@ Similarly one can easy get equations for the Jupiter:
 \end{aligned}
 \end{equation}  
 
-\section{Numerical methods}\label{Numerical methods}
-\subsection{Forward Euler's method}
-In order to solve the equations above we use numerical methods. We managed to rewrite our second order differential equations as coupled first order differential equations which can be solved by different numerical methods. In this project we focus only on finite difference methods. We consider Euler and velocity Verlet methods bellow, however there are many others for example family of Runge-Kutta methods.
-Here we start with discussion of Euler's method which is rather simple but gives a good feeling of all finate difference methods for solving ODEs.
+\subsection{Numerical methods}\label{Numerical methods}
+
+We managed to rewrite our second order differential equations as coupled first order differential equations \ref{eq:motion} and \ref{eq:motion-3-jupiter} which can be solved by different numerical methods. In this project we focus only on finite difference methods. We consider Euler and velocity Verlet methods bellow, however there are many others for example family of Runge-Kutta methods.
+Here we start with discussion of Euler's method which is rather simple but gives a good feeling of all finate difference methods for solving ODEs.\\
+\subsubsection{Forward Euler's method}
+
 We have the ODE of the form: 
 \[
 \frac{dy}{dt}=f(t,y),
 \] 
-Assume we have initial conditions $y_0 = y(t_0)$.We discretize a time domain and use the Taylor expansion for the functions we are looking for. 
+Assume we have initial conditions $y_0 = y(t_0)$. We discretize a time domain and use the Taylor expansion for the functions we are looking for. 
 Applying mentioned we get the following:
 \[ 
 y_{i+1}=y(t_i)+hf(t_i,y_i)+o(h^2),
@@ -153,7 +155,7 @@ y_{i+1}=y(t_i)+hf(t_i,y_i)+o(h^2),
 t_{i+1}=t_i+h,
 \]
 where $h$ is a time step $h=\frac{a-b}{N}$, $N$ is number of steps, $a$ and $b$ define the size of the $t$ domain.\\*
-This is called a forward Euler method or explicit Euler method as next step function value depends on previous values(that are all known) only.\\
+This is called a forward Euler method or explicit Euler method as next step function value depends on previous values (that are all known) only.\\
 Now we go back to the original problem of solar system and apply this method to two-body problem. Let us just define initial conditions and discretization first:
 \[
 x \rightarrow x_i \ ,\ v_x \rightarrow v_{x,i},
@@ -181,12 +183,12 @@ v_{z,i+1}=v_{z,i}-h\frac{4\pi^2}{r_i^3}z_i \ ,\ z_{i+1}=z_{i}+hv_{z,i}\\
 \end{aligned}
 \end{equation}
 
-As one can see from \ref{eq:euler-two-body} in Euler's explicit method we just need initial conditions to calculate velocities and coordinates. This is  easy to implement and straightforward algorithm. However we truncate Taylor expansion at the second term or with other words every step we make an approximation error of the order of $o(h^2)$ and taking into account fact that we make $N$-steps, total error goes like $N\cdot o(h^2)\approx o(h)$.
+As one can see from \ref{eq:euler-two-body} we just need initial conditions to calculate velocities and coordinates using Euler's explicit method. This is  easy to implement and straightforward algorithm. However we truncate Taylor expansion at the second term or with other words every step we make an approximation error of the order of $o(h^2)$ and taking into account fact that we make $N$-steps, total error goes like $N\cdot o(h^2)\approx o(h)$.
 We should keep in mind that decreasing $h$ is not always gives us better precision if we compute derivatives numerically by two point formula.
-We will later show that Euler method is not stable for our calculations (SSILKA NA RESULTS), however method is important due to it can be used to check general view of solution and as a component for more precise methods, for example -- predictive phase of Runge-Kutta methods.
+We will later show \ref{fig:verlet_vs_euler} that Euler method is not stable for our calculations, however method is important due to it can be used to check general solution form and as a component for more precise methods, for example -- predictive phase of Runge-Kutta methods.
 In next chapter we try to improve accuracy of solution by taking into account higher derivatives in Taylor expansion.
 
-\subsection{Velocity Verlet method}
+\subsubsection{Velocity Verlet method}
 Main method we use to simulate the solar system is velocity Verlet method. Reasons for prioritizing this method over Euler method will be discussed in \ref{results} part. Here we provide some mathematical details starting with Verlet method and move toward velocity Verlet method. First we go from second order differential equation to a coupled first order ones same way as it have been already discussed above. After this we perform the Taylor expansion up to and including second derivative. The discretization and the step are the same as in Euler method, so we are not introducing them one more time.
 \begin{equation}\label{eq:taylor_verlet}
 x_{i+1}=x_i+hx'_i+\frac{h^2}{2}x''_i
