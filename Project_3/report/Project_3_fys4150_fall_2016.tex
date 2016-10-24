@@ -189,7 +189,7 @@ We will later show \ref{fig:verlet_vs_euler} that Euler method is not stable for
 In next chapter we try to improve accuracy of solution by taking into account higher derivatives in Taylor expansion.
 
 \subsubsection{Velocity Verlet method}
-Main method we use to simulate the solar system is velocity Verlet method. Reasons for prioritizing this method over Euler method will be discussed in \ref{results} part. Here we provide some mathematical details starting with Verlet method and move toward velocity Verlet method. First we go from second order differential equation to a coupled first order ones same way as it have been already discussed above. After this we perform the Taylor expansion up to and including second derivative. The discretization and the step are the same as in Euler method, so we are not introducing them one more time.
+Main method we use to simulate the solar system is velocity Verlet method. Reasons for prioritizing this method over Euler method will be discussed in part \ref{results}.  In this part we provide   derivation of Verlet method and then continue with velocity Verlet method. We start with reducing the order of ODE from second order to first order same way as it have been already discussed above. After this we perform the Taylor expansion up to and including second derivative. The discretization is the same as in Euler method, so we are not introducing it here.
 \begin{equation}\label{eq:taylor_verlet}
 x_{i+1}=x_i+hx'_i+\frac{h^2}{2}x''_i
 \end{equation}
@@ -202,7 +202,7 @@ This formula does not contain the velocity however the velocity can be computed 
 \[
 x'_i=\frac{x_{i+1}-x_{i-1}}{2h}
 \]
-The truncation error for the velocity goes like $o(h^2)$ which we consider to be a poor accuracy and so do not want to use this method. Instead we use so-called velocity Verlet algorithm (or the Leapfrog algorithm). Mentioned algorithm should provide us a truncation error going as $o(h^3)$. The Taylor expansion for position will remain as in \ref{eq:taylor_verlet} and the corresponding expansion for the velocity is the following:
+The truncation error for the velocity goes like $o(h^2)$ which we consider to be a poor accuracy so we will not use this method. Instead we use so-called velocity Verlet algorithm (or the Leapfrog algorithm). Mentioned algorithm should provide us a truncation error going as $o(h^3)$. The Taylor expansion for position will remain as in \ref{eq:taylor_verlet} and the corresponding expansion for the velocity is the following:
 \begin{equation}
 v_{i+1}=v_i+hv'_i+\frac{h^2}{2}v''_i
 \end{equation}
@@ -216,7 +216,7 @@ Using the above formula we may derive the expression for the $v''_i$ and the tru
 \begin{equation}
 v''_i=\frac{v'_{i+1}+v'_i}{h}
 \end{equation}
-Now we can ready derive the corresponding discretized equations for the coordinates and velocities are:
+Now we can readily derive the corresponding discretized equations for the coordinates and velocities are:
 \begin{equation}
 \begin{aligned} 
 x_{i+1}=x_{i}+hv_{x,i}+\frac{h^2}{2}v_{x,i}',\ 
@@ -227,14 +227,13 @@ z_{i+1}=z_{i}+hv_{z,i}+\frac{h^2}{2}v_{z,i}',\
 v_{x,i+1}=v_{z,i}+\frac{h}{2}(v_{z,i+1}'+v_{z,i}')\\
 \end{aligned}
 \end{equation}
-This method has a truncation error going as $o(h^3)$, which is better then the truncation error we obtain in case of Euler or Verlet methods which have $o(h^2)$.
+This method has a truncation error going as $o(h^3)$, which is better then the truncation error we obtain in case of Euler method which have $o(h^2)$.
 
 \section{Results and discussion}\label{results}
 \subsection{Numerical methods comparison}
 We implemented Euler's method to solve \ref{eq:motion} in C++ and source code can be found at \url{https://github.com/andrei-fys/fys4150/blob/master/Project_3/src/euler.cpp}. Similar code for velocity Verlet method can be found at \url{https://github.com/andrei-fys/fys4150/blob/master/Project_3/src/verlet.cpp}. For reader not familiar with C++ language simple compilation and usage instructions are given to all programs. To reproduce results documentation from \url{https://github.com/andrei-fys/fys4150/blob/master/Project_3/README.md} can be used.
-We present simulation of the solar system in three dimensions earlier in this chapter, however now we limit ourselves to two just dimensions for illustrative purposes only. 
-Figure \ref{fig:verlet_vs_euler} shows that Euler's method is not stable, the Earth is slightly moves away from the Sun. Decreasing a step length (increasing N in our implementation) provide better accuracy of Euler's method becoming, nevertheless solution is not stable. So we use the velocity Verlet method for simulating of the whole solar system. Additionally if one takes into consideration number of floating points operations for both mentioned methods it's easy to notice that number of FLOPS has same order of magnitude: $12N$ for Verlet versus $8N$ for Euler. The latter makes selection of the method for solar system simulation obvious.
-On figure \ref{fig:slope} convergence rates for Verlet method and forward Euler's methods are shown. It's easy to see that velocity Verlet converges faster then Euler's method. As we already mentioned discussing \ref{fig:verlet_vs_euler} method not accurate enough and increasing $N$ we can rather end in domination of round-off errors much quicker then in good precision. Final argument against Euler's method is shown on \ref{fig:euler_energy}, namely energy of the system doesn't conserve. After we substantiated choose of method we need to decide reasonable limits for $N$. If one fix final time of simulation $t_{fin}$ to one year and makes calculation of convergence rate of velocity Verlet method, one gets that for value of $N > 10^7$ round-off errors dominate. For obvious reasons $N$ should not be too small to get precise enough solution.
+We present simulation of the solar system in three dimensions later in this chapter, however  we limit ourselves now to just two  dimensions for illustrative purposes only. 
+Figure \ref{fig:verlet_vs_euler} shows that Euler's method is less accurate then Verlet, the Earth is slightly moves away from the Sun. Decreasing a step length (increasing N in our implementation) provide better accuracy of Euler's method becoming, nevertheless solution is not stable. So we use the velocity Verlet method for simulating of the whole solar system. Additionally if one takes into consideration number of floating points operations for both mentioned methods it's easy to notice that number of FLOPS has same order of magnitude: $12N$ for Verlet versus $8N$ for Euler. On figure \ref{fig:slope} convergence rates for Verlet method and forward Euler's methods are shown. It's easy to see that velocity Verlet converges faster then Euler's method. As we already mentioned discussing \ref{fig:verlet_vs_euler} method not accurate enough and increasing $N$ we can rather end in domination of round-off errors much quicker then in good precision. Final argument against Euler's method is shown on \ref{fig:euler_energy}, namely energy of the system doesn't conserve. All mentioned above makes selection of the method for solar system simulation obvious. After we substantiated choose of method we need to decide reasonable limits for $N$. If one fix final time of simulation $t_{fin}$ to one year and makes calculation of convergence rate of velocity Verlet method, one gets that for value of $N > 10^7$ round-off errors dominate. For obvious reasons $N$ should not be too small to get accurate solution.
 
 \clearpage
 
@@ -276,7 +275,7 @@ On figure \ref{fig:slope} convergence rates for Verlet method and forward Euler'
 \begin{figure}[ht]
   \begin{center}
     \includegraphics[scale=0.5]{euler_energy}
-    \caption {Total, kinetic and potential energies for 2-dimensional simulation of solar system, initial velocity of the Earth is $2\pi$ $[AU/year]$, initial position of the Earth is $[1,0]\ AU$. Finish time is $100$ years. $N=10^6$ was used in simulations. }
+    \caption {Total, kinetic and potential energies for 2-dimensional simulation of solar system computed using Euler method.  Initial velocity of the Earth is $2\pi$ $[AU/year]$, initial position of the Earth is $[1,0]\ AU$. Finish time is $100$ years. $N=10^6$ was used in simulations. }
     \label{fig:euler_energy}
   \end{center}
 
@@ -284,7 +283,7 @@ On figure \ref{fig:slope} convergence rates for Verlet method and forward Euler'
 
   \begin{center}
     \includegraphics[scale=0.5]{escape_earth}
-    \caption {Earth orbit after 2-dimensional simulation of solar system with different initial velocities of the Earth. Initial position of the Earth is $[1,0]\ AU$. Finish time is $1$ years. $N=10^6$ was used in simulations. }
+    \caption {Earth orbit after 2-dimensional simulation of solar system with different initial velocities of the Earth computed using velocity Verlet method. Initial position of the Earth is $[1,0]\ AU$. Finish time is $1$ years. $N=10^6$ was used in simulations. }
     \label{fig:escape}
   \end{center}
 \end{figure}
