@@ -13,12 +13,12 @@ void computeForces(vector<Celestial*> bodies) {
         celestial->f[1] = 0.0;
         celestial->f[2] = 0.0;
     }
-
+    /* Iterates over all bodies and calculates fores by coupling them */
     for(int i=0; i<bodies.size(); i++) {
         Celestial *celestial1 = bodies[i];
         for(int j=i+1; j<bodies.size(); j++) {
             Celestial *celestial2 = bodies[j];
-
+			/* distance between selestials */
             double dx = celestial2->r[0] - celestial1->r[0];
             double dy = celestial2->r[1] - celestial1->r[1];
             double dz = celestial2->r[2] - celestial1->r[2];
@@ -75,16 +75,17 @@ void integrateEuler(vector<Celestial*> bodies, double dt) {
 void integrateVerlet(vector<Celestial*> bodies, double dt) {
 
     computeForces(bodies);
-
+	/* first step is to compute axeleration components needed on nex step */
+	/* at the same time we compute new coordinates */
     for(Celestial *celestial : bodies) {
         for(int i=0; i<3; i++) {
             celestial->old_a[i] = celestial->f[i] / celestial->mass;
             celestial->r[i] += celestial->v[i] * dt + ((dt * dt) / 2)* celestial->f[i]/celestial->mass;
         }
     }
-
+	/* new accelerations */
     computeForces(bodies);
-
+	/* finally velocity */
     for(Celestial *celestial : bodies) {
         for(int i=0; i<3; i++) {
             celestial->v[i] += (((celestial->f[i] / celestial->mass) + celestial->old_a[i]) * dt/2.0);
