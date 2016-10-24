@@ -19,28 +19,26 @@ FYS 4150
 
 \maketitle
 \begin{abstract}
-In this project we made a model of the solar system using Newtonian's law of gravity and describing motion of planets by system of ODE to be solved numerically. Verlet method shows good convergence while Euler's method is not stable. Critical discussion of chosen method is given. Using Verlet solver we showed that solar system is stable. Finally we calculated procession of Mercury's perihelion by correcting a force to conform it with general relativity. Results are in good agreement with observed ones. 
+In this project we built a model for the solar system using Newtonian's law of gravity. This lead to a system of ordinary differential equations (ODE) to be solved numerically. Verlet method shows good convergence while Euler's method is not stable. Using Verlet solver we showed that solar system is stable. Also the influence of the Jupiter on the Earth motion was studied. Finally we calculated procession of Mercury's perihelion by correcting a force to conform it with general relativity. Results are in good agreement with astronomical data. 
 \end{abstract}
 \clearpage 
 
 
 \section{Introduction}
-
-In this project our goal was to study numerical methods for ordinary differential equations(ODE) needed for simulating planetary motion. We considered finite difference methods, namely velocity Verlet and Euler and applied them to differential equations of motion for planets in solar system. We used Newton's gravity law to compute forces between celestial bodies. In our model of solar system all celestial bodies have constant masses and all general relativistic effects are neglected except the case we study precession of the Mercury's perihelion. 
-We tested two numerical methods mentioned above and chose one based on numerical precision, stability and convergence rate. We also studied the special case for three bodies to investigate Jupiter's influence on the Earth orbit. All deformation effects which may be caused by gravity forces were neglected. 
-Additionally we tested our simulation to provide observed precession of Mercury's perihelion considering general relativity correction to the Newtonian gravitational force.
-
+Simulations are extremely important tool in nowadays science. It provides us a deeper understanding of nature and  better insight into the processes taking place in a complicated systems. It is also very useful for presenting and analyzing the results.\\
+In this project our goal was to simulate the solar system using Newtonian law of gravity. We end up with a system of ODEs, which can be solved numerically. We considered finite difference methods, namely velocity Verlet and Euler. In our model of the solar system all celestial bodies have constant masses and all general relativistic effects are neglected except the case we study precession of the Mercury's perihelion. We tested two numerical methods mentioned above and chose one based on numerical precision, stability and convergence rate. We also studied the special case for three bodies to investigate Jupiter's influence on the Earth orbit. All deformation effects which may be caused by gravity forces were neglected. Additionally we tested our simulation to provide observed precession of Mercury's perihelion considering general relativity correction to the Newtonian gravitational force.\\
+It was shown that object oriented programming approach is very useful for such simulations. We created a special class for celestial bodies in order to store information we need to use and update during the simulation. \\
 The report has the following structure:\\*
-In the part \ref{Part1}  we discuss the problem and make assumptions to the model of the solar system. Then we present Verlet and Euler methods for solving ODEs and discuss their precision(part \ref{Numerical methods}). Those who are already familiar with those methods can safely skip this part and go directly to the results and discussion part \ref{results}  where we presented simulated results. In conclusion \ref{conc} we made a brief overview of obtained results and discuss possibilities for further research. 
+In the part \ref{Part1}  we discuss the problem and make assumptions to the model of the solar system, then we present Verlet and Euler methods for solving ODEs and discuss their precision (part \ref{Numerical methods}). Those who are already familiar with those methods can safely skip this part and go directly to the results and discussion part \ref{results}  where we present simulated results. In conclusion \ref{conc} we made a brief overview of obtained results and discuss possibilities for further research. 
 
  
 
 \newpage
 \section{Problem formulation and mathematical method}\label{Part1}
-In this part we present the mathematical description of the investigated problem as well as derivation and discussion of numerical methods to be used for simulations. The model of the Solar system is based on Newtonian gravity law. 
+In this part we present a mathematical description of investigated problem as well as derivation and discussion of numerical methods to be used for simulations.  Model of the Solar system is based on Newtonian gravity law. 
 
 \subsection{The gravity and laws of motion}
-In the first place we are interested in  the only force in the solar system  -- gravity. Newton's law of gravitation stands that two bodies with masses $M_1$ abd $M_2$ are attracted to each other with a force given by:
+To provide an appropriate description of the planetary motion we need to consider the only force in the solar system  -- gravity. Newton's law of gravitation stands that two bodies with masses $M_1$ abd $M_2$ are attracted to each other with a force given by:
 \[
 F_G=\frac{GM_{1}M_{2}}{r^2},
 \]
@@ -58,7 +56,7 @@ and
 \frac{d^2z}{dt^2}=\frac{F_{G,z}}{M_{\mathrm{Earth}}},
 \]
 where $F_{G,x}$, $F_{G,y}$ and $F_{G,z}$ are the $x$, $y$ and $z$ components of the gravitational force, $M_{\mathrm{Earth}}$ is the mass of the Earth.
-Lets assume the Sun mass is much larger then Earth mass and that orbit of Earth is circular. In this case Cartesian coordinates of Earth can be easily rewritten from spherical coordinates (radius $r$, inclination $\theta$ and azimuth $\varphi$):
+Lets assume that mass of the Sun is much larger then mass of the Earth and that orbit of the Earth is circular. In this case Cartesian coordinates of Earth can be easily rewritten from spherical coordinates (radius $r$, inclination $\theta$ and azimuth $\varphi$):
 
 \[
 x=r cos\varphi sin\theta,
@@ -74,7 +72,7 @@ It's obvious that:
 \[
 {F_{G,x}}=-G\frac{M_{\mathrm{E}}M_{\odot}}{r^2}cos\varphi sin\theta
 \]
-Where $M_{\mathrm{E}}$ and $M_{\odot}$ are masses of the Earth and the Sun correspondingly. Multiplying and dividing right hand side of the last equation by $x$ we get new equation for the $x$-component of the gravitational force between the Sun and the Earth:
+Where $M_{\mathrm{E}}$ and $M_{\odot}$ are masses of the Earth and the Sun correspondingly. By multiplying and dividing right hand side of the last equation by $x$ we get new equation for the $x$-component of the gravitational force between the Sun and the Earth:
 
 \begin{equation}\label{eq:force_motion}
 F_{G,x}=-Gx\frac{M_{\mathrm{E}}M_{\odot}}{r^3},
