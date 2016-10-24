@@ -18,21 +18,14 @@ void computeForces(vector<Celestial*> bodies) {
         Celestial *celestial1 = bodies[i];
         for(int j=i+1; j<bodies.size(); j++) {
             Celestial *celestial2 = bodies[j];
-
+			/* Iterates over all bodies and calculates fores by coupling them */
+			/* distance between selestials */
             double dx = celestial2->r[0] - celestial1->r[0];
             double dy = celestial2->r[1] - celestial1->r[1];
             double dz = celestial2->r[2] - celestial1->r[2];
             double dr2 = dx*dx + dy*dy + dz*dz;
             double r = sqrt(dr2);
             double G = 4.0*M_PI*M_PI;
-            double c = 63145; //c squared in AU/year
-            //double l = pow((celestial2->r[1]*celestial2->v[2] - celestial2->r[2]*celestial2->v[1]),2) -
-            //           pow((celestial2->r[0]*celestial2->v[2] - celestial2->r[2]*celestial2->v[0]),2) +
-            //           pow((celestial2->r[0]*celestial2->v[1] - celestial2->r[1]*celestial2->v[0]),2);
-            //double l = pow((dy*celestial2->v[2] - dz*celestial2->v[1]),2) -
-            //           pow((dx*celestial2->v[2] - dz*celestial2->v[0]),2) +
-            //           pow((dx*celestial2->v[1] - dy*celestial2->v[0]),2);
-            //double F = (G * celestial1->mass * celestial2->mass / (r*r*r)) * (1.0 + 3.0*l/r*r*c);
             double F = G * celestial1->mass * celestial2->mass / (r*r*r);
             double P_energ = G * celestial1->mass * celestial2->mass / (r);
             double fx = F*dx;
@@ -105,16 +98,17 @@ void integrateEuler(vector<Celestial*> bodies, double dt) {
 void integrateVerlet(vector<Celestial*> bodies, double dt) {
 
     computeForces(bodies);
-
+	/* first step is to compute axeleration components needed on nex step */    
+	/* at the same time we compute new coordinates */ 
     for(Celestial *celestial : bodies) {
         for(int i=0; i<3; i++) {
             celestial->old_a[i] = celestial->f[i] / celestial->mass;
             celestial->r[i] += celestial->v[i] * dt + ((dt * dt) / 2)* celestial->f[i]/celestial->mass;
         }
     }
-
+	/* new accelerations */
     computeForces(bodies);
-
+	/* finally velocity */
     for(Celestial *celestial : bodies) {
         for(int i=0; i<3; i++) {
             celestial->v[i] += (((celestial->f[i] / celestial->mass) + celestial->old_a[i]) * dt/2.0);
@@ -131,7 +125,11 @@ void writeToFile(vector<Celestial*> bodies, string filename)
     for(Celestial *celestial : bodies) {
 
         m_file << celestial->body_radius << " " << celestial->body_name << " " << celestial->r[0] << " " << celestial->r[1] << " " << celestial->r[2] << "\n";
-        celestial->writeMyCoordinates();
+        celestial->writeMyCoordinates(); /* Every time step it writes additional
+                                          * file with celestial as file name only
+                                          * coordinates of chosen celestial     
+                                          * Usefull for python static plots.    
+                                          */ 
     }
 }
 
@@ -144,8 +142,10 @@ int main() {
     */
     //Celestial *sun = new Celestial(0, 0, 0, 0, 0, 0, 0, 0, 0, 1.0, "Sun", 109.3*earth_radius_au, -1);
     //Celestial *earth = new Celestial(1, 0, 0, 0, 0.75*sqrt(2.0)*2*M_PI, 0, 0, 0, 0, 3e-6, "Earth", 1.0*earth_radius_au, 1);
-
-    Celestial *sun = new Celestial(3.573492533603374E-03, 3.382190685467812E-03, -1.599607179196645E-04,
+	
+	// 11. October 2016, data provided by NASA
+    
+	Celestial *sun = new Celestial(3.573492533603374E-03, 3.382190685467812E-03, -1.599607179196645E-04,
                                   -1.961253767828543E-06,  6.848684614020077E-06,  3.982709603458882E-08,
                                    0, 0, 0, 1.0, "Sun", 109.3*earth_radius_au, -1);
     Celestial *earth = new Celestial(9.536270134019510E-01,  3.098418103295414E-01, -1.776444588972545E-04,
