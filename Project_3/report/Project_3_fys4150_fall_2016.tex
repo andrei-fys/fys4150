@@ -35,7 +35,7 @@ In the part \ref{Part1}  we discuss the problem and make assumptions to the mode
 
 \newpage
 \section{Problem formulation and mathematical method}\label{Part1}
-In this part we present a mathematical description of investigated problem as well as derivation and discussion of numerical methods to be used for simulations.  Model of the Solar system is based on Newtonian gravity law. 
+In this part we present a mathematical description of investigated problem as well as derivation and discussion of numerical methods to be used for simulations.  Model of the solar system is based on Newtonian gravity law. 
 
 \subsection{The gravity and laws of motion}
 To provide an appropriate description of the planetary motion we need to consider the only force in the solar system  -- gravity. Newton's law of gravitation stands that two bodies with masses $M_1$ abd $M_2$ are attracted to each other with a force given by:
@@ -46,10 +46,9 @@ where $r$ is the distance between objects and $G$ is the gravitational constant.
 Applying  Newton's second law of motion to our problem we get the following equations:
 \[
 \frac{d^2x}{dt^2}=\frac{F_{G,x}}{M_{\mathrm{Earth}}},
-\]
-, 
+\] 
 \[
-\frac{d^2y}{dt^2}=\frac{F_{G,y}}{M_{\mathrm{Earth}}},
+\frac{d^2y}{dt^2}=\frac{F_{G,y}}{M_{\mathrm{Earth}}}
 \]
 and
 \[
@@ -138,7 +137,7 @@ Similarly one can easy get equations for the Jupiter:
 
 \subsection{Numerical methods}\label{Numerical methods}
 
-We managed to rewrite our second order differential equations as coupled first order differential equations \ref{eq:motion} and \ref{eq:motion-3-jupiter} which can be solved by different numerical methods. In this project we focus only on finite difference methods. We consider Euler and velocity Verlet methods bellow, however there are many others for example family of Runge-Kutta methods.
+We managed to rewrite our second order differential equations as coupled first order differential equations \ref{eq:motion} and \ref{eq:motion-3-earth}, \ref{eq:motion-3-jupiter} which can be solved by different numerical methods. In this project we focus only on finite difference methods. We consider Euler and velocity Verlet methods bellow, however there are many others for example family of Runge-Kutta methods.
 Here we start with discussion of Euler's method which is rather simple but gives a good feeling of all finate difference methods for solving ODEs.\\
 \subsubsection{Forward Euler's method}
 
@@ -185,7 +184,7 @@ v_{z,i+1}=v_{z,i}-h\frac{4\pi^2}{r_i^3}z_i \ ,\ z_{i+1}=z_{i}+hv_{z,i}\\
 
 As one can see from \ref{eq:euler-two-body} we just need initial conditions to calculate velocities and coordinates using Euler's explicit method. This is  easy to implement and straightforward algorithm. However we truncate Taylor expansion at the second term or with other words every step we make an approximation error of the order of $o(h^2)$ and taking into account fact that we make $N$-steps, total error goes like $N\cdot o(h^2)\approx o(h)$.
 We should keep in mind that decreasing $h$ is not always gives us better precision if we compute derivatives numerically by two point formula.
-We will later show \ref{fig:verlet_vs_euler} that Euler method is not stable for our calculations, however method is important due to it can be used to check general solution form and as a component for more precise methods, for example -- predictive phase of Runge-Kutta methods.
+We will later show \ref{fig:verlet_vs_euler} that Euler method is not stable for our calculations, however method is important due to it can be used to check general solution form and as a component for more precise methods, for example -- predictive phase of Runge-Kutta methods \cite{one}.
 In next chapter we try to improve accuracy of solution by taking into account higher derivatives in Taylor expansion.
 
 \subsubsection{Velocity Verlet method}
@@ -233,7 +232,7 @@ This method has a truncation error going as $o(h^3)$, which is better then the t
 \subsection{Numerical methods comparison}
 We implemented Euler's method to solve \ref{eq:motion} in C++ and source code can be found at \url{https://github.com/andrei-fys/fys4150/blob/master/Project_3/src/euler.cpp}. Similar code for velocity Verlet method can be found at \url{https://github.com/andrei-fys/fys4150/blob/master/Project_3/src/verlet.cpp}. For reader not familiar with C++ language simple compilation and usage instructions are given to all programs. To reproduce results documentation from \url{https://github.com/andrei-fys/fys4150/blob/master/Project_3/README.md} can be used.
 We present simulation of the solar system in three dimensions later in this chapter, however  we limit ourselves now to just two  dimensions for illustrative purposes only. 
-Figure \ref{fig:verlet_vs_euler} shows that Euler's method is less accurate then Verlet, the Earth is slightly moves away from the Sun. Decreasing a step length (increasing N in our implementation) provide better accuracy of Euler's method becoming, nevertheless solution is not stable. So we use the velocity Verlet method for simulating of the whole solar system. Additionally if one takes into consideration number of floating points operations for both mentioned methods it's easy to notice that number of FLOPS has same order of magnitude: $12N$ for Verlet versus $8N$ for Euler. On figure \ref{fig:slope} convergence rates for Verlet method and forward Euler's methods are shown. It's easy to see that velocity Verlet converges faster then Euler's method. As we already mentioned discussing \ref{fig:verlet_vs_euler} method not accurate enough and increasing $N$ we can rather end in domination of round-off errors much quicker then in good precision. Final argument against Euler's method is shown on \ref{fig:euler_energy}, namely energy of the system doesn't conserve. All mentioned above makes selection of the method for solar system simulation obvious. After we substantiated choose of method we need to decide reasonable limits for $N$. If one fix final time of simulation $t_{fin}$ to one year and makes calculation of convergence rate of velocity Verlet method, one gets that for value of $N > 10^7$ round-off errors dominate. For obvious reasons $N$ should not be too small to get accurate solution.
+Figure \ref{fig:verlet_vs_euler} shows that Euler's method is less accurate then Verlet, the Earth is slightly moves away from the Sun. Decrease of step length (increase of N in our implementation) provides better accuracy of Euler's method, nevertheless solar system is not stable. Additionally if one takes into consideration number of floating points operations for both mentioned methods it's easy to notice that number of FLOPS has same order of magnitude: $12N$ for Verlet versus $8N$ for Euler. On figure \ref{fig:slope} convergence rates for Verlet method and forward Euler's methods are shown. It's easy to see that velocity Verlet converges faster then Euler's method. As we already mentioned discussing \ref{fig:verlet_vs_euler} method not accurate enough and increasing $N$ we can rather end in domination of round-off errors much quicker then in good precision. Final argument against Euler's method is shown on \ref{fig:euler_energy}, namely energy of the system doesn't conserve. All mentioned above makes selection of the method for solar system simulation obvious. So we use the velocity Verlet method for simulating of the whole solar system. After we substantiated choose of method we need to decide reasonable limits for $N$. If one fix final time of simulation $t_{fin}$ to one year and makes calculation of convergence rate of velocity Verlet method, one gets that for value of $N > 10^7$ round-off errors dominate. For obvious reasons $N$ should not be too small to get accurate solution.
 
 \clearpage
 
@@ -296,36 +295,34 @@ If we ignore bad readability of code, difficulties in it's maintenance and debug
 After this we continued with three body system. We have tested it for the most heavy planet in our solar system, namely Jupiter. As one can see from fig. \ref{fig:3body_orig_jup} we obtain reasonable results for such simulation. Now we can investigate how Jupiter influences the movement of the Earth. In order to do this we made simulations for different masses of the Jupiter, namely $10\times M_{\mathrm{J}}$(fig. \ref{fig:3body_10x_jup}) and $1000\times M_{\mathrm{J}}$, where $M_{\mathrm{J}}$ is original mass of the Jupiter. For the latter we got a system similar to what is called a double star. One can see it on the figure \ref{fig:3body}. This plot shows how th Earth move if we add one more star to our solar system instead of the Jupiter. Initial position and velocity for a new star as those for the Jupiter on the 11.th of October 2016 (data provided by NASA\cite{three}). The mass of a new star is 0.95 mass of the Sun. We took the period of 50 years and choose the time step equal to $10^{-5} [year]$. For bigger time steps the Earth escapes such Solar system almost immediately. For rather small time step one may see that the Earth is no longer orbiting the Sun or a new star. Such system is not stable, after 50 years the Earth actually escapes the system.
 Finally we add all planets of our solar system and Pluto for historical reasons. Source code can be found \url{https://github.com/andrei-fys/fys4150/tree/master/Project_3/src/OOP/Solar_System_all_planets}. Code produces output in xyz-file format that is commonly used for molecular dynamics simulations and it's easy to visualize. We used Ovito\cite{ovito} to make a 3D visualization for our Solar system. We obtain a good model of the solar system. It is stable over time and gives us reasonable results for the velocities and positions of the planets. \\
  Finally we computed Mercury's perihelion (fig. \ref{fig:perihelion}) precession angle by adding general relativity correction to the Newtonian gravitational force. We considered two-body system only (the Mercury and the Sun) in order to neglect the influence of other planets and calculate the precession angle caused by the general relativity effects only. We run the simulation for one century and find out that the perihelion precession is in a good agreement with the observed one.
-
-\clearpage
-
-\newpage
 \begin{figure}[ht]
   \begin{center}
     \includegraphics[scale=0.5]{3body_orig_jup}
     \caption {The simulation result for Earth and Jupiter orbiting the Sun. Period of 50 years and time step $10^{-5} [year]$.}
     \label{fig:3body_orig_jup}
   \end{center}
-\vspace*{\floatsep}
-  \begin{center}
-    \includegraphics[scale=0.5]{3body_10x_jup}
-    \caption {The simulation result for Earth and Jupiter orbiting the Sun. The mass of Jupiter is increased to by the factor of 10. Period of 50 years and time step $10^{-5} [year]$.}
-    \label{fig:3body_10x_jup}
-  \end{center}
 \end{figure}
+
 \clearpage
 
 \newpage
 \begin{figure}[ht]
   \begin{center}
+    \includegraphics[scale=0.5]{3body_10x_jup}
+    \caption {The simulation result for Earth and Jupiter orbiting the Sun. The mass of Jupiter is increased to by the factor of 10. Period of 50 years and time step $10^{-5} [year]$.}
+    \label{fig:3body_10x_jup}
+  \end{center}
+\vspace*{\floatsep}
+  \begin{center}
     \includegraphics[scale=0.5]{3body}
     \caption {The simulation result for the Earth moving in the double star solar system. The new star has mass $0.95\times M_{Sun}$ and its initial velocity and position are those for the Jupiter. Period of 50 years and time step $10^{-5} [year]$}
     \label{fig:3body}
   \end{center}
-
+\end{figure}
+\clearpage
 % 1 mass of the sun and 0.95 mass of the sun. dt 10⁻5, 50 years. Initial velocities from NASA 11 oct 2016, position and velocity coincide with those for Jupiter. 
   
-\vspace*{\floatsep}
+\begin{figure}[ht]
   \begin{center}
     \includegraphics[scale=0.5]{mercury}
     \caption {Value of the perihelion angle obtained by simulation of Mercury’s orbit around the Sun with no other planets present. General theory of relativity precession is calculated only, classical effects are substracted. Initial position of the Mercury is $[0.3075,0]\ AU$, initial velocity is $12.44\ AU/yr$. Finish time is $100$ Earth's years. $N=10^8$ was used in simulations. }
@@ -335,7 +332,6 @@ Finally we add all planets of our solar system and Pluto for historical reasons.
 \clearpage
 
 \newpage
-\clearpage
 \section{Conclusion and further research}\label{conc}
 In the project we made a simulation for all planets in solar system. Our results turn to be rather accurate and chosen method turns to be stable. We studied two different numerical methods, provided both quantitative and qualitative comparison for them (discuss truncation errors and test convergence rates). We also investigated the influence of Jupiter on the Earth's motion and compute the angle for precession of Mercury's perihelion.
 
@@ -343,8 +339,6 @@ Regarding program itself there is a big potential to further development, for ex
 In this case we have to improve the solver by choosing the one of the adaptive methods. The point is all planets have different periods while orbiting the Sun, as well as the comets and asteroids,  so it is preferred to have more mesh points in the discretization for some of them and less for others. This could be an option for further research. For example the Runge-Kutta family has many different method base on prediction correction approach (this is still the finite difference methods) and some of them provide an option to adapt the number of mesh points for different cases.
  Also, one may use it to model other types of Solar systems. We scratch the surface of the double star systems here, but it actually a large field for research. In 2012 the group of scientists from NASA and Tel-Aviv University in Israel discovered the double star system Kepler 47, with one of the stars very similar to our Sun \cite{kepler}. By some small corrections our program can by modified to simulate this system. We consider systems of double stars rather interesting topic and actually planned to discuss it more in the project, but have to give up the idea due to the lack of time.
 
-
-\clearpage
 \newpage
 \begin{thebibliography}{2}
 \bibitem{one} 
