@@ -232,7 +232,7 @@ This method has a truncation error going as $o(h^3)$, which is better then the t
 \subsection{Numerical methods comparison}
 We implemented Euler's method to solve \ref{eq:motion} in C++ and source code can be found at \url{https://github.com/andrei-fys/fys4150/blob/master/Project_3/src/euler.cpp}. Similar code for velocity Verlet method can be found at \url{https://github.com/andrei-fys/fys4150/blob/master/Project_3/src/verlet.cpp}. For reader not familiar with C++ language simple compilation and usage instructions are given to all programs. To reproduce results documentation from \url{https://github.com/andrei-fys/fys4150/blob/master/Project_3/README.md} can be used.
 We present simulation of the solar system in three dimensions later in this chapter, however  we limit ourselves now to just two  dimensions for illustrative purposes only. 
-Figure \ref{fig:verlet_vs_euler} shows that Euler's method is less accurate then Verlet, the Earth is slightly moves away from the Sun. Decrease of step length (increase of N in our implementation) provides better accuracy of Euler's method, nevertheless solar system is not stable. Additionally if one takes into consideration number of floating points operations for both mentioned methods it's easy to notice that number of FLOPS has same order of magnitude: $12N$ for Verlet versus $8N$ for Euler. On figure \ref{fig:slope} convergence rates for Verlet method and forward Euler's methods are shown. It's easy to see that velocity Verlet converges faster then Euler's method. As we already mentioned discussing \ref{fig:verlet_vs_euler} method not accurate enough and increasing $N$ we can rather end in domination of round-off errors much quicker then in good precision. Final argument against Euler's method is shown on \ref{fig:euler_energy}, namely energy of the system doesn't conserve. All mentioned above makes selection of the method for solar system simulation obvious. So we use the velocity Verlet method for simulating of the whole solar system. After we substantiated choose of method we need to decide reasonable limits for $N$. If one fix final time of simulation $t_{fin}$ to one year and makes calculation of convergence rate of velocity Verlet method, one gets that for value of $N > 10^7$ round-off errors dominate. For obvious reasons $N$ should not be too small to get accurate solution.
+Figure \ref{fig:verlet_vs_euler} shows that Euler's method is less accurate then Verlet, the Earth is slightly moves away from the Sun. Decrease of step length (increase of N in our implementation) provides better accuracy of Euler's method, nevertheless solar system is not stable. Additionally if one takes into consideration number of floating points operations for both mentioned methods it's easy to notice that number of FLOPS has same order of magnitude: $12N$ for Verlet versus $8N$ for Euler. On figure \ref{fig:slope} convergence rates for Verlet method and forward Euler's methods are shown. It's easy to see that velocity Verlet converges faster then Euler's method. As we already mentioned discussing \ref{fig:verlet_vs_euler} method not accurate enough and increasing $N$ we can rather end in domination of round-off errors much quicker then in good precision. Final argument against Euler's method is shown on \ref{fig:euler_energy}, namely energy of the system doesn't conserve. All mentioned above makes selection of the method for solar system simulation obvious. So we use the velocity Verlet method for simulating of the whole solar system. After we substantiated choose of method we need to decide reasonable limits for $N$. If one fix final time of simulation $t_{fin}$ to one year and makes calculation of convergence rate of velocity Verlet method, one gets that for value of $N > 10^7$ round-off errors dominate. For obvious reasons $N$ should not be too small to get accurate solution.\\
 In the discussion above we mentioned the conservation of energy as a good test for numerical method. In our simulation we used it as a unit test for the program. However, we need to make some adjustments for the initial velocity of the Sun, in order the conservation laws to be performed. In the simulation for all planets the Sun is no longer fixed, so we have to adjust it's initial velocity and make total momentum of the system zero. After this is done all conservation laws are performed. However, we use this just as a unit test and do not have this adjustment in the main program (we are using data from NASA instead). 
 
 \clearpage
@@ -299,7 +299,7 @@ Finally we add all planets of our solar system and Pluto for historical reasons.
 \begin{figure}[ht]
   \begin{center}
     \includegraphics[scale=0.5]{3body_orig_jup}
-    \caption {The simulation result for Earth and Jupiter orbiting the Sun. Period of 50 years and time step $10^{-5} [year]$.}
+    \caption {The simulation result for Earth and Jupiter orbiting the Sun. Period of 50 years and time step $10^{-5} [year]$. Initial velocities and positions are provided by NASA.}
     \label{fig:3body_orig_jup}
   \end{center}
 \end{figure}
@@ -310,13 +310,13 @@ Finally we add all planets of our solar system and Pluto for historical reasons.
 \begin{figure}[ht]
   \begin{center}
     \includegraphics[scale=0.5]{3body_10x_jup}
-    \caption {The simulation result for Earth and Jupiter orbiting the Sun. The mass of Jupiter is increased to by the factor of 10. Period of 50 years and time step $10^{-5} [year]$.}
+    \caption {The simulation result for Earth and Jupiter orbiting the Sun. The mass of Jupiter is increased to by the factor of 10. Period of 50 years and time step $10^{-5} [year]$. Initial velocities and positions are provided by NASA.}
     \label{fig:3body_10x_jup}
   \end{center}
 \vspace*{\floatsep}
   \begin{center}
     \includegraphics[scale=0.5]{3body}
-    \caption {The simulation result for the Earth moving in the double star solar system. The new star has mass $0.95\times M_{Sun}$ and its initial velocity and position are those for the Jupiter. Period of 50 years and time step $10^{-5} [year]$}
+    \caption {The simulation result for the Earth moving in the double star solar system. The new star has mass $0.95\times M_{Sun}$ and its initial velocity and position are those for the Jupiter. Period of 50 years and time step $10^{-5} [year]$. }
     \label{fig:3body}
   \end{center}
 \end{figure}
@@ -326,7 +326,7 @@ Finally we add all planets of our solar system and Pluto for historical reasons.
 \begin{figure}[ht]
   \begin{center}
     \includegraphics[scale=0.5]{mercury}
-    \caption {Value of the perihelion angle obtained by simulation of Mercury’s orbit around the Sun with no other planets present. General theory of relativity precession is calculated only, classical effects are substracted. Initial position of the Mercury is $[0.3075,0]\ AU$, initial velocity is $12.44\ AU/yr$. Finish time is $100$ Earth's years. $dt=10^{-8}$ was used in simulations. }
+    \caption {Value of the perihelion angle obtained by simulation of Mercury’s orbit around the Sun with no other planets present. General theory of relativity precession is calculated only, classical effects are subtracted. Initial position of the Mercury is $[0.3075,0]\ AU$, initial velocity is $12.44\ AU/yr$. Finish time is $100$ Earth's years. $dt=10^{-8}$ was used in simulations. }
     \label{fig:perihelion}
   \end{center}
 \end{figure}
