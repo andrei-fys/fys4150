@@ -9,10 +9,11 @@ using namespace std;
 
 void show_matrix (int, int**);
 void create_ferromagnet (int, int**, int);
-int calculate_energy(int , int**, int &, int &, int &);
-int energy_difference(int, int, int, int**, int &);
+int calculate_energy(int, int**, int &, int &, int &);
+int energy_difference(int, int, int, int**);
+void update_magnetization(int, int, int, int **, int &, int &);
 void precalculate_exp_deltaE(double*, double);
-void update_expectation(int, int, int &, int &, int &, int &);
+void update_expectation(int,int,int,int &, int &, int &, int &, int &, int &);
 void unit_test();
 
 int main(int argc, char* argv[]){
@@ -61,8 +62,11 @@ int main(int argc, char* argv[]){
 	int E2 = 0;
 	int M = 0; 
 	int M2 = 0;
+	int absM = 0;
+	int absM2 = 0;
 	int E_diff;
-	int mean_energy, mean_magnetization, mean_energy2, mean_magnetization2;
+	int mean_energy, mean_magnetization, mean_energy2, mean_magnetization2,
+		mean_absM, mean_absM2;
 
 	create_ferromagnet(N,spins,chaos);
 	int Energy_of_state = calculate_energy(N, spins, E2, M, M2); //brute-force
@@ -71,6 +75,8 @@ int main(int argc, char* argv[]){
 	mean_magnetization = M;
 	mean_energy2 = E2;
 	mean_magnetization2 = M2;
+	mean_absM = abs(M);
+	mean_absM2 = abs(M2);
 
 	while (T <= T_finish){
 		precalculate_exp_deltaE(expE, T);
@@ -78,28 +84,34 @@ int main(int argc, char* argv[]){
 			pick_spin_i = (int) (RandomNumberGenerator(gen)*N);
 			pick_spin_j = (int) (RandomNumberGenerator(gen)*N);
 			spins[pick_spin_i][pick_spin_j] *= -1;
-			E_diff = energy_difference(N, pick_spin_i, pick_spin_j, spins, M);
+			E_diff = energy_difference(N, pick_spin_i, pick_spin_j, spins);
 			if (E_diff <= 0){
 				Energy_of_state += E_diff;
-				update_expectation(Energy_of_state, M, 
+				update_magnetization(N, pick_spin_i, pick_spin_j, spins, M, absM);
+				update_expectation(Energy_of_state, M, absM,
 						mean_energy, mean_energy2,
-						mean_magnetization, mean_magnetization2);
+						mean_magnetization, mean_magnetization2,
+						mean_absM, mean_absM2);
 				MC_counter++;
 				MC_accepted++;
 			} else {
 				double sampling_parameter = RandomNumberGenerator(gen);
 				if (expE[E_diff+8] < sampling_parameter){
 					spins[pick_spin_i][pick_spin_j] *= -1; //flip back
-					update_expectation(Energy_of_state, M,
+					update_expectation(Energy_of_state, M, absM,
 						mean_energy, mean_energy2,
-						mean_magnetization, mean_magnetization2);
+						mean_magnetization, mean_magnetization2,
+						mean_absM, mean_absM2);
 					MC_counter++;
 					MC_rejected++;
 				} else {
 					Energy_of_state += E_diff;
-					update_expectation(Energy_of_state, M,
+					update_magnetization(N, pick_spin_i, pick_spin_j,
+							spins, M, absM);
+					update_expectation(Energy_of_state, M, absM,
 						mean_energy, mean_energy2,
-						mean_magnetization, mean_magnetization2);
+						mean_magnetization, mean_magnetization2,
+						mean_absM, mean_absM2);
 					MC_counter++;
 					MC_accepted++;
 				}
@@ -115,6 +127,16 @@ int main(int argc, char* argv[]){
 	cout << "E^2 = " << (double) mean_energy2/MC_samples << endl;
 	cout << "M = "   << (double) mean_magnetization/MC_samples << endl;
 	cout << "M^2 = " << (double) mean_magnetization2/MC_samples << endl;
+	cout << "|M| = "   << (double) mean_absM/MC_samples << endl;
+	cout << "|M|^2 = " << (double) mean_absM2/MC_samples << endl;
+	T = 1.0;
+	double e2 = (double) mean_energy2/MC_samples;
+	double e = (double) mean_energy/MC_samples*mean_energy/MC_samples;
+	cout << "C_v  " << (e2 - e)/T << endl;
+
+	double xi2 = (double) mean_absM2/MC_samples;
+	double xi = (double) mean_absM/MC_samples*mean_absM/MC_samples;
+	cout << "Xi  " << (xi2 - xi)/T << endl;
 	
 	for( int i=0;i<N; i++ ) {
 		delete [] spins[i];
@@ -178,8 +200,8 @@ void create_ferromagnet (int n, int ** spins, int chaos){
 	}
 }
 
-int energy_difference(int n, int i, int j, int ** spins, int &M){
-	/*
+int energy_difference(int n, int i, int j, int ** spins){
+	/* Checks energy difference if one spin flipped
 	 * Args:
 	 *	n : system size
 	 *	i : row number of flipped spin
@@ -217,9 +239,23 @@ int energy_difference(int n, int i, int j, int ** spins, int &M){
 		EH = spins[i][j+1] + spins[i][j-1];
 	}
 	int delta_E = -2*spins[flipped_spin_row][flipped_spin_colomn]*(EH + EV);
-	M =- 2*spins[flipped_spin_row][flipped_spin_colomn];
 	return delta_E;
-	//new_E = E_0 + delta_E;
+}
+
+void update_magnetization(int n, int i, int j, int ** spins, int &M, int &absM){
+	/* Updates magnetization and absolute value of it for the system
+	 * Args:
+	 *	n : system size
+	 *	i : row number of flipped spin
+	 *	j : colomn number of flipped spin
+	 *	spins : spin matrix
+	 *	M : magnetization of system
+	 *	absM : |M| - absolute magnetization
+	 */
+	int flipped_spin_row = i;
+	int flipped_spin_colomn = j;
+	M =- 2*spins[flipped_spin_row][flipped_spin_colomn];
+	absM = abs(M);
 }
 
 int calculate_energy(int n, int ** spins, int &E2, int &M, int &M2){
@@ -257,16 +293,21 @@ int calculate_energy(int n, int ** spins, int &E2, int &M, int &M2){
 	return Energy;
 }
 
-void update_expectation(int E, int M,
+void update_expectation(int E, int M, int absM,
 		int &mean_energy, int &mean_energy2,
-		int &mean_magnetization, int &mean_magnetization2){
-	int M2, E2;
+		int &mean_magnetization, int &mean_magnetization2,
+		int &mean_absM, int &mean_absM2){
+	int M2, E2, absM2;
 	mean_energy += E;
 	E2 = E*E;
 	mean_energy2 += E2;
 	mean_magnetization += M;
 	M2 = M*M;
 	mean_magnetization2 += M2;
+	mean_absM += absM;
+	absM2 = absM*absM;
+	mean_absM2 += absM2;
+
 }
 
 void precalculate_exp_deltaE(double* exp_energy, double Temperature){
@@ -357,7 +398,7 @@ void unit_test(){
 		int rand_spin_i = (int) (RandomNumberGenerator(gen)*N);
 		int rand_spin_j = (int) (RandomNumberGenerator(gen)*N);
 		spin[rand_spin_i][rand_spin_j] *= -1;
-		int delta = energy_difference(N, rand_spin_i, rand_spin_j, spin, M);
+		int delta = energy_difference(N, rand_spin_i, rand_spin_j, spin);
 		int new_energy = calculate_energy(2, spin, E2, M, M2);
 		assert (energy + delta == new_energy);
 	}
