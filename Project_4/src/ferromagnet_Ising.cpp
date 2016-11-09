@@ -9,7 +9,7 @@ using namespace std;
 
 void show_matrix (int, int**);
 void create_ferromagnet (int, int**, int);
-int calculate_energy(int , int** );
+int calculate_energy(int , int**, int &, int &, int &);
 int energy_difference(int, int, int, int** );
 void precalculate_exp_deltaE(double*, double);
 void unit_test();
@@ -44,21 +44,26 @@ int main(int argc, char* argv[]){
 	double T_step = atof(argv[5]);
 	int chaos = atof(argv[6]);
 	
-	unit_test();
+	//unit_test();
 	// Initialize the seed and call the Mersienne algo
 	random_device rd;
 	mt19937_64 gen(rd());
 	uniform_real_distribution<double> RandomNumberGenerator(0.0,1.0);
 	
-	create_ferromagnet(N,spins,chaos);
-	int Energy_of_state = calculate_energy(N, spins); //brute-force
 	double T = T_start;
 	double * expE = new double[16]; //precalculate exp(-beta deltaE) matrix
 	int pick_spin_i, pick_spin_j; 
 	int MC_counter = 0;
 	int MC_rejected = 0;
 	int MC_accepted = 0;
+	int E2 = 0;
+	int M = 0; 
+	int M2 = 0;
 	int E_diff;
+	
+	create_ferromagnet(N,spins,chaos);
+	int Energy_of_state = calculate_energy(N, spins, E2, M, M2); //brute-force
+	
 	while (T <= T_finish){
 		precalculate_exp_deltaE(expE, T);
 		for (int m=0; m < MC_samples; m++){ //MonteCarlo cycle
@@ -200,13 +205,17 @@ int energy_difference(int n, int i, int j, int ** spins){
 	//new_E = E_0 + delta_E;
 }
 
-int calculate_energy(int n, int ** spins){
-	/* 
+int calculate_energy(int n, int ** spins, int &E2, int &M, int &M2){
+	/* Calculates energy in BF way, returns energy
+	 * Updates energy squared, magn. moment, magn. moment squared
 	 * Args:
 	 *	n : system size
 	 *	spins : spin matrix
+	 *	E2 : energy squared
+	 *	M : magnetic moment
+	 *	M2 : magnetic moment squared
 	 */
-	int Energy = 0;
+	int Energy = 0; //split energies vertically and horizontally to apply PBC
 	for (int i=0; i<n; i++){
 		int jn = n-1;
 		for (int j=0; j<n; j++){
@@ -221,7 +230,13 @@ int calculate_energy(int n, int ** spins){
 			in = i;
 		}
 	}
-	//cout << "Energy is " << Energy << endl;
+	for (int i=0;i<n;i++){ //Magnetic moment
+		for (int j;j<n;j++){
+			M += spins[i][j];
+		}
+	}
+	M2 = M*M;
+	E2 = Energy*Energy;
 	return Energy;
 }
 
@@ -249,6 +264,7 @@ void unit_test(){
 	 * if function calculating delta of energy after
 	 * flipping one spin calculates energy of new state correctly.
 	 */
+	int E2, M, M2;
 	int N = 2;
 	int ** spin = new int*[N];
 	for (int i=0; i<N; i++){
@@ -256,64 +272,64 @@ void unit_test(){
 	}
 	spin[0][0]=1; spin[0][1]=1;
 	spin[1][0]=1; spin[1][1]=1;
-	assert (calculate_energy(2, spin) == -8);
+	assert (calculate_energy(2, spin, E2, M, M2) == -8);
 	spin[0][0]=1; spin[0][1]=1;
 	spin[1][0]=1; spin[1][1]=-1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=1; spin[0][1]=-1;
 	spin[1][0]=1; spin[1][1]=1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=-1; spin[0][1]=1;
 	spin[1][0]=1; spin[1][1]=1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=1; spin[0][1]=1;
 	spin[1][0]=-1; spin[1][1]=1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=1 ;spin[0][1]=1;
 	spin[1][0]=-1 ;spin[1][1]=-1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=-1;spin[0][1]=-1;
 	spin[1][0]=1;spin[1][1]=1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=1; spin[0][1]=-1;
 	spin[1][0]=1; spin[1][1]=-1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=-1; spin[0][1]=1;
 	spin[1][0]=-1; spin[1][1]=1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=1;spin[0][1]=-1;
 	spin[1][0]=-1;spin[1][1]=1;
-	assert (calculate_energy(2, spin) == 8);
+	assert (calculate_energy(2, spin, E2, M, M2) == 8);
 	spin[0][0]=-1; spin[0][1]=1;
 	spin[1][0]=1; spin[1][1]=-1;
-	assert (calculate_energy(2, spin) == 8);
+	assert (calculate_energy(2, spin, E2, M, M2) == 8);
 	spin[0][0]=-1; spin[0][1]=-1;
 	spin[1][0]=1; spin[1][1]=-1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=1; spin[0][1]=-1;
 	spin[1][0]=-1; spin[1][1]=-1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=-1; spin[0][1]=1;
 	spin[1][0]=-1; spin[1][1]=-1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=-1; spin[0][1]=-1;
 	spin[1][0]=-1; spin[1][1]=1;
-	assert (calculate_energy(2, spin) == 0);
+	assert (calculate_energy(2, spin, E2, M, M2) == 0);
 	spin[0][0]=-1; spin[0][1]=-1;
 	spin[1][0]=-1; spin[1][1]=-1;
-	assert (calculate_energy(2, spin) == -8);
+	assert (calculate_energy(2, spin, E2, M, M2) == -8);
 	cout << "Unit test #1(energy calculation): PASSED"<< endl;
 	random_device rd;
 	mt19937_64 gen(rd());
 	uniform_real_distribution<double> RandomNumberGenerator(0.0,1.0);
 	for (int l;l<128;l++){
 		
-		int energy = calculate_energy(2, spin);
+		int energy = calculate_energy(2, spin, E2, M, M2);
 		int rand_spin_i = (int) (RandomNumberGenerator(gen)*N);
 		int rand_spin_j = (int) (RandomNumberGenerator(gen)*N);
 		spin[rand_spin_i][rand_spin_j] *= -1;
 		int delta = energy_difference(N, rand_spin_i, rand_spin_j, spin);
-		int new_energy = calculate_energy(2, spin);
+		int new_energy = calculate_energy(2, spin, E2, M, M2);
 		assert (energy + delta == new_energy);
 	}
 	cout << "Unit test #2(delta E (periodic boundary)): PASSED"<<endl;
