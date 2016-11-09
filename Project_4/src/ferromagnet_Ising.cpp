@@ -44,7 +44,8 @@ int main(int argc, char* argv[]){
 	double T_step = atof(argv[5]);
 	int chaos = atof(argv[6]);
 	
-	//unit_test();
+	unit_test(); //crash if something wrong
+	
 	// Initialize the seed and call the Mersienne algo
 	random_device rd;
 	mt19937_64 gen(rd());
