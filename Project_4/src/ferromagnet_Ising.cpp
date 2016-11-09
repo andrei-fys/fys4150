@@ -11,6 +11,7 @@ void show_matrix (int, int**);
 void create_ferromagnet (int, int**, int);
 int calculate_energy(int , int** );
 int energy_difference(int, int, int, int** );
+void precalculate_exp_deltaE(double*, double);
 void unit_test();
 
 int main(int argc, char* argv[]){
@@ -49,13 +50,40 @@ int main(int argc, char* argv[]){
 	mt19937_64 gen(rd());
 	uniform_real_distribution<double> RandomNumberGenerator(0.0,1.0);
 	
+	create_ferromagnet(N,spins,chaos);
+	calculate_energy(N, spins);
+	double T = T_start;
+	double * expE = new double[16];
+	while (T <= T_finish){
+		precalculate_exp_deltaE(expE, T);
+	//	for (int m=0; m < MC_samples; m++){
+	//		flip spin
+	//		calculate delta_e
+	//		if (delta_e <= 0){
+	//			accept move;
+	//			update MC_counter;
+	//		} else {
+	//			double sampling_parameter = RandomNumberGenerator(gen);
+	//			if (delta_e < sampling_parameter){
+	//				decline move;(flip back)
+	//				update MC counter;
+	//			} else {
+	//				accept move;
+	//				update MC_counter;
+	//			}
+	//	}
+		T += T_step;
+		//cout << T << endl;
+	}
+	
+	
 	//int random_spin = (int) (RandomNumberGenerator(gen)*N);
 	//double random_uniform = RandomNumberGenerator(gen);
 	//cout << "X = " << random_uniform << endl;
 	
-	create_ferromagnet(N,spins,chaos);
-	//calculate_energy(N, spins);
-	
+	for( int i=0;i<N; i++ ) {
+		delete [] spins[i];
+	}
 	delete[] spins;
 }
 
@@ -182,6 +210,22 @@ int calculate_energy(int n, int ** spins){
 	//cout << "Energy is " << Energy << endl;
 	return Energy;
 }
+
+void precalculate_exp_deltaE(double* exp_energy, double Temperature){
+	/*
+	 * Precalculate exponents of delta E at given temperature.
+	 * Args:
+	 *	exp_energy : vector
+	 *	Temperature : temperature
+	 *	values of delta E are written into
+	 *	exp_energy vector as 0,4,8,12,16th elements
+	 */
+	for (int i=-8;i<=8;i+=4){
+		exp_energy[i+8]=exp((double) -i/Temperature);
+	}
+
+}
+
 void unit_test(){
 	/*
 	 * Unit tests, should run every time.
@@ -244,7 +288,7 @@ void unit_test(){
 	spin[0][0]=-1; spin[0][1]=-1;
 	spin[1][0]=-1; spin[1][1]=-1;
 	assert (calculate_energy(2, spin) == -8);
-
+	cout << "Unit test #1(energy calculation): PASSED"<< endl;
 	random_device rd;
 	mt19937_64 gen(rd());
 	uniform_real_distribution<double> RandomNumberGenerator(0.0,1.0);
@@ -257,8 +301,7 @@ void unit_test(){
 		int delta = energy_difference(N, rand_spin_i, rand_spin_j, spin);
 		int new_energy = calculate_energy(2, spin);
 		assert (energy + delta == new_energy);
-		cout << l << endl;
-		cout << energy <<" "<< delta <<" "<< new_energy << endl;
 	}
+	cout << "Unit test #2(delta E (periodic boundary)): PASSED"<<endl;
 
 }
