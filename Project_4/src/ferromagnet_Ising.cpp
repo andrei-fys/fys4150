@@ -254,7 +254,7 @@ void update_magnetization(int n, int i, int j, int ** spins, int &M, int &absM){
 	 */
 	int flipped_spin_row = i;
 	int flipped_spin_colomn = j;
-	M =- 2*spins[flipped_spin_row][flipped_spin_colomn];
+	M += 2*spins[flipped_spin_row][flipped_spin_colomn];
 	absM = abs(M);
 }
 
