@@ -76,7 +76,7 @@ int main(int argc, char* argv[]){
 	mean_energy2 = E2;
 	mean_magnetization2 = M2;
 	mean_absM = abs(M);
-	mean_absM2 = abs(M2);
+	mean_absM2 = mean_absM*mean_absM;
 
 	while (T <= T_finish){
 		precalculate_exp_deltaE(expE, T);
@@ -92,6 +92,7 @@ int main(int argc, char* argv[]){
 						mean_energy, mean_energy2,
 						mean_magnetization, mean_magnetization2,
 						mean_absM, mean_absM2);
+				//cout << "Accept #1 M= "<<M<<endl;
 				MC_counter++;
 				MC_accepted++;
 			} else {
@@ -102,6 +103,7 @@ int main(int argc, char* argv[]){
 						mean_energy, mean_energy2,
 						mean_magnetization, mean_magnetization2,
 						mean_absM, mean_absM2);
+					//cout << "Reject #1 M= "<<M<<endl;
 					MC_counter++;
 					MC_rejected++;
 				} else {
@@ -112,6 +114,7 @@ int main(int argc, char* argv[]){
 						mean_energy, mean_energy2,
 						mean_magnetization, mean_magnetization2,
 						mean_absM, mean_absM2);
+					//cout << "Accept #2 M= "<<M<<endl;
 					MC_counter++;
 					MC_accepted++;
 				}
@@ -256,6 +259,7 @@ void update_magnetization(int n, int i, int j, int ** spins, int &M, int &absM){
 	int flipped_spin_colomn = j;
 	M += 2*spins[flipped_spin_row][flipped_spin_colomn];
 	absM = abs(M);
+	cout << "M = " << M << " absM = " << absM << endl;
 }
 
 int calculate_energy(int n, int ** spins, int &E2, int &M, int &M2){
@@ -301,9 +305,11 @@ void update_expectation(int E, int M, int absM,
 	mean_energy += E;
 	E2 = E*E;
 	mean_energy2 += E2;
+	
 	mean_magnetization += M;
 	M2 = M*M;
 	mean_magnetization2 += M2;
+	
 	mean_absM += absM;
 	absM2 = absM*absM;
 	mean_absM2 += absM2;
