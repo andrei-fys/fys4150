@@ -51,29 +51,43 @@ int main(int argc, char* argv[]){
 	uniform_real_distribution<double> RandomNumberGenerator(0.0,1.0);
 	
 	create_ferromagnet(N,spins,chaos);
-	calculate_energy(N, spins);
+	int Energy_of_state = calculate_energy(N, spins); //brute-force
 	double T = T_start;
-	double * expE = new double[16];
+	double * expE = new double[16]; //precalculate exp(-beta deltaE) matrix
+	int pick_spin_i, pick_spin_j; 
+	int MC_counter = 0;
+	int MC_rejected = 0;
+	int MC_accepted = 0;
+	int E_diff;
 	while (T <= T_finish){
 		precalculate_exp_deltaE(expE, T);
-	//	for (int m=0; m < MC_samples; m++){
-	//		flip spin
-	//		calculate delta_e
-	//		if (delta_e <= 0){
-	//			accept move;
-	//			update MC_counter;
-	//		} else {
-	//			double sampling_parameter = RandomNumberGenerator(gen);
-	//			if (delta_e < sampling_parameter){
-	//				decline move;(flip back)
-	//				update MC counter;
-	//			} else {
-	//				accept move;
-	//				update MC_counter;
-	//			}
-	//	}
+		for (int m=0; m < MC_samples; m++){ //MonteCarlo cycle
+			pick_spin_i = (int) (RandomNumberGenerator(gen)*N);
+			pick_spin_j = (int) (RandomNumberGenerator(gen)*N);
+			spins[pick_spin_i][pick_spin_j] *= -1;
+			E_diff = energy_difference(N, pick_spin_i, pick_spin_j, spins);
+			if (E_diff <= 0){
+				Energy_of_state += E_diff;
+				MC_counter++;
+				MC_accepted++;
+			} else {
+				double sampling_parameter = RandomNumberGenerator(gen);
+				if (expE[E_diff+8] < sampling_parameter){
+					spins[pick_spin_i][pick_spin_j] *= -1; //flip back
+					MC_counter++;
+					MC_rejected++;
+				} else {
+					Energy_of_state += E_diff;
+					MC_counter++;
+					MC_accepted++;
+				}
+			}
+		//cout << "Energy " << Energy_of_state << "; " << MC_counter<< endl;
+		}
+		cout <<"Temperature "<< T << endl;
+		cout <<"MC cycles accepted: "<< MC_accepted << endl;
+		cout <<"MC cycles rejected: "<< MC_rejected << endl;
 		T += T_step;
-		//cout << T << endl;
 	}
 	
 	
