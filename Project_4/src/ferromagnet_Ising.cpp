@@ -104,11 +104,6 @@ int main(int argc, char* argv[]){
 					MC_accepted++;
 				}
 			}
-		//cout << "Energy " << Energy_of_state << "; " << MC_counter<< endl;
-			//cout << "E = "   << (double) mean_energy/MC_counter << endl;
-			//cout << "E^2 = " << (double) (mean_energy2/MC_samples) << endl;
-			//cout << "M = "   << (double) (mean_magnetization/MC_samples) << endl;
-			//cout << "M^2 = " << (double) (mean_magnetization2/MC_samples) << endl;
 		}
 		cout <<"Temperature "<< T << endl;
 		cout <<"MC cycles accepted: "<< MC_accepted << endl;
@@ -116,8 +111,6 @@ int main(int argc, char* argv[]){
 		T += T_step;
 	}
 	
-	//cout << "mean E summ = "   <<  mean_energy << endl;
-	//cout << "MC = "   <<  MC_samples << endl;
 	cout << "E = "   << (double) mean_energy/MC_samples << endl;
 	cout << "E^2 = " << (double) mean_energy2/MC_samples << endl;
 	cout << "M = "   << (double) mean_magnetization/MC_samples << endl;
