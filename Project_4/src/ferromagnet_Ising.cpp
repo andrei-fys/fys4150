@@ -80,10 +80,32 @@ int main(int argc, char* argv[]){
 	mean_magnetization2 = M2;
 	mean_absM = abs(M);
 	mean_absM2 = mean_absM*mean_absM;
-
+	int MC_skipped_cycles = 0.15*MC_samples;
+	cout <<"15% = " << MC_skipped_cycles << endl;
 	while (T <= T_finish){
 		precalculate_exp_deltaE(expE, T);
-		for (int m=0; m < MC_samples; m++){ //MonteCarlo cycle
+		//-----------------------------------------------------------------------
+		for (int m=0; m < MC_skipped_cycles; m++){ //10% of MC samples, we skip them
+			for (int k=0;k<N*N;k++){
+				pick_spin_i = (int) (RandomNumberGenerator(gen)*N);
+				pick_spin_j = (int) (RandomNumberGenerator(gen)*N);
+				spins[pick_spin_i][pick_spin_j] *= -1;
+				E_diff = energy_difference(N, pick_spin_i, pick_spin_j, spins);
+				if (E_diff <= 0){
+					Energy_of_state += E_diff;
+				} else {
+					double sampling_parameter = RandomNumberGenerator(gen);
+					if (expE[E_diff+8] < sampling_parameter){
+						spins[pick_spin_i][pick_spin_j] *= -1; //flip back
+					} else {
+						Energy_of_state += E_diff;
+					}
+				}
+			}
+		} //----------------------------------------------------------------
+		int M = 0;
+		Energy_of_state = calculate_energy(N, spins, E2, M, M2);
+		for (int m=MC_skipped_cycles; m < MC_samples; m++){ //MonteCarlo cycle
 			for (int k=0;k<N*N;k++){
 				pick_spin_i = (int) (RandomNumberGenerator(gen)*N);
 				pick_spin_j = (int) (RandomNumberGenerator(gen)*N);
@@ -327,8 +349,9 @@ void update_expectation(int E, int M, int absM,
 void write_expectations_file(int cycle, int MC_counter,
 								int mean_energy, int mean_energy2,
 								int mean_absM, int mean_absM2){
-	int L = cycle*MC_counter;
+	int L = cycle*(MC_counter+1);
 	string filename = "Expectations";
+	//sprintf(str,"%f",T);
 	ofstream e_file;
 	e_file.open(filename, std::ios::app);
 	e_file << (double) mean_energy/L << "," << (double) mean_absM/L << ","<< MC_counter << endl;
