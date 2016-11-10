@@ -80,11 +80,11 @@ int main(int argc, char* argv[]){
 	sum_magnetization2 = M2;
 	sum_absM = abs(M);
 	sum_absM2 = sum_absM*sum_absM;
-	int MC_skipped_cycles = 0.15*MC_samples;
+	int MC_skipped_cycles = 0*MC_samples;
 	cout <<"Skipping 15% = " << MC_skipped_cycles << endl;
 	while (T <= T_finish){
 		precalculate_exp_deltaE(expE, T);
-		//-----------------------------------------------------------------------
+		//----------------------------we cut here 15%-------------------------
 		for (int m=0; m < MC_skipped_cycles; m++){ //10% of MC samples, we skip them
 			for (int k=0;k<N*N;k++){
 				pick_spin_i = (int) (RandomNumberGenerator(gen)*N);
@@ -107,7 +107,6 @@ int main(int argc, char* argv[]){
 		int M2 = 0;
 		int E2 = 0;
 		Energy_of_state = calculate_energy(N, spins, E2, M, M2);
-		cout << M<< "=  M; Energy =   " << Energy_of_state << endl;
 		sum_energy = Energy_of_state;
 		sum_magnetization = M;
 		sum_energy2 = E2;
@@ -159,7 +158,6 @@ int main(int argc, char* argv[]){
 								sum_energy, sum_energy2,
 								sum_absM, sum_absM2);
 		MC_counter++;
-	//	cout << "Magnetic moment = "<< M <<endl;
 		}
 		cout <<"Temperature "<< T << endl;
 		cout <<"MC cycles accepted: "<< MC_accepted << endl;
