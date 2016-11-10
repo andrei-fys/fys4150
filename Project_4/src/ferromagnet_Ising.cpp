@@ -14,7 +14,7 @@ int calculate_energy(int, int**, int &, int &, int &);
 int energy_difference(int, int, int, int**);
 void update_magnetization(int, int, int, int **, int &, int &);
 void precalculate_exp_deltaE(double*, double);
-void update_expectation(int,int,int,int &, int &, int &, int &, int &, int &);
+void update_expectation(int,int,int, double &, double &, double &, double &, double &, double &);
 void unit_test();
 void write_expectations_file(int, int, int, int, int, int);
 void probability_distribution(int**, int, int);
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]){
 	int absM = 0;
 	int absM2 = 0;
 	int E_diff;
-	int sum_energy, sum_magnetization, sum_energy2, sum_magnetization2,
+	double sum_energy, sum_magnetization, sum_energy2, sum_magnetization2,
 		sum_absM, sum_absM2;
 
 	create_ferromagnet(N,spins,chaos);
@@ -107,7 +107,7 @@ int main(int argc, char* argv[]){
 		int M2 = 0;
 		int E2 = 0;
 		Energy_of_state = calculate_energy(N, spins, E2, M, M2);
-		cout << M<< "   " << Energy_of_state << endl;
+		cout << M<< "=  M; Energy =   " << Energy_of_state << endl;
 		sum_energy = Energy_of_state;
 		sum_magnetization = M;
 		sum_energy2 = E2;
@@ -159,6 +159,7 @@ int main(int argc, char* argv[]){
 								sum_energy, sum_energy2,
 								sum_absM, sum_absM2);
 		MC_counter++;
+	//	cout << "Magnetic moment = "<< M <<endl;
 		}
 		cout <<"Temperature "<< T << endl;
 		cout <<"MC cycles accepted: "<< MC_accepted << endl;
@@ -337,21 +338,21 @@ int calculate_energy(int n, int ** spins, int &E2, int &M, int &M2){
 }
 
 void update_expectation(int E, int M, int absM,
-		int &sum_energy, int &sum_energy2,
-		int &sum_magnetization, int &sum_magnetization2,
-		int &sum_absM, int &sum_absM2){
-	int M2, E2, absM2;
-	sum_energy += E;
-	E2 = E*E;
-	sum_energy2 += E2;
+		double &sum_energy, double &sum_energy2,
+		double &sum_magnetization, double &sum_magnetization2,
+		double &sum_absM, double &sum_absM2){
+	double M2, E2, absM2;
+	sum_energy += (double) E;
+	E2 = (double) E*E;
+	sum_energy2 += (double) E2;
 	
-	sum_magnetization += M;
-	M2 = M*M;
-	sum_magnetization2 += M2;
+	sum_magnetization += (double) M;
+	M2 = (double) M*M;
+	sum_magnetization2 += (double) M2;
 	
-	sum_absM += absM;
-	absM2 = absM*absM;
-	sum_absM2 += absM2;
+	sum_absM += (double) absM;
+	absM2 = (double) absM*absM;
+	sum_absM2 += (double) absM2;
 
 }
 
