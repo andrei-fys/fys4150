@@ -17,6 +17,7 @@ void precalculate_exp_deltaE(double*, double);
 void update_expectation(int,int,int,int &, int &, int &, int &, int &, int &);
 void unit_test();
 void write_expectations_file(int, int, int, int, int, int);
+void probability_distribution(int**, int, int);
 
 int main(int argc, char* argv[]){
 	/*
@@ -59,7 +60,7 @@ int main(int argc, char* argv[]){
 	double * expE = new double[16]; //precalculate exp(-beta deltaE) matrix
 	int pick_spin_i, pick_spin_j; 
 	int flip_counter = 0;
-	int MC_counter = 0;
+	int MC_counter = 1;
 	int MC_rejected = 0;
 	int MC_accepted = 0;
 	int E2 = 0;
@@ -68,20 +69,19 @@ int main(int argc, char* argv[]){
 	int absM = 0;
 	int absM2 = 0;
 	int E_diff;
-	int mean_energy, mean_magnetization, mean_energy2, mean_magnetization2,
-		mean_absM, mean_absM2;
+	int sum_energy, sum_magnetization, sum_energy2, sum_magnetization2,
+		sum_absM, sum_absM2;
 
 	create_ferromagnet(N,spins,chaos);
 	int Energy_of_state = calculate_energy(N, spins, E2, M, M2); //brute-force
-	
-	mean_energy = Energy_of_state;
-	mean_magnetization = M;
-	mean_energy2 = E2;
-	mean_magnetization2 = M2;
-	mean_absM = abs(M);
-	mean_absM2 = mean_absM*mean_absM;
+	sum_energy = Energy_of_state;
+	sum_magnetization = M;
+	sum_energy2 = E2;
+	sum_magnetization2 = M2;
+	sum_absM = abs(M);
+	sum_absM2 = sum_absM*sum_absM;
 	int MC_skipped_cycles = 0.15*MC_samples;
-	cout <<"15% = " << MC_skipped_cycles << endl;
+	cout <<"Skipping 15% = " << MC_skipped_cycles << endl;
 	while (T <= T_finish){
 		precalculate_exp_deltaE(expE, T);
 		//-----------------------------------------------------------------------
@@ -104,7 +104,16 @@ int main(int argc, char* argv[]){
 			}
 		} //----------------------------------------------------------------
 		int M = 0;
+		int M2 = 0;
+		int E2 = 0;
 		Energy_of_state = calculate_energy(N, spins, E2, M, M2);
+		cout << M<< "   " << Energy_of_state << endl;
+		sum_energy = Energy_of_state;
+		sum_magnetization = M;
+		sum_energy2 = E2;
+		sum_magnetization2 = M2;
+		sum_absM = abs(M);
+		sum_absM2 = sum_absM*sum_absM;
 		for (int m=MC_skipped_cycles; m < MC_samples; m++){ //MonteCarlo cycle
 			for (int k=0;k<N*N;k++){
 				pick_spin_i = (int) (RandomNumberGenerator(gen)*N);
@@ -115,9 +124,9 @@ int main(int argc, char* argv[]){
 					Energy_of_state += E_diff;
 					update_magnetization(N, pick_spin_i, pick_spin_j, spins, M, absM);
 					update_expectation(Energy_of_state, M, absM,
-							mean_energy, mean_energy2,
-							mean_magnetization, mean_magnetization2,
-							mean_absM, mean_absM2);
+							sum_energy, sum_energy2,
+							sum_magnetization, sum_magnetization2,
+							sum_absM, sum_absM2);
 					//cout << "Accept #1 M= "<<M<<endl;
 					flip_counter++;
 					MC_accepted++;
@@ -126,9 +135,9 @@ int main(int argc, char* argv[]){
 					if (expE[E_diff+8] < sampling_parameter){
 						spins[pick_spin_i][pick_spin_j] *= -1; //flip back
 						update_expectation(Energy_of_state, M, absM,
-							mean_energy, mean_energy2,
-							mean_magnetization, mean_magnetization2,
-							mean_absM, mean_absM2);
+							sum_energy, sum_energy2,
+							sum_magnetization, sum_magnetization2,
+							sum_absM, sum_absM2);
 						//cout << "Reject #1 M= "<<M<<endl;
 						flip_counter++;
 						MC_rejected++;
@@ -137,9 +146,9 @@ int main(int argc, char* argv[]){
 						update_magnetization(N, pick_spin_i, pick_spin_j,
 								spins, M, absM);
 						update_expectation(Energy_of_state, M, absM,
-							mean_energy, mean_energy2,
-							mean_magnetization, mean_magnetization2,
-							mean_absM, mean_absM2);
+							sum_energy, sum_energy2,
+							sum_magnetization, sum_magnetization2,
+							sum_absM, sum_absM2);
 						//cout << "Accept #2 M= "<<M<<endl;
 						flip_counter++;
 						MC_accepted++;
@@ -147,8 +156,8 @@ int main(int argc, char* argv[]){
 				}
 			}
 		write_expectations_file(N*N, MC_counter,
-								mean_energy, mean_energy2,
-								mean_absM, mean_absM2);
+								sum_energy, sum_energy2,
+								sum_absM, sum_absM2);
 		MC_counter++;
 		}
 		cout <<"Temperature "<< T << endl;
@@ -157,19 +166,19 @@ int main(int argc, char* argv[]){
 		T += T_step;
 	}
 	
-	cout << "E = "   << (double) mean_energy/flip_counter << endl;
-	cout << "E^2 = " << (double) mean_energy2/flip_counter << endl;
-	cout << "M = "   << (double) mean_magnetization/flip_counter << endl;
-	cout << "M^2 = " << (double) mean_magnetization2/flip_counter << endl;
-	cout << "|M| = "   << (double) mean_absM/flip_counter << endl;
-	cout << "|M|^2 = " << (double) mean_absM2/flip_counter << endl;
+	cout << "E = "   << (double) sum_energy/flip_counter << endl;
+	cout << "E^2 = " << (double) sum_energy2/flip_counter << endl;
+	cout << "M = "   << (double) sum_magnetization/flip_counter << endl;
+	cout << "M^2 = " << (double) sum_magnetization2/flip_counter << endl;
+	cout << "|M| = "   << (double) sum_absM/flip_counter << endl;
+	cout << "|M|^2 = " << (double) sum_absM2/flip_counter << endl;
 	T = 1.0;
-	double e2 = (double) mean_energy2/flip_counter;
-	double e = (double) mean_energy/flip_counter*mean_energy/flip_counter;
+	double e2 = (double) sum_energy2/flip_counter;
+	double e = (double) sum_energy/flip_counter*sum_energy/flip_counter;
 	cout << "C_v  " << (e2 - e)/T << endl;
 
-	double xi2 = (double) mean_absM2/flip_counter;
-	double xi = (double) mean_absM/flip_counter*mean_absM/flip_counter;
+	double xi2 = (double) sum_absM2/flip_counter;
+	double xi = (double) sum_absM/flip_counter*sum_absM/flip_counter;
 	cout << "Xi  " << (xi2 - xi)/T << endl;
 	
 	for( int i=0;i<N; i++ ) {
@@ -328,33 +337,33 @@ int calculate_energy(int n, int ** spins, int &E2, int &M, int &M2){
 }
 
 void update_expectation(int E, int M, int absM,
-		int &mean_energy, int &mean_energy2,
-		int &mean_magnetization, int &mean_magnetization2,
-		int &mean_absM, int &mean_absM2){
+		int &sum_energy, int &sum_energy2,
+		int &sum_magnetization, int &sum_magnetization2,
+		int &sum_absM, int &sum_absM2){
 	int M2, E2, absM2;
-	mean_energy += E;
+	sum_energy += E;
 	E2 = E*E;
-	mean_energy2 += E2;
+	sum_energy2 += E2;
 	
-	mean_magnetization += M;
+	sum_magnetization += M;
 	M2 = M*M;
-	mean_magnetization2 += M2;
+	sum_magnetization2 += M2;
 	
-	mean_absM += absM;
+	sum_absM += absM;
 	absM2 = absM*absM;
-	mean_absM2 += absM2;
+	sum_absM2 += absM2;
 
 }
 
 void write_expectations_file(int cycle, int MC_counter,
-								int mean_energy, int mean_energy2,
-								int mean_absM, int mean_absM2){
-	int L = cycle*(MC_counter+1);
+								int sum_energy, int sum_energy2,
+								int sum_absM, int sum_absM2){
+	int L = cycle*(MC_counter);
 	string filename = "Expectations";
 	//sprintf(str,"%f",T);
 	ofstream e_file;
 	e_file.open(filename, std::ios::app);
-	e_file << (double) mean_energy/L << "," << (double) mean_absM/L << ","<< MC_counter << endl;
+	e_file << (double) sum_energy/L << "," << (double) sum_absM/L << ","<< MC_counter << endl;
 }
 
 void precalculate_exp_deltaE(double* exp_energy, double Temperature){
@@ -369,6 +378,19 @@ void precalculate_exp_deltaE(double* exp_energy, double Temperature){
 	for (int i=-8;i<=8;i+=4){
 		exp_energy[i+8]=exp((double) -i/Temperature);
 	}
+
+}
+
+void probability_distribution(int** E_distribution, int E, int E_max){
+	/*
+	 * Writes to file energy distribution
+	 * Args:
+	 *	E_distribution : array
+	 *	E : Energy
+	 */
+	int map = (E + E_max)/4;
+	E_distribution[map][0] += 1;
+	E_distribution[map][1] = E;
 
 }
 
