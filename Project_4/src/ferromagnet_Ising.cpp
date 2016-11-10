@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "time.h"
 #include <random>
+#include <string>
 #include <assert.h>
 using namespace std;
 
@@ -15,6 +16,7 @@ void update_magnetization(int, int, int, int **, int &, int &);
 void precalculate_exp_deltaE(double*, double);
 void update_expectation(int,int,int,int &, int &, int &, int &, int &, int &);
 void unit_test();
+void write_expectations_file(int, int, int, int, int, int);
 
 int main(int argc, char* argv[]){
 	/*
@@ -56,6 +58,7 @@ int main(int argc, char* argv[]){
 	double T = T_start;
 	double * expE = new double[16]; //precalculate exp(-beta deltaE) matrix
 	int pick_spin_i, pick_spin_j; 
+	int flip_counter = 0;
 	int MC_counter = 0;
 	int MC_rejected = 0;
 	int MC_accepted = 0;
@@ -81,44 +84,50 @@ int main(int argc, char* argv[]){
 	while (T <= T_finish){
 		precalculate_exp_deltaE(expE, T);
 		for (int m=0; m < MC_samples; m++){ //MonteCarlo cycle
-			pick_spin_i = (int) (RandomNumberGenerator(gen)*N);
-			pick_spin_j = (int) (RandomNumberGenerator(gen)*N);
-			spins[pick_spin_i][pick_spin_j] *= -1;
-			E_diff = energy_difference(N, pick_spin_i, pick_spin_j, spins);
-			if (E_diff <= 0){
-				Energy_of_state += E_diff;
-				update_magnetization(N, pick_spin_i, pick_spin_j, spins, M, absM);
-				update_expectation(Energy_of_state, M, absM,
-						mean_energy, mean_energy2,
-						mean_magnetization, mean_magnetization2,
-						mean_absM, mean_absM2);
-				//cout << "Accept #1 M= "<<M<<endl;
-				MC_counter++;
-				MC_accepted++;
-			} else {
-				double sampling_parameter = RandomNumberGenerator(gen);
-				if (expE[E_diff+8] < sampling_parameter){
-					spins[pick_spin_i][pick_spin_j] *= -1; //flip back
-					update_expectation(Energy_of_state, M, absM,
-						mean_energy, mean_energy2,
-						mean_magnetization, mean_magnetization2,
-						mean_absM, mean_absM2);
-					//cout << "Reject #1 M= "<<M<<endl;
-					MC_counter++;
-					MC_rejected++;
-				} else {
+			for (int k=0;k<N*N;k++){
+				pick_spin_i = (int) (RandomNumberGenerator(gen)*N);
+				pick_spin_j = (int) (RandomNumberGenerator(gen)*N);
+				spins[pick_spin_i][pick_spin_j] *= -1;
+				E_diff = energy_difference(N, pick_spin_i, pick_spin_j, spins);
+				if (E_diff <= 0){
 					Energy_of_state += E_diff;
-					update_magnetization(N, pick_spin_i, pick_spin_j,
-							spins, M, absM);
+					update_magnetization(N, pick_spin_i, pick_spin_j, spins, M, absM);
 					update_expectation(Energy_of_state, M, absM,
-						mean_energy, mean_energy2,
-						mean_magnetization, mean_magnetization2,
-						mean_absM, mean_absM2);
-					//cout << "Accept #2 M= "<<M<<endl;
-					MC_counter++;
+							mean_energy, mean_energy2,
+							mean_magnetization, mean_magnetization2,
+							mean_absM, mean_absM2);
+					//cout << "Accept #1 M= "<<M<<endl;
+					flip_counter++;
 					MC_accepted++;
+				} else {
+					double sampling_parameter = RandomNumberGenerator(gen);
+					if (expE[E_diff+8] < sampling_parameter){
+						spins[pick_spin_i][pick_spin_j] *= -1; //flip back
+						update_expectation(Energy_of_state, M, absM,
+							mean_energy, mean_energy2,
+							mean_magnetization, mean_magnetization2,
+							mean_absM, mean_absM2);
+						//cout << "Reject #1 M= "<<M<<endl;
+						flip_counter++;
+						MC_rejected++;
+					} else {
+						Energy_of_state += E_diff;
+						update_magnetization(N, pick_spin_i, pick_spin_j,
+								spins, M, absM);
+						update_expectation(Energy_of_state, M, absM,
+							mean_energy, mean_energy2,
+							mean_magnetization, mean_magnetization2,
+							mean_absM, mean_absM2);
+						//cout << "Accept #2 M= "<<M<<endl;
+						flip_counter++;
+						MC_accepted++;
+					}
 				}
 			}
+		write_expectations_file(N*N, MC_counter,
+								mean_energy, mean_energy2,
+								mean_absM, mean_absM2);
+		MC_counter++;
 		}
 		cout <<"Temperature "<< T << endl;
 		cout <<"MC cycles accepted: "<< MC_accepted << endl;
@@ -126,19 +135,19 @@ int main(int argc, char* argv[]){
 		T += T_step;
 	}
 	
-	cout << "E = "   << (double) mean_energy/MC_samples << endl;
-	cout << "E^2 = " << (double) mean_energy2/MC_samples << endl;
-	cout << "M = "   << (double) mean_magnetization/MC_samples << endl;
-	cout << "M^2 = " << (double) mean_magnetization2/MC_samples << endl;
-	cout << "|M| = "   << (double) mean_absM/MC_samples << endl;
-	cout << "|M|^2 = " << (double) mean_absM2/MC_samples << endl;
+	cout << "E = "   << (double) mean_energy/flip_counter << endl;
+	cout << "E^2 = " << (double) mean_energy2/flip_counter << endl;
+	cout << "M = "   << (double) mean_magnetization/flip_counter << endl;
+	cout << "M^2 = " << (double) mean_magnetization2/flip_counter << endl;
+	cout << "|M| = "   << (double) mean_absM/flip_counter << endl;
+	cout << "|M|^2 = " << (double) mean_absM2/flip_counter << endl;
 	T = 1.0;
-	double e2 = (double) mean_energy2/MC_samples;
-	double e = (double) mean_energy/MC_samples*mean_energy/MC_samples;
+	double e2 = (double) mean_energy2/flip_counter;
+	double e = (double) mean_energy/flip_counter*mean_energy/flip_counter;
 	cout << "C_v  " << (e2 - e)/T << endl;
 
-	double xi2 = (double) mean_absM2/MC_samples;
-	double xi = (double) mean_absM/MC_samples*mean_absM/MC_samples;
+	double xi2 = (double) mean_absM2/flip_counter;
+	double xi = (double) mean_absM/flip_counter*mean_absM/flip_counter;
 	cout << "Xi  " << (xi2 - xi)/T << endl;
 	
 	for( int i=0;i<N; i++ ) {
@@ -259,7 +268,6 @@ void update_magnetization(int n, int i, int j, int ** spins, int &M, int &absM){
 	int flipped_spin_colomn = j;
 	M += 2*spins[flipped_spin_row][flipped_spin_colomn];
 	absM = abs(M);
-	cout << "M = " << M << " absM = " << absM << endl;
 }
 
 int calculate_energy(int n, int ** spins, int &E2, int &M, int &M2){
@@ -288,7 +296,7 @@ int calculate_energy(int n, int ** spins, int &E2, int &M, int &M2){
 		}
 	}
 	for (int i=0;i<n;i++){ //Magnetic moment
-		for (int j;j<n;j++){
+		for (int j=0;j<n;j++){
 			M += spins[i][j];
 		}
 	}
@@ -314,6 +322,16 @@ void update_expectation(int E, int M, int absM,
 	absM2 = absM*absM;
 	mean_absM2 += absM2;
 
+}
+
+void write_expectations_file(int cycle, int MC_counter,
+								int mean_energy, int mean_energy2,
+								int mean_absM, int mean_absM2){
+	int L = cycle*MC_counter;
+	string filename = "Expectations";
+	ofstream e_file;
+	e_file.open(filename, std::ios::app);
+	e_file << (double) mean_energy/L << "," << (double) mean_absM/L << ","<< MC_counter << endl;
 }
 
 void precalculate_exp_deltaE(double* exp_energy, double Temperature){
@@ -398,7 +416,7 @@ void unit_test(){
 	random_device rd;
 	mt19937_64 gen(rd());
 	uniform_real_distribution<double> RandomNumberGenerator(0.0,1.0);
-	for (int l;l<128;l++){
+	for (int l=0;l<128;l++){
 		
 		int energy = calculate_energy(2, spin, E2, M, M2);
 		int rand_spin_i = (int) (RandomNumberGenerator(gen)*N);
