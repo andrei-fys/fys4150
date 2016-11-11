@@ -170,12 +170,12 @@ int main(int argc, char* argv[]){
 		T += T_step;
 	}
 	
-	cout << "E = "   << (double) sum_energy/flip_counter << endl;
-	cout << "E^2 = " << (double) sum_energy2/flip_counter << endl;
-	cout << "M = "   << (double) sum_magnetization/flip_counter << endl;
-	cout << "M^2 = " << (double) sum_magnetization2/flip_counter << endl;
-	cout << "|M| = "   << (double) sum_absM/flip_counter << endl;
-	cout << "|M|^2 = " << (double) sum_absM2/flip_counter << endl;
+	cout << "E = "   << (double) sum_energy/MC_counter << endl;
+	cout << "E^2 = " << (double) sum_energy2/MC_counter << endl;
+	cout << "M = "   << (double) sum_magnetization/MC_counter << endl;
+	cout << "M^2 = " << (double) sum_magnetization2/MC_counter << endl;
+	cout << "|M| = "   << (double) sum_absM/MC_counter << endl;
+	cout << "|M|^2 = " << (double) sum_absM2/MC_counter << endl;
 	T = 1.0;
 	double e2 = (double) sum_energy2/flip_counter;
 	double e = (double) sum_energy/flip_counter*sum_energy/flip_counter;
