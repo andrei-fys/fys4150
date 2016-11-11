@@ -17,6 +17,7 @@ void precalculate_exp_deltaE(double*, double);
 void update_expectation(int,int,int, double &,  double &,  double &, double &, double &, double &);
 void unit_test();
 void write_expectations_file(int, int, int, int, int, int);
+void write_expectations_file_temperature(double, double, double, double, double);
 void probability_distribution(int**, int, int);
 
 int main(int argc, char* argv[]){
@@ -163,6 +164,8 @@ int main(int argc, char* argv[]){
 		double xi2 = (double) sum_absM2/MC_counter;
 		double xi = (double) sum_absM/MC_counter*sum_absM/MC_counter;
 		cout << "Xi  " << (xi2 - xi)/T << endl;
+		write_expectations_file_temperature(T,(double) sum_energy/MC_counter, (double) sum_absM/MC_counter, (e2 - e)/T, (xi2 - xi)/T );
+		
 		T += T_step;
 	}
 	
@@ -350,6 +353,15 @@ void write_expectations_file(int cycle, int MC_counter,
 	ofstream e_file;
 	e_file.open(filename, std::ios::app);
 	e_file << (double) sum_energy/L << "," << (double) sum_absM/L << ","<< MC_counter << endl;
+}
+
+void write_expectations_file_temperature(double T , double E, double M, double Cv, double Xi){
+	string filename = "Expectations_temperature";
+	ofstream t_file;
+	t_file.open(filename, std::ios::app);
+	t_file << T << "," << E << "," << M << "," << Cv <<"," << Xi << endl;
+
+
 }
 
 void precalculate_exp_deltaE(double* exp_energy, double Temperature){
