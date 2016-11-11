@@ -80,7 +80,7 @@ int main(int argc, char* argv[]){
 	sum_magnetization2 = M2;
 	sum_absM = abs(M);
 	sum_absM2 = sum_absM*sum_absM;
-	int MC_skipped_cycles = 0*MC_samples;
+	int MC_skipped_cycles = 0.15*MC_samples;
 	cout <<"Skipping 15% = " << MC_skipped_cycles << endl;
 	while (T <= T_finish){
 		precalculate_exp_deltaE(expE, T);
@@ -122,33 +122,18 @@ int main(int argc, char* argv[]){
 				if (E_diff <= 0){
 					Energy_of_state += E_diff;
 					update_magnetization(N, pick_spin_i, pick_spin_j, spins, M, absM);
-//					update_expectation(Energy_of_state, M, absM,
-//							sum_energy, sum_energy2,
-//							sum_magnetization, sum_magnetization2,
-//							sum_absM, sum_absM2);
-					//cout << "Accept #1 M= "<<M<<endl;
 					flip_counter++;
 					MC_accepted++;
 				} else {
 					double sampling_parameter = RandomNumberGenerator(gen);
 					if (expE[E_diff+8] < sampling_parameter){
 						spins[pick_spin_i][pick_spin_j] *= -1; //flip back
-//						update_expectation(Energy_of_state, M, absM,
-//							sum_energy, sum_energy2,
-//							sum_magnetization, sum_magnetization2,
-//							sum_absM, sum_absM2);
-						//cout << "Reject #1 M= "<<M<<endl;
 						flip_counter++;
 						MC_rejected++;
 					} else {
 						Energy_of_state += E_diff;
 						update_magnetization(N, pick_spin_i, pick_spin_j,
 								spins, M, absM);
-//						update_expectation(Energy_of_state, M, absM,
-//							sum_energy, sum_energy2,
-//							sum_magnetization, sum_magnetization2,
-//							sum_absM, sum_absM2);
-						//cout << "Accept #2 M= "<<M<<endl;
 						flip_counter++;
 						MC_accepted++;
 					}
@@ -158,32 +143,29 @@ int main(int argc, char* argv[]){
 					sum_energy, sum_energy2,
 					sum_magnetization, sum_magnetization2,
 					sum_absM, sum_absM2);
-		write_expectations_file(N*N, MC_counter,
-								sum_energy, sum_energy2,
-								sum_absM, sum_absM2);
+//		write_expectations_file(N*N, MC_counter,
+//								sum_energy, sum_energy2,
+//								sum_absM, sum_absM2);
 		MC_counter++;
-		//cout << sum_absM << endl;
 		}
-		cout <<"Temperature "<< T << endl;
+		cout <<"============Temperature "<< T << endl;
 		cout <<"MC cycles accepted: "<< MC_accepted << endl;
 		cout <<"MC cycles rejected: "<< MC_rejected << endl;
+		cout << "E = "   << (double) sum_energy/MC_counter << endl;
+		cout << "E^2 = " << (double) sum_energy2/MC_counter << endl;
+		cout << "M = "   << (double) sum_magnetization/MC_counter << endl;
+		cout << "M^2 = " << (double) sum_magnetization2/MC_counter << endl;
+		cout << "|M| = "   << (double) sum_absM/MC_counter << endl;
+		cout << "|M|^2 = " << (double) sum_absM2/MC_counter << endl;
+		double e2 = (double) sum_energy2/MC_counter;
+		double e = (double) sum_energy/MC_counter*sum_energy/MC_counter;
+		cout << "C_v  " << (e2 - e)/T << endl;
+		double xi2 = (double) sum_absM2/MC_counter;
+		double xi = (double) sum_absM/MC_counter*sum_absM/MC_counter;
+		cout << "Xi  " << (xi2 - xi)/T << endl;
 		T += T_step;
 	}
 	
-	cout << "E = "   << (double) sum_energy/MC_counter << endl;
-	cout << "E^2 = " << (double) sum_energy2/MC_counter << endl;
-	cout << "M = "   << (double) sum_magnetization/MC_counter << endl;
-	cout << "M^2 = " << (double) sum_magnetization2/MC_counter << endl;
-	cout << "|M| = "   << (double) sum_absM/MC_counter << endl;
-	cout << "|M|^2 = " << (double) sum_absM2/MC_counter << endl;
-	T = 1.0;
-	double e2 = (double) sum_energy2/MC_counter;
-	double e = (double) sum_energy/MC_counter*sum_energy/MC_counter;
-	cout << "C_v  " << (e2 - e)/T << endl;
-
-	double xi2 = (double) sum_absM2/MC_counter;
-	double xi = (double) sum_absM/MC_counter*sum_absM/MC_counter;
-	cout << "Xi  " << (xi2 - xi)/T << endl;
 	
 	for( int i=0;i<N; i++ ) {
 		delete [] spins[i];
