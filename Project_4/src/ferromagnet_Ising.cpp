@@ -14,7 +14,7 @@ int calculate_energy(int, int**, int &, int &, int &);
 int energy_difference(int, int, int, int**);
 void update_magnetization(int, int, int, int **, int &, int &);
 void precalculate_exp_deltaE(double*, double);
-void update_expectation(int,int,int, double &, double &, double &, double &, double &, double &);
+void update_expectation(int,int,int, double &,  double &,  double &, double &, double &, double &);
 void unit_test();
 void write_expectations_file(int, int, int, int, int, int);
 void probability_distribution(int**, int, int);
@@ -122,10 +122,10 @@ int main(int argc, char* argv[]){
 				if (E_diff <= 0){
 					Energy_of_state += E_diff;
 					update_magnetization(N, pick_spin_i, pick_spin_j, spins, M, absM);
-					update_expectation(Energy_of_state, M, absM,
-							sum_energy, sum_energy2,
-							sum_magnetization, sum_magnetization2,
-							sum_absM, sum_absM2);
+//					update_expectation(Energy_of_state, M, absM,
+//							sum_energy, sum_energy2,
+//							sum_magnetization, sum_magnetization2,
+//							sum_absM, sum_absM2);
 					//cout << "Accept #1 M= "<<M<<endl;
 					flip_counter++;
 					MC_accepted++;
@@ -133,10 +133,10 @@ int main(int argc, char* argv[]){
 					double sampling_parameter = RandomNumberGenerator(gen);
 					if (expE[E_diff+8] < sampling_parameter){
 						spins[pick_spin_i][pick_spin_j] *= -1; //flip back
-						update_expectation(Energy_of_state, M, absM,
-							sum_energy, sum_energy2,
-							sum_magnetization, sum_magnetization2,
-							sum_absM, sum_absM2);
+//						update_expectation(Energy_of_state, M, absM,
+//							sum_energy, sum_energy2,
+//							sum_magnetization, sum_magnetization2,
+//							sum_absM, sum_absM2);
 						//cout << "Reject #1 M= "<<M<<endl;
 						flip_counter++;
 						MC_rejected++;
@@ -144,20 +144,25 @@ int main(int argc, char* argv[]){
 						Energy_of_state += E_diff;
 						update_magnetization(N, pick_spin_i, pick_spin_j,
 								spins, M, absM);
-						update_expectation(Energy_of_state, M, absM,
-							sum_energy, sum_energy2,
-							sum_magnetization, sum_magnetization2,
-							sum_absM, sum_absM2);
+//						update_expectation(Energy_of_state, M, absM,
+//							sum_energy, sum_energy2,
+//							sum_magnetization, sum_magnetization2,
+//							sum_absM, sum_absM2);
 						//cout << "Accept #2 M= "<<M<<endl;
 						flip_counter++;
 						MC_accepted++;
 					}
 				}
 			}
+			update_expectation(Energy_of_state, M, absM,
+					sum_energy, sum_energy2,
+					sum_magnetization, sum_magnetization2,
+					sum_absM, sum_absM2);
 		write_expectations_file(N*N, MC_counter,
 								sum_energy, sum_energy2,
 								sum_absM, sum_absM2);
 		MC_counter++;
+		//cout << sum_absM << endl;
 		}
 		cout <<"Temperature "<< T << endl;
 		cout <<"MC cycles accepted: "<< MC_accepted << endl;
@@ -357,7 +362,7 @@ void update_expectation(int E, int M, int absM,
 void write_expectations_file(int cycle, int MC_counter,
 								int sum_energy, int sum_energy2,
 								int sum_absM, int sum_absM2){
-	int L = cycle*(MC_counter);
+	int L = MC_counter;
 	string filename = "Expectations";
 	//sprintf(str,"%f",T);
 	ofstream e_file;
