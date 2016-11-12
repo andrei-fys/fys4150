@@ -1,0 +1,13 @@
+Unit test #1(energy calculation): PASSED
+Unit test #2(delta E (periodic boundary)): PASSED
+============Temperature 1
+MC cycles accepted: 80232
+MC cycles rejected: 39919768
+E = -7.9839
+E^2 = 63.8712
+M = 0.0331534
+M^2 = 15.9732
+|M| = 3.99464
+|M|^2 = 15.9732
+C_v  0.12856
+Xi  0.0160516

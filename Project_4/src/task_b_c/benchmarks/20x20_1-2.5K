@@ -1,0 +1,369 @@
+Unit test #1(energy calculation): PASSED
+Unit test #2(delta E (periodic boundary)): PASSED
+============Temperature 1
+MC cycles accepted: 30496
+MC cycles rejected: 39969504
+E = -798.783
+E^2 = 638077
+M = 399.617
+M^2 = 159715
+|M| = 399.617
+|M|^2 = 159715
+C_v  22.8313
+C_v per spin 0.0570781
+Xi  21.319
+Xi per spin 0.0532974
+============Temperature 1.05
+MC cycles accepted: 73762
+MC cycles rejected: 79926238
+E = -798.534
+E^2 = 637676
+M = 399.589
+M^2 = 159683
+|M| = 399.589
+|M|^2 = 159683
+C_v  17.6666
+C_v per spin 0.0441666
+Xi  10.6112
+Xi per spin 0.026528
+============Temperature 1.1
+MC cycles accepted: 136496
+MC cycles rejected: 119863504
+E = -798.207
+E^2 = 637153
+M = 399.516
+M^2 = 159621
+|M| = 399.516
+|M|^2 = 159621
+C_v  17.6163
+C_v per spin 0.0440408
+Xi  7.1906
+Xi per spin 0.0179765
+============Temperature 1.15
+MC cycles accepted: 222988
+MC cycles rejected: 159777012
+E = -797.823
+E^2 = 636543
+M = 399.421
+M^2 = 159544
+|M| = 399.421
+|M|^2 = 159544
+C_v  19.1294
+C_v per spin 0.0478235
+Xi  5.61748
+Xi per spin 0.0140437
+============Temperature 1.2
+MC cycles accepted: 341750
+MC cycles rejected: 199658250
+E = -797.346
+E^2 = 635787
+M = 399.299
+M^2 = 159445
+|M| = 399.299
+|M|^2 = 159445
+C_v  21.9203
+C_v per spin 0.0548007
+Xi  4.83538
+Xi per spin 0.0120884
+============Temperature 1.25
+MC cycles accepted: 501608
+MC cycles rejected: 239498392
+E = -796.775
+E^2 = 634882
+M = 399.149
+M^2 = 159325
+|M| = 399.149
+|M|^2 = 159325
+C_v  25.7576
+C_v per spin 0.064394
+Xi  4.48154
+Xi per spin 0.0112039
+============Temperature 1.3
+MC cycles accepted: 709570
+MC cycles rejected: 279290430
+E = -796.116
+E^2 = 633841
+M = 398.974
+M^2 = 159186
+|M| = 398.974
+|M|^2 = 159186
+C_v  30.6623
+C_v per spin 0.0766557
+Xi  4.40791
+Xi per spin 0.0110198
+============Temperature 1.35
+MC cycles accepted: 980009
+MC cycles rejected: 319019991
+E = -795.331
+E^2 = 632602
+M = 398.763
+M^2 = 159018
+|M| = 398.763
+|M|^2 = 159018
+C_v  37.2573
+C_v per spin 0.0931432
+Xi  4.59864
+Xi per spin 0.0114966
+============Temperature 1.4
+MC cycles accepted: 1323648
+MC cycles rejected: 358676352
+E = -794.428
+E^2 = 631180
+M = 398.517
+M^2 = 158823
+|M| = 398.517
+|M|^2 = 158823
+C_v  45.6213
+C_v per spin 0.114053
+Xi  5.0417
+Xi per spin 0.0126043
+============Temperature 1.45
+MC cycles accepted: 1755796
+MC cycles rejected: 398244204
+E = -793.394
+E^2 = 629555
+M = 398.231
+M^2 = 158596
+|M| = 398.231
+|M|^2 = 158596
+C_v  56.0099
+C_v per spin 0.140025
+Xi  5.73964
+Xi per spin 0.0143491
+============Temperature 1.5
+MC cycles accepted: 2289924
+MC cycles rejected: 437710076
+E = -792.222
+E^2 = 627719
+M = 397.902
+M^2 = 158336
+|M| = 397.902
+|M|^2 = 158336
+C_v  69.0041
+C_v per spin 0.17251
+Xi  6.73491
+Xi per spin 0.0168373
+============Temperature 1.55
+MC cycles accepted: 2950782
+MC cycles rejected: 477049218
+E = -790.881
+E^2 = 625626
+M = 397.52
+M^2 = 158035
+|M| = 397.52
+|M|^2 = 158035
+C_v  85.7335
+C_v per spin 0.214334
+Xi  8.16127
+Xi per spin 0.0204032
+============Temperature 1.6
+MC cycles accepted: 3751014
+MC cycles rejected: 516248986
+E = -789.378
+E^2 = 623288
+M = 397.086
+M^2 = 157693
+|M| = 397.086
+|M|^2 = 157693
+C_v  106.411
+C_v per spin 0.266028
+Xi  10.0139
+Xi per spin 0.0250347
+============Temperature 1.65
+MC cycles accepted: 4722112
+MC cycles rejected: 555277888
+E = -787.69
+E^2 = 620674
+M = 396.588
+M^2 = 157303
+|M| = 396.588
+|M|^2 = 157303
+C_v  132.452
+C_v per spin 0.331131
+Xi  12.5373
+Xi per spin 0.0313434
+============Temperature 1.7
+MC cycles accepted: 5894242
+MC cycles rejected: 594105758
+E = -785.783
+E^2 = 617737
+M = 396.012
+M^2 = 156853
+|M| = 396.012
+|M|^2 = 156853
+C_v  165.709
+C_v per spin 0.414272
+Xi  16.0201
+Xi per spin 0.0400502
+============Temperature 1.75
+MC cycles accepted: 7287686
+MC cycles rejected: 632712314
+E = -783.67
+E^2 = 614500
+M = 395.362
+M^2 = 156347
+|M| = 395.362
+|M|^2 = 156347
+C_v  205.964
+C_v per spin 0.51491
+Xi  20.391
+Xi per spin 0.0509774
+============Temperature 1.8
+MC cycles accepted: 8941983
+MC cycles rejected: 671058017
+E = -781.318
+E^2 = 610919
+M = 394.621
+M^2 = 155773
+|M| = 394.621
+|M|^2 = 155773
+C_v  256.265
+C_v per spin 0.640664
+Xi  26.1827
+Xi per spin 0.0654569
+============Temperature 1.85
+MC cycles accepted: 10898257
+MC cycles rejected: 709101743
+E = -778.708
+E^2 = 606975
+M = 393.771
+M^2 = 155119
+|M| = 393.771
+|M|^2 = 155119
+C_v  318.606
+C_v per spin 0.796515
+Xi  34.0541
+Xi per spin 0.0851354
+============Temperature 1.9
+MC cycles accepted: 13200183
+MC cycles rejected: 746799817
+E = -775.819
+E^2 = 602647
+M = 392.801
+M^2 = 154377
+|M| = 392.801
+|M|^2 = 154377
+C_v  395.577
+C_v per spin 0.988943
+Xi  44.5164
+Xi per spin 0.111291
+============Temperature 1.95
+MC cycles accepted: 15902240
+MC cycles rejected: 784097760
+E = -772.617
+E^2 = 597895
+M = 391.684
+M^2 = 153531
+|M| = 391.684
+|M|^2 = 153531
+C_v  490.981
+C_v per spin 1.22745
+Xi  58.7156
+Xi per spin 0.146789
+============Temperature 2
+MC cycles accepted: 19064769
+MC cycles rejected: 820935231
+E = -769.072
+E^2 = 592690
+M = 390.398
+M^2 = 152566
+|M| = 390.398
+|M|^2 = 152566
+C_v  608.886
+C_v per spin 1.52222
+Xi  77.8785
+Xi per spin 0.194696
+
+============Temperature 2.1
+MC cycles accepted: 27125474
+MC cycles rejected: 892874526
+E = -760.758
+E^2 = 580734
+M = 387.066
+M^2 = 150136
+|M| = 387.066
+|M|^2 = 150136
+C_v  943.421
+C_v per spin 2.35855
+Xi  150.128
+Xi per spin 0.375319
+
+
+============Temperature 2.25
+MC cycles accepted: 45261895
+MC cycles rejected: 994738105
+E = -744.289
+E^2 = 558149
+M = 356.259
+M^2 = 144528
+|M| = 378.599
+|M|^2 = 144528
+C_v  1859.28
+C_v per spin 4.64821
+Xi  529.573
+Xi per spin 1.32393
+============Temperature 2.3
+MC cycles accepted: 53693155
+MC cycles rejected: 1026306845
+E = -737.25
+E^2 = 548991
+M = 340.924
+M^2 = 141748
+|M| = 373.781
+|M|^2 = 141748
+C_v  2371.13
+C_v per spin 5.92783
+Xi  884.81
+Xi per spin 2.21203
+============Temperature 2.35
+MC cycles accepted: 63296467
+MC cycles rejected: 1056703533
+E = -729.64
+E^2 = 539322
+M = 328.848
+M^2 = 138657
+|M| = 368.187
+|M|^2 = 138657
+C_v  2956.31
+C_v per spin 7.39079
+Xi  1317.28
+Xi per spin 3.29321
+============Temperature 2.4
+MC cycles accepted: 74066189
+MC cycles rejected: 1085933811
+E = -721.546
+E^2 = 529283
+M = 317.171
+M^2 = 135311
+|M| = 361.755
+|M|^2 = 135311
+C_v  3606.01
+C_v per spin 9.01503
+Xi  1851.71
+Xi per spin 4.62927
+============Temperature 2.45
+MC cycles accepted: 85886625
+MC cycles rejected: 1114113375
+E = -713.138
+E^2 = 519077
+M = 306.427
+M^2 = 131821
+|M| = 354.74
+|M|^2 = 131821
+C_v  4290.26
+C_v per spin 10.7256
+Xi  2441.18
+Xi per spin 6.10295
+============Temperature 2.5
+MC cycles accepted: 98566059
+MC cycles rejected: 1141433941
+E = -704.613
+E^2 = 508911
+M = 296.205
+M^2 = 128334
+|M| = 347.527
+|M|^2 = 128334
+C_v  4972.9
+C_v per spin 12.4323
+Xi  3023.54
+Xi per spin 7.55886
