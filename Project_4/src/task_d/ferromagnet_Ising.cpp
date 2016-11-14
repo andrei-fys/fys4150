@@ -70,6 +70,7 @@ int main(int argc, char* argv[]){
     int absM = 0;
     int absM2 = 0;
     int E_diff;
+	double Energy_scale;
     double sum_energy, sum_magnetization, sum_energy2, sum_magnetization2,
     sum_absM, sum_absM2;
     int E_max=2*N*N;
@@ -157,24 +158,35 @@ int main(int argc, char* argv[]){
             MC_counter++;
         }
         
-        //MPI_Reduce
-        cout <<"============Temperature "<< T << endl;
-        cout <<"MC cycles accepted: "<< MC_accepted << endl;
-        cout <<"MC cycles rejected: "<< MC_rejected << endl;
-        cout << "E = "   << (double) sum_energy/MC_counter << endl;
-        cout << "E^2 = " << (double) sum_energy2/MC_counter << endl;
-        cout << "M = "   << (double) sum_magnetization/MC_counter << endl;
-        cout << "M^2 = " << (double) sum_magnetization2/MC_counter << endl;
-        cout << "|M| = "   << (double) sum_absM/MC_counter << endl;
-        cout << "|M|^2 = " << (double) sum_absM2/MC_counter << endl;
-        double e2 = (double) sum_energy2/MC_counter;
-        double e = (double) sum_energy/MC_counter*sum_energy/MC_counter;
-        cout << "C_v  " << (e2 - e)/T << endl;
-        double xi2 = (double) sum_absM2/MC_counter;
-        double xi = (double) sum_absM/MC_counter*sum_absM/MC_counter;
-        cout << "Xi  " << (xi2 - xi)/T << endl;
-        write_expectations_file_temperature(T,(double) sum_energy/MC_counter, (double) sum_absM/MC_counter, (e2 - e)/T, (xi2 - xi)/T );
-        
+		cout <<"============ Temperature = "<< T <<" ============="<< endl;
+		cout <<"MC cycles accepted: "<< MC_accepted << endl;
+		cout <<"MC cycles rejected: "<< MC_rejected << endl;
+		cout << "E = "   << (double) sum_energy/MC_counter << endl;
+		cout << "|M| = "   << (double) sum_absM/MC_counter << endl;
+		double e2 = (double) sum_energy2/MC_counter;
+		double e = (double) sum_energy/MC_counter*sum_energy/MC_counter;
+		cout << "C_v per spin " << (e2 - e)/T/T/N/N << endl;
+		double xi2 = (double) sum_absM2/MC_counter;
+		double xi = (double) sum_absM/MC_counter*sum_absM/MC_counter;
+		cout << "Xi per spin " << (xi2 - xi)/T/N/N << endl;
+		//write_accepted_energies_ratio_file(T, MC_accepted/MC_samples);
+		write_expectations_file_temperature(T,(double) sum_energy/MC_counter/N/N, (double) sum_absM/MC_counter/N/N, (e2 - e)/T/T/N/N, (xi2 - xi)/T/N/N );
+		sum_energy = 0;
+		sum_absM = 0;
+		sum_absM2 = 0;
+		sum_energy2 = 0;
+		sum_magnetization = 0;
+		sum_magnetization2 = 0;
+		MC_counter = 0;
+		MC_rejected = 0;
+		MC_accepted = 0;
+		for (int i=0; i<E_max;i++){
+			Energy_scale = - E_max + i*4;
+			string filename = "Probability";
+			ofstream es_file;
+			es_file.open(filename, std::ios::app);
+			es_file << (double) Energy_scale/N/N << "," <<  E_distribution[i] << endl;
+		}
         T += T_step;
     }
     
@@ -184,14 +196,6 @@ int main(int argc, char* argv[]){
     }
     delete[] spins;
     
-    for (int i=0; i<E_max;i++){
-        T = - E_max + i*4;
-        //cout << "Energy" << "|"<< T/N/N << "|"<< "Probability" << "|"  << E_distribution[i]<< endl;
-        string filename = "Probability";
-        ofstream e_file;
-        e_file.open(filename, std::ios::app);
-        e_file << (double) T/N/N << "," << (double) E_distribution[i] << endl;
-    }
 }
 
 void show_matrix (int n, int ** matrix){
