@@ -119,29 +119,30 @@ int main(int argc, char* argv[]){
 //								sum_absM, sum_absM2);
 		MC_counter++;
 		}
-		cout <<"============Temperature "<< T << endl;
+		cout <<"============ Temperature = "<< T <<" ============="<< endl;
 		cout <<"MC cycles accepted: "<< MC_accepted << endl;
 		cout <<"MC cycles rejected: "<< MC_rejected << endl;
 		cout << "E = "   << (double) sum_energy/MC_counter << endl;
-		cout << "E^2 = " << (double) sum_energy2/MC_counter << endl;
-		cout << "M = "   << (double) sum_magnetization/MC_counter << endl;
-		cout << "M^2 = " << (double) sum_magnetization2/MC_counter << endl;
 		cout << "|M| = "   << (double) sum_absM/MC_counter << endl;
-		cout << "|M|^2 = " << (double) sum_absM2/MC_counter << endl;
 		double e2 = (double) sum_energy2/MC_counter;
 		double e = (double) sum_energy/MC_counter*sum_energy/MC_counter;
-		cout << "C_v  " << (e2 - e)/T << endl;
-		cout << "C_v per spin " << (e2 - e)/T/N/N << endl;
+		cout << "C_v per spin " << (e2 - e)/T/T/N/N << endl;
 		double xi2 = (double) sum_absM2/MC_counter;
 		double xi = (double) sum_absM/MC_counter*sum_absM/MC_counter;
-		cout << "Xi  " << (xi2 - xi)/T << endl;
 		cout << "Xi per spin " << (xi2 - xi)/T/N/N << endl;
-		write_accepted_energies_ratio_file(T, MC_accepted/MC_samples);
-		//write_expectations_file_temperature(T,(double) sum_energy/MC_counter, (double) sum_absM/MC_counter, (e2 - e)/T, (xi2 - xi)/T );
-		
+		//write_accepted_energies_ratio_file(T, MC_accepted/MC_samples);
+		write_expectations_file_temperature(T,(double) sum_energy/MC_counter/N/N, (double) sum_absM/MC_counter/N/N, (e2 - e)/T/T/N/N, (xi2 - xi)/T/N/N );
+		sum_energy = 0;
+		sum_absM = 0;
+		sum_absM2 = 0;
+		sum_energy2 = 0;
+		sum_magnetization = 0;
+		sum_magnetization2 = 0;
+		MC_counter = 0;
+		MC_rejected = 0;
+		MC_accepted = 0;
 		T += T_step;
 	}
-	
 	
 	for( int i=0;i<N; i++ ) {
 		delete [] spins[i];
