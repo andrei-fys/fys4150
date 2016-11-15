@@ -1,6 +1,9 @@
 Program for studying phase transitions. Paralyzed implementation with MPI library.
 Ising model, periodic boundary conditions.
-
+You need MPI library before compiling. On Ubuntu 16.04 it's easy to install:
+```bash
+sudo apt-get install libopenmpi-dev
+```
 Compile with:
 
 ```bash
