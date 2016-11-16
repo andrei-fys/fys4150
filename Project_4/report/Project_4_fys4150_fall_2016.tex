@@ -31,7 +31,7 @@ In this project we study phase transitions in a magnetic system by using Ising m
 We use periodic boundary conditions and the Metropolis algorithm simulating phase transition by Monte Carlo methods.
 Open MPI library used for code parallelization. Phase transition from ferromagnetic phase to diamagnetic can be clearly seen, however
 finite size effects take place.
-All the result are in a good agreement with the solutions obtained for the closed form. The critical temperature turned to be close to the exact result obtained by Lars Onsager. ​
+All the result are in a good agreement with the solutions obtained for the closed form. The critical temperature turned to be close to the exact result obtained by Lars Onsager\cite{Onsager}. ​
 
 
 \end{abstract}
@@ -43,8 +43,7 @@ Ising model is one of the most widely studied models in physics. It is extremely
 In this work we use this widely popular model to simulate phase transitions. Monte Carlo methods is naturally to use due to the fact that our problem has a probabilistic interpretation.
 We find the analytical expression for the partition function and various expectations values for simple 2$\times$2 case.
 Then we present results obtained numerically by our program and compare results with ones obtained analytically for 2$\times$2 lattice.
-
-To study phase transitions we parallelize code using MPI.
+After we study lattice of bigger size namely 20$\times$20 to qualitatively examine behavior of energy and magnetization. And finally we study a magnet system at a small temperature range close to the critical temperature. We run numerical experiment for different lattice sizes and see sign of phase transition as well as finite lattice effects. To study phase transitions we parallelize code using MPI.
 
 The report has the following structure:\\*
 In the part \ref{Part1}  we discuss the problem and describe Ising model, then we briefly discuss random walks and Metropolis algorithm. Those who are already familiar with those methods and Ising model can safely skip this part and go directly to the results and discussion part \ref{results}. In conclusion \ref{conc} a brief overview of obtained results and discuss possibilities for further research are given. 
@@ -67,8 +66,8 @@ B_E \sim M
 \]
 
 So every spin can see only average magnetization of other spins. Bellow we introduce model and a method allowing us to calculate numerically critical temperature and 
-magnetization of magnetic. \\
-Let us modulate magnetic as two-dimentional square lattice. In general case it's possible to study other types of lattices and three-dimensional case, we employ 2D square lattice
+magnetization of magnet. \\
+Let us modulate ferromagnet as two-dimentional square lattice. In general case it's possible to study other types of lattices and three-dimensional case, we employ 2D square lattice
 just for simplicity here. We assume that the spin in every lattice point can have just two possible values, either pointing up (+1) or pointing down(-1). This simple approximation is
 called Ising model, named after Ernst Ising who introduced this idea in early 1920s.
 
@@ -125,8 +124,7 @@ C_{v}=\frac{\sigma^2 _{E}}{k_{B}T^{2}}=\frac{\langle E^{2}\rangle -\langle E\ran
 \end{aligned}
 \end{equation}
 
-If we know partition function we can calculate all quantities describing system. If we have a system of 2$\times$2 spins where each spin can have just two values($\pm$ 1), then it is needed to calculate just $2^{2^{2}} = 2^4$ microstates. For a system 4$\times$4 it's just a $2^{16}$ configurations and for 10$\times$10 -- $2^{10000}$ which is quite complicated to compute or solve analytically. So we need to apply
-However 2$\times$2 can be solved and used as a test of our program.
+If we know partition function we can calculate all quantities describing system. If we have a system of 2$\times$2 spins where each spin can have just two values($\pm$ 1), then it is needed to calculate just $2^{2^{2}} = 2^4$ microstates. For a system 4$\times$4 it's just a $2^{16}$ configurations and for 10$\times$10 -- $2^{10000}$ which is quite complicated to compute or solve analytically. However 2$\times$2 case can be solved and used as a test of our program.
 
 
 
@@ -149,7 +147,7 @@ $W_{ji}$ represent probability of moving from one microstate to another mictosta
 
 For Ising model in two dimensions considered above we can write:
 \[
-w_i(t) = \frac{e^{-\beta E}}{Z},
+w_i(t) = \frac{e^{-\beta E_i}}{Z},
 \]
 
 where $Z$ cannot be computed for considered Ising model of size more then 2$\times$2 lattice as was mentioned above.
@@ -264,7 +262,7 @@ M=\sum_{i=1}^{16} s_i
 Results are presented in Table \ref{tab:2x2}.
 
 \begin{table}[h!]
-  \caption{Values of energy and magnetization for two-dimensional Ising model of magnetic with square lattice. Lattice size is 2$\times$2. Periodic boundary conditions were used.}
+  \caption{Values of energy and magnetization for two-dimensional Ising model of ferromagnet with square lattice. Lattice size is 2$\times$2. Periodic boundary conditions were used.}
   \label{tab:2x2}
   \begin{center}
     \begin{tabular}{c|c|c|c}
@@ -349,7 +347,7 @@ Now using (\ref{2x2magnet}), (\ref{2x2_energy}), (\ref{2x2Cv}) and (\ref{2x2chi}
 
 
 \begin{table}[h!]
-  \caption{Values of energy, magnetization, heat capacity and magnetic susceptibility for two-dimensional Ising model of magnetic with square lattice for temperature $1K$ and $J=1$ . Lattice size is 2$\times$2. Periodic boundary conditions were used. Exact solution was obtained by equations (\ref{2x2magnet}), (\ref{2x2_energy}), (\ref{2x2Cv}) and (\ref{2x2chi}). }
+  \caption{Values of energy, magnetization, heat capacity and magnetic susceptibility for two-dimensional Ising model of ferromagnet with square lattice for temperature $1k_BT/J$ and $J=1$ . Lattice size is 2$\times$2. Periodic boundary conditions were used. Exact solution was obtained by equations (\ref{2x2magnet}), (\ref{2x2_energy}), (\ref{2x2Cv}) and (\ref{2x2chi}). }
   \label{tab:2x2_compare}
   \begin{center}
     \begin{tabular}{c|c|c|c|c|c}
@@ -458,7 +456,7 @@ Temperature is in units of $k_BT/J$. $10^5$ Monte Carlo samples were used in cal
 \newpage
 
 \subsection{Numerical studies of phase transitions}
-In Figs. \ref{fig:phase_energy}-\ref{fig:phase_heat_cap} we present results obtained for 40$\times$40, 60$\times$60, 100$\times$100 and 140$\times$140 lattices in temperature range between 2.0 $k_BT/J$ and 2.41 $k_BT/J$ with $10^6$ Monte Carlo cycles and temperature step of 0.01. Fig. \ref{fig:phase_magnetiz} and fig:phase_magnetiz shows that phase transition takes place. Magnetization goes to zero, corresponding phase transition from ferromagnetic phase to diamagnetic. Magnetic susceptibility grows at the same temperature, similar effect is seen for heat capacity \ref{fig:phase_heat_cap}. We cannot observe that susceptibility goes to infinity due to finite lattice effects.
+In Figs. \ref{fig:phase_energy}-\ref{fig:phase_heat_cap} we present results obtained for 40$\times$40, 60$\times$60, 100$\times$100 and 140$\times$140 lattices in temperature range between 2.0 $k_BT/J$ and 2.41 $k_BT/J$ with $10^6$ Monte Carlo cycles and temperature step of 0.01. Fig. \ref{fig:phase_magnetiz} and \ref{fig:phase_magnetiz} show that phase transition takes place. Magnetization goes to zero, corresponding phase transition from ferromagnetic phase to diamagnetic. Magnetic susceptibility grows at the same temperature, similar effect is seen for heat capacity \ref{fig:phase_heat_cap}. We cannot observe that susceptibility goes to infinity due to finite lattice effects.
 We use finite size scaling relations from \cite{one} to relate the behavior at finite lattices with the results for
 an infinitely large lattice.
 \[
@@ -473,7 +471,7 @@ a=(T_C(L_1)-T_C(L_2))\frac{L_1 L_2}{L_2-L_2}
 
 
 Choosing $L=140$ and $L=100$ we got $T_C(L_1 =100)=2,29$ and $T_C(L_2 =140)=2,28$. Value of the parameter $a=3.5$.
-The critical temperature in the thermodynamical limit cam be computes as:
+The critical temperature in the thermodynamical limit can be calculated as:
 \[
 T_C(L=\infty) = T_C(L)-\frac{3.5}{L}
 \]
@@ -532,6 +530,17 @@ Temperature step is 0.01 $k_BT/J$. $10^6$ Monte Carlo samples were used in calcu
 
 
 \section{Conclusion and further research}\label{conc}
+In this project we found the analytical expression for expectations values
+for the energy E, the mean absolute value of the magnetic moment, the heat capacity and the
+susceptibility as functions of temperature using periodic boundary conditions.
+We wrote a program which employs Monte Carlo methods and Metropolis algorithm to simulate ferromagnetic system evolving in time toward equilibrium state.
+Numerical results are in good agreement with exact ones.
+Finally we used parallelized version of program to estimate critical temperature of phase transition. Result differs from exact one obtained by Lars Onsager \cite{Onsager} by 0.6 \%.
+We didn't study behavior of Metrorolis algorithm near critical temperatures. Referring to \cite{one} heat bath or Wolf algorithms can be more efficient and can be a topic for further research.\\
+Graphical approach to estimate thermolization time can be not the most efficient one. So another possible topic for research can be study and implementation of auto-correlation function.
+\section{Collaborations}
+I would thank Anna Gribkovskaya for help in writing code for this project and many discussions we had regarding Ising model and statistical physics.
+A huge thanks to professor Morten Hjort-Jensen and whole team of instructors on FYS4150 course. Thank for all motivation! 
 \newpage
 \begin{thebibliography}{2}
 \bibitem{one} 
