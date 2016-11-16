@@ -464,7 +464,24 @@ an infinitely large lattice.
 \[
 T_c(L) - T_c(L = \infty ) = a L^{-1},
 \]
-where $T_c$ is critical temperature, $L$ is lattice size. Choosing $L=140$ and $L=100$ we got result that is $0.6$ \% differs from exact result for the critical temperature after \cite{Onsager}.
+where $T_c$ is critical temperature, $L$ is lattice size. 
+
+To compute the value of $a$:
+\[
+a=(T_C(L_1)-T_C(L_2))\frac{L_1 L_2}{L_2-L_2}
+\]
+
+
+Choosing $L=140$ and $L=100$ we got $T_C(L_1 =100)=2,29$ and $T_C(L_2 =140)=2,28$. Value of the parameter $a=3.5$.
+The critical temperature in the thermodynamical limit cam be computes as:
+\[
+T_C(L=\infty) = T_C(L)-\frac{3.5}{L}
+\]
+
+Using last equation we got $T_C(L=\infty)= 2.255$ that is $0.6$ \% differs from exact result for the critical temperature after \cite{Onsager}.
+
+
+
 Source code of program used is provided on \href{https://github.com/andrei-fys/fys4150/tree/master/Project_4/src/MPI}{Ising model MPI} link.
 Additionally results for $10^5$ Monte Carlo samples provided on same link. Simulations with $10^6$ cycles run for a considerable time on one computer. It took roughly two days on Intel(R) Core(TM) i7-3615QM CPU @ 2.30GHz with eight treads, so supercomputing facilities should be considered for fast reproduction of presented results. 
 
