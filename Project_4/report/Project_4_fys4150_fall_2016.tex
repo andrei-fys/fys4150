@@ -10,6 +10,7 @@
 \usepackage{hyperref}
 \usepackage{amsthm}
 \usepackage{subcaption}
+\usepackage{hyperref}
 \usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}   
 \newtcblisting[auto counter]{pseudolisting}[2][]{sharp corners,
     fonttitle=\bfseries, colframe=gray, listing only,
@@ -36,8 +37,12 @@ finate size effects take place.
 
 
 \section{Introduction}
-Ising model is one of the most widely studied models in physics. It is extremely useful and precise when describing different kinds of magnetism: ferro, anti-ferro and ferrimagnetism.\\
- \\
+Ising model is one of the most widely studied models in physics. It is extremely useful and precise when describing different kinds of magnetism: ferro, anti-ferro and ferrimagnetism. Ising model can show how competition between entropy and energy leads to phase transition. \\
+In this work we use this widely popular model to simulate phase transitions. Monte Carlo methods is naturally to use due to the fact that our problem has a probabilistic interpretation.
+We find the analytical expression for the partition function and various expectations values for simple 2$\times$2 case.
+Then we present results obtained numerically by our program and compare results with ones obtained analytically for 2$\times$2 lattice.
+
+To study phase transitions we parallelize code using MPI.
 
 The report has the following structure:\\*
 In the part \ref{Part1}  we discuss the problem and describe Ising model, then we briefly discuss random walks and Metropolis algorithm. Those who are already familiar with those methods and Ising model can safely skip this part and go directly to the results and discussion part \ref{results}. In conclusion \ref{conc} a brief overview of obtained results and discuss possibilities for further research are given. 
@@ -124,15 +129,14 @@ However 2$\times$2 can be solved and used as a test of our program.
 
 
 \subsection{Random walks and Metropolis algorithm}
-Consider a random walker in one dimension. Walker can jump to the left or to the right as well as stay in current state or with other words not make a move. If we now try to imagine this process to a system represented by Ising model and evolving in time. Let us consider one dimensional case for simplicity.
-Let assume we start with microstate with a specific spin arrangement. Flipping one spin we obtain a new microstate. So in space of microstates we get 2 different points.
-In this case random walker makes moves in a space of microstates.
+Consider a random walker in one dimension. Walker can jump to the left or to the right as well as stay in current state that is not making a move. Let us try to imagine this process applied to a system represented by Ising model and evolving in time. We consider one-dimensional case for simplicity.
+Let assume we start with microstate with a specific spin arrangement. By flipping one spin we obtain a new microstate. So in space of microstates we get 2 different points. Naturally that random walker makes moves in a space of microstates in our case.
 Random walker can either accept or neglect the move or with other words system will keep
 current state or will move to a new one. And probability of being in a certain state must be normalized:
 \[
 \sum_{i} {w_i(t)} = 1
 \]
-Markov chain is a process where next position is independent of the previous one.
+Markov chain is a process where next position is independent of the previous one what ca be mathematically expressed as:
 \[
 w_i(t+t_s)=\sum_{j} {W(j\rightarrow i)w_j(t)}
 \]
@@ -146,7 +150,7 @@ For Ising model in two dimensions considered above we can write:
 w_i(t) = \frac{e^{-\beta E}}{Z},
 \]
 
-where $Z$ cannot be computed for considered Ising model as was mentioned above.
+where $Z$ cannot be computed for considered Ising model of size more then 2$\times$2 lattice as was mentioned above.
 
 Let we model $W(j\rightarrow i)$ as a product of probabilities:
 
@@ -211,14 +215,14 @@ for (int i=-8;i<=8;i+=4){
 }
 
 \end{pseudolisting}
-Additionally we want to note that accuracy of expectation values depends on number of Monte Carlo cycles. Modern CPUs have several cores or with other words it is possible to say that one computer has several CPUs. In next section we discuss briefly how to run Monte Carlo experiments on one computer
+Additionally we want to note that accuracy of expectation values depends on number of Monte Carlo cycles. Modern CPUs have several cores and it it naturally to think that one computer has several CPUs. In next section we discuss briefly how to run Monte Carlo experiments on one computer
 parallel. 
 \subsection{Parallelization}
 In this section we will discuss how we can speedup our numerical experiment by parallelizing code with OpenMPI library \cite{Gabriel}. 
 We divide our task into independent tasks each running Monte Carlo sampling. So for every temperature we run eight parallel experiments.
 When all tasks are finished master process gets all expectation values sum them and writes to file.
 
-\begin{pseudolisting}{precalculate\_exp\_deltaE}
+\begin{pseudolisting}{Open MPI usage}
 int numprocs, my_rank;
 MPI_Init (&argc, &argv);
 MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
@@ -338,7 +342,9 @@ results into:
 \chi=\frac{8\beta (e^{8J\beta }+1)}{\cosh 8J\beta +3}-\left( \frac{2(e^{8\beta J}+2)}{\cosh (8\beta J)+3}\right) ^{2}
 \end{equation}
 
-Now using (\ref{2x2magnet}), (\ref{2x2_energy}), (\ref{2x2Cv}) and (\ref{2x2chi}) we can calculate different expectation values for 2$\times$2 lattice. Additionally we present results obtained numerically by program we developed in Table \ref{tab:2x2_compare}
+Now using (\ref{2x2magnet}), (\ref{2x2_energy}), (\ref{2x2Cv}) and (\ref{2x2chi}) we can calculate different expectation values for 2$\times$2 lattice. Additionally we present results obtained numerically by program we developed in Table \ref{tab:2x2_compare}. Source code and benchmarks are available at 
+\href{https://github.com/andrei-fys/fys4150/tree/master/Project_4/src/task_b_c}{Ising model} .
+
 
 \begin{table}[h!]
   \caption{Values of energy, magnetization, heat capacity and magnetic susceptibility for two-dimensional Ising model of magnetic with square lattice for temperature $1K$ and $J=1$ . Lattice size is 2$\times$2. Periodic boundary conditions were used. Exact solution was obtained by equations (\ref{2x2magnet}), (\ref{2x2_energy}), (\ref{2x2Cv}) and (\ref{2x2chi}). }
@@ -365,7 +371,7 @@ In Figs. \ref{fig:energy_1k}-\ref{fig:magnetization_24k} we present results obta
 It is easy to see that at lower temperature energy converges much faster as expected due to the fact that number of accepted energies is lower that follows from Boltzmann distribution. Additionally it can be seen from Fig. \ref{fig:prob1} which represents energy distribution in our Monte Carlo simulation. Gap on Fig. \ref{fig:prob1} can be explained by our model and fact we flip one spin at the time which results in just five possible values for energy difference. 
 
 For higher temperatures where we may not have information about systems preferred state it can be useful to use steady state of a little bit lower temperature as initial configuration and wait some number of Monte Carlo cycles while new steady state established. In general case time of thermalization should be studied carefully but we skip it in this work and make it topic for further research. Here we just study time system needs to reach equilibrium roughly graphical. And it's easy to see from Fig. \ref{fig:energy_24k} that first 10 \% of Monte Carlo calculations can be skipped.
-We studied behavior of expectation values for energy and magnetization at just two temperatures, however it's interesting to check thermolization time for temperatures near critical temperature of phase transition. 
+We studied behavior of expectation values for energy and magnetization at just two temperatures, however it's interesting to check thermolization time for temperatures near critical temperature of phase transition. Results presented in this section were obtained by program available at \href{https://github.com/andrei-fys/fys4150/tree/master/Project_4/src/task_d}{Ising model}. Following mentioned link information how to repsenent results can be found. We do not provide result files with dependencies of expectation on number of Monte Calro cycles due to file size. However instructions how to reproduce results are given.
 
 
 \newpage
@@ -448,14 +454,15 @@ Temperature is in units of $k_BT/J$. $10^5$ Monte Carlo samples were used in cal
 \newpage
 
 \subsection{Numerical studies of phase transitions}
-In Figs. \ref{fig:phase_energy}-\ref{fig:phase_heat_cap} we present results obtained for 40$\times$40, 60$\times$60, 100$\times$100 and 140$\times$140 lattices in temperature range between 2.0 $k_BT/J$ and 2.41 $k_BT/J$ with $10^5$ Monte Carlo cycles and temperature step of 0.01. Fig. \ref{fig:phase_magnetiz} and fig:phase_magnetiz shows that phase transition takes place. Magnetization goes to zero, corresponding phase transition from ferromagnetic phase to diamagnetic. Magnetic susceptibility grows at the same temperature, similar effect is seen for heat capacity \ref{fig:phase_heat_cap}. We cannot observe that susceptibility goes to infinity due to finite lattice effects.
+In Figs. \ref{fig:phase_energy}-\ref{fig:phase_heat_cap} we present results obtained for 40$\times$40, 60$\times$60, 100$\times$100 and 140$\times$140 lattices in temperature range between 2.0 $k_BT/J$ and 2.41 $k_BT/J$ with $10^6$ Monte Carlo cycles and temperature step of 0.01. Fig. \ref{fig:phase_magnetiz} and fig:phase_magnetiz shows that phase transition takes place. Magnetization goes to zero, corresponding phase transition from ferromagnetic phase to diamagnetic. Magnetic susceptibility grows at the same temperature, similar effect is seen for heat capacity \ref{fig:phase_heat_cap}. We cannot observe that susceptibility goes to infinity due to finite lattice effects.
 We use finite size scaling relations from \cite{one} to relate the behavior at finite lattices with the results for
 an infinitely large lattice.
 \[
 T_c(L) - T_c(L = \infty ) = a L^{-1},
 \]
-where $T_c$ is critical temperature, $L$ is lattice size. Choosing $L=140$ and $L=100$ we got result that is $0.6$ \% differs from exact result for the critical temperature after \cite{Onsager}
-
+where $T_c$ is critical temperature, $L$ is lattice size. Choosing $L=140$ and $L=100$ we got result that is $0.6$ \% differs from exact result for the critical temperature after \cite{Onsager}.
+Source code of program used is provided on \href{https://github.com/andrei-fys/fys4150/tree/master/Project_4/src/MPI}{Ising model MPI} link.
+Additionally results for $10^5$ Monte Carlo samples provided on same link. Simulations with $10^6$ cycles run for a considerable time on one computer. It took roughly two days on Intel(R) Core(TM) i7-3615QM CPU @ 2.30GHz with eight treads, so supercomputing facilities should be considered for fast reproduction of presented results. 
 
 
 
@@ -463,18 +470,18 @@ where $T_c$ is critical temperature, $L$ is lattice size. Choosing $L=140$ and $
 \begin{figure}
 \centering
    \begin{subfigure}[b]{1\textwidth}
-   \includegraphics[width=0.9\linewidth]{phase_10_5_energy}
+   \includegraphics[width=0.9\linewidth]{phase_10_6_energy}
    \caption{Energy per spin.}
    \label{fig:phase_energy} 
 \end{subfigure}
 
 \begin{subfigure}[b]{1\textwidth}
-   \includegraphics[width=0.9\linewidth]{phase_10_5_magnetization}
+   \includegraphics[width=0.9\linewidth]{phase_10_6_magnetization}
    \caption{Magnetization per spin.}
    \label{fig:phase_magnetiz}
 \end{subfigure}
 \caption{Energy (a) and Magnetization (b) for system of 40$\times$40, 60$\times$60, 100$\times$100 and 140$\times$140 spins
-Temperature step is 0.01 $k_BT/J$. $10^5$ Monte Carlo samples were used in calculations.}
+Temperature step is 0.01 $k_BT/J$. $10^6$ Monte Carlo samples were used in calculations.}
 \end{figure}
 \clearpage
 
@@ -482,19 +489,19 @@ Temperature step is 0.01 $k_BT/J$. $10^5$ Monte Carlo samples were used in calcu
 \begin{figure}
 \centering
    \begin{subfigure}[b]{1\textwidth}
-   \includegraphics[width=0.9\linewidth]{phase_10_5_susceptability}
+   \includegraphics[width=0.9\linewidth]{phase_10_6_susceptability}
    \caption{Magnetic susceptibility per spin.}
    \label{fig:phase_suscept} 
 \end{subfigure}
 
 \begin{subfigure}[b]{1\textwidth}
-   \includegraphics[width=0.9\linewidth]{phase_10_5_heat_capacity}
+   \includegraphics[width=0.9\linewidth]{phase_10_6_heat_capacity}
    \caption{Heat capacity per spin.}
    \label{fig:phase_heat_cap}
 \end{subfigure}
 
 \caption{Magnetic susceptibility (a) and heat capacity (b) for system of 40$\times$40, 60$\times$60, 100$\times$100 and 140$\times$140 spins
-Temperature step is 0.01 $k_BT/J$. $10^5$ Monte Carlo samples were used in calculations.}
+Temperature step is 0.01 $k_BT/J$. $10^6$ Monte Carlo samples were used in calculations.}
 \end{figure}
 
 \clearpage
