@@ -19,8 +19,8 @@ mpirun -n 8 ./Ising_phase_transition 40 1000000 2.0 2.6 0.02 1
 ```
 In [benchmarks](/Project_4/src/MPI/benchmarks) folder you can find output for [40x40](/Project_4/src/MPI/benchmarks/40x40_10_5),
 [60x60](/Project_4/src/MPI/benchmarks/60x60_10_5), [100x100](/Project_4/src/MPI/benchmarks/100x100_10_5) and [140x140](/Project_4/src/MPI/benchmarks/140x140_10_5) lattices with one 100000 Monte Carlo samples.
-Same results for one million Monte Carlo cycles:
-In [benchmarks](/Project_4/src/MPI/benchmarks) folder you can find output for [40x40](/Project_4/src/MPI/benchmarks/40x40_10_6),
+Same results for one million Monte Carlo cycles can be found in same directory [benchmarks](/Project_4/src/MPI/benchmarks):
+[40x40](/Project_4/src/MPI/benchmarks/40x40_10_6),
 [60x60](/Project_4/src/MPI/benchmarks/60x60_10_6), [100x100](/Project_4/src/MPI/benchmarks/100x100_10_6) and [140x140](/Project_4/src/MPI/benchmarks/140x140_10_6) lattices with one 100000 Monte Carlo samples.
 
 Files have following format: 
