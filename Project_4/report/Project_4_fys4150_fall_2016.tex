@@ -30,7 +30,9 @@ FYS 4150
 In this project we study phase transitions in a magnetic system by using Ising model in two dimensions.
 We use periodic boundary conditions and the Metropolis algorithm simulating phase transition by Monte Carlo methods.
 Open MPI library used for code parallelization. Phase transition from ferromagnetic phase to diamagnetic can be clearly seen, however
-finate size effects take place.
+finite size effects take place.
+All the result are in a good agreement with the solutions obtained for the closed form. The critical temperature turned to be close to the exact result obtained by Lars Onsager. ​
+
 
 \end{abstract}
 \clearpage 
@@ -56,7 +58,7 @@ In the part \ref{Part1}  we discuss the problem and describe Ising model, then w
 
 \subsection{Ising model}
 It is known that ferromagnetic materials have spontaneous magnetic moment that is not equal to zero at certain temperatures even with no external magnetic field applied. For readers not familiar with magnetic materials text of Kittel \cite{Kittel} chapter 12 is recommended.
-With other words spins of electrons have some kind of ordering. We assume that interaction between spins exists inside magnetic material and 
+In other words spins of electrons have some kind of ordering. We assume that interaction between spins exists inside magnetic material and 
 this interaction can be described by some kind of quasi-magnetic field often called exchange field. Thermal agitation and exchange field are competitors and we can say that increasing temperature we can reach such a point where thermal energy will dominate and magnetic ordering will be destroyed.
 In mean-field approximation it is assumed that $B_E$, exchange field is proportional to magnetization $M$:
 
@@ -118,8 +120,8 @@ where $N$ is number of microstates, $E_{i}$ energy of microstate $i$, $M_{i}$ --
 Magnetic susceptibility and heat capacity can be calculated then as follows: 
 \begin{equation}\label{cv_xi}
 \begin{aligned}
-C_{v}=\frac{\sigma _{E}}{k_{B}T^{2}}=\frac{\langle E^{2}\rangle -\langle E\rangle ^{2}}{k_{B}T^2} \\
-\chi =\frac{\sigma _{M}}{k_{B}T}=\frac{\langle M^{2}\rangle -\langle M\rangle ^{2}}{k_{B}T}
+C_{v}=\frac{\sigma^2 _{E}}{k_{B}T^{2}}=\frac{\langle E^{2}\rangle -\langle E\rangle ^{2}}{k_{B}T^2} \\
+\chi =\frac{\sigma^2 _{M}}{k_{B}T}=\frac{\langle M^{2}\rangle -\langle M\rangle ^{2}}{k_{B}T}
 \end{aligned}
 \end{equation}
 
@@ -130,7 +132,7 @@ However 2$\times$2 can be solved and used as a test of our program.
 
 \subsection{Random walks and Metropolis algorithm}
 Consider a random walker in one dimension. Walker can jump to the left or to the right as well as stay in current state that is not making a move. Let us try to imagine this process applied to a system represented by Ising model and evolving in time. We consider one-dimensional case for simplicity.
-Let assume we start with microstate with a specific spin arrangement. By flipping one spin we obtain a new microstate. So in space of microstates we get 2 different points. Naturally that random walker makes moves in a space of microstates in our case.
+Let assume we start with microstate with a specific spin arrangement. By flipping one spin we obtain a new microstate. So in space of microstates we get two different points. Naturally that random walker makes moves in a space of microstates in our case.
 Random walker can either accept or neglect the move or with other words system will keep
 current state or will move to a new one. And probability of being in a certain state must be normalized:
 \[
@@ -140,7 +142,7 @@ Markov chain is a process where next position is independent of the previous one
 \[
 w_i(t+t_s)=\sum_{j} {W(j\rightarrow i)w_j(t)}
 \]
-Where $t_s$ is time step, $w_i$ - PDF in a time $t+t_s$ in state $i$, $W(j\rightarrow i)$ is transition probability from state $j$ to state $i$. To understand what transition probability is one can think of example in the beginning of this section where random walker could jump in 1D space either to the right or to the left. In this case
+where $t_s$ is time step, $w_i$ - PDF in a time $t+t_s$ in state $i$, $W(j\rightarrow i)$ is transition probability from state $j$ to state $i$. To understand what transition probability is one can consider example in the beginning of this section where random walker could jump in 1D space either to the right or to the left. In this case
 $W(j\rightarrow i)=W_{ji}=1/2$, if points in space are near each other ($|i-j|=1$). For other cases transition probability is zero as random walker can't jump over points during one move.
 $W_{ji}$ represent probability of moving from one microstate to another mictostate which is in general case is impossible to calculate especially for complex systems.
 
@@ -334,7 +336,7 @@ C_{v}=128J^{2}\frac{1+3\cosh 8J\beta }{6\sinh 8J\beta +\sinh 16J\beta }
 Similarly for magnetic susceptibility:
 
 \[
-\chi=\frac{\sigma _{M}}{k_{B}T}=\frac{\langle M^{2}\rangle -\langle M\rangle ^{2}}{k_{B}T}
+\chi=\frac{\sigma^2 _{M}}{k_{B}T}=\frac{\langle M^{2}\rangle -\langle M\rangle ^{2}}{k_{B}T}
 \]
 
 results into:
@@ -363,7 +365,9 @@ Now using (\ref{2x2magnet}), (\ref{2x2_energy}), (\ref{2x2Cv}) and (\ref{2x2chi}
   \end{center}
 \end{table}
 
-Results from Table \ref{tab:2x2_compare} clearly show us that Monte Carlo simulation is quite precise. At $10^6$ simulations relative error for magnetic susceptibility is roughly $0.5 \%$. For $10^5$ simulations relative error is quite big, however this number of Monte Carlo samples can be used to qualitative analysis of systems behavior. Additionally one should remember that number of spin flips is proportional to size of lattice. For 2$\times$2 case it is easy to perform $10^7$ Monte Carlo experiments, however cab be quite time consuming for lattice 100$\times$100, when each Monte Carlo cycle contains $10^10000$ spin flips. 
+Results from Table \ref{tab:2x2_compare} clearly show us that Monte Carlo simulation is quite precise. At $10^6$ simulations relative error for magnetic susceptibility is roughly $0.5 \%$. For $10^5$ simulations relative error is quite big, however this number of Monte Carlo samples can be used to qualitative analysis of systems behavior.\\
+It's easy to see that energy converges much faster then magnetization for both temperatures. Possible reason for this is the fact that in our model range of magnetization change is almost twice as small as similar rabge for energy. 
+Additionally one should remember that number of spin flips is proportional to size of lattice. For 2$\times$2 case it is easy to perform $10^7$ Monte Carlo experiments, however can be quite time consuming for lattice 100$\times$100, when each Monte Carlo cycle contains $10^4$ spin flips. 
 In next section we study system of 20$\times$20 size and use $10^5$ Monte Carlo samples to examine behavior of the system at different temperatures. 
 
 \subsection{20$\times$20 lattice}
