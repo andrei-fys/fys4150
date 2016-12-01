@@ -18,12 +18,9 @@ int main(int argc, char* argv[]){
 	 * Args:
 	 *	MC_samples : number of Monte-Carlo samples
 	 */
-//	if ( argc != 1 ) {
-//		cout<<"Usage: "<<argv[0]<< "[Number of Monte Carlo samples]" <<endl;
-//		exit(1);
-//	}
 
 	int MC_samples = atof(argv[1]);
+	double h = atof(argv[2]);       // step
 	
 	// Initialize the seed and call the Mersienne algo
 	//random_device rd;
@@ -40,7 +37,6 @@ int main(int argc, char* argv[]){
 	// physics comes here
 	double omega = 1.0;   // from keyboard
 	double alpha = 1.0;   // AAAAAA!!!!!!
-	double h = 1.0;       // step
 	double local_energy = 0.0;
 	double expectation_energy = 0.0;
 	R1[0] = 1.0;
@@ -107,7 +103,6 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 				R2[0] = R2_new[0];
 				R2[1] = R2_new[1];
 				R2[2] = R2_new[2];
-				//mean_energy += update_local_energy(omega, R1, R2, alpha);
 				update_local_energy(omega, R1, R2, alpha, local_energy);
 				mean_energy += local_energy;
 				MC_accepted++;
@@ -115,7 +110,6 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 				double sampling_parameter = RandomNumberGenerator1(gen);
 				if (W < sampling_parameter){
 					update_local_energy(omega, R1, R2, alpha, local_energy);
-					//mean_energy += update_local_energy(omega, R1, R2, alpha);
 					mean_energy += local_energy;
 					MC_rejected++;
 				} else {
@@ -125,19 +119,16 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 					R2[0] = R2_new[0];
 					R2[1] = R2_new[1];
 					R2[2] = R2_new[2];
-					//mean_energy += update_local_energy(omega, R1, R2, alpha);
 					update_local_energy(omega, R1, R2, alpha, local_energy);
 					mean_energy += local_energy;
 					MC_accepted++;
 				}
 			}
-	cout << R1[0] << endl;
-	cout << R1[1] << endl;
-	cout << R1[2] << endl;
 	MC_counter++;
 	}
-	cout << "Accept " <<MC_accepted << endl;
-	cout << "Reject " <<MC_rejected << endl;
+	cout << "Total MC " << MC_samples << endl;
+	cout << "Accept " << MC_accepted <<" "<< MC_accepted*100.0/MC_samples << "%"<<endl;
+	cout << "Reject " << MC_rejected <<" "<< MC_rejected*100.0/MC_samples << "%"<<endl;
 	cout << "Local energy " << mean_energy/MC_samples << endl;
 }
 
