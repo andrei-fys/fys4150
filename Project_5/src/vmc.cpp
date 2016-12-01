@@ -9,7 +9,7 @@ using namespace std;
 
 void transition_probability(double, double, double *, double *, double *, double *, double &);
 void update_local_energy(double, double *, double *, double, double &); 
-void Metropolis(int, double, double, double *, double *,double *, double *, double &, double &, double, double &);
+void Metropolis(int, double, double, double *, double *,double *, double *, double &, double &, double, double &, double &, double &);
 
 //MC step omega alpha beta
 
@@ -39,6 +39,8 @@ int main(int argc, char* argv[]){
 	double W = 0.0;
 	double local_energy = 0.0;
 	double expectation_energy = 0.0;
+	double MC_rejected_prosent = 0;
+	double MC_accepted_prosent = 0;
 	R1[0] = 1.0;
 	R1[1] = 1.0;
 	R1[2] = 1.0;
@@ -47,7 +49,9 @@ int main(int argc, char* argv[]){
 	R2[2] = 1.0;
 
 	//while (T <= T_finish){ here should be alpha-loop
-	Metropolis(MC_samples, omega, alpha, R1, R2, R1_new, R2_new, W, local_energy, h, expectation_energy);
+	Metropolis(MC_samples, omega, alpha, R1, R2, R1_new, R2_new, 
+				W, local_energy, h, expectation_energy,
+				MC_rejected_prosent, MC_accepted_prosent);
 	//new appha
 	//}
 	
@@ -77,7 +81,9 @@ void update_local_energy(double omega, double * R1, double * R2,
 }
 
 void Metropolis(int MC_samples, double omega, double alpha, double * R1, double * R2,
-				double * R1_new, double * R2_new, double &W, double &local_energy, double h, double & expectation_energy){
+				double * R1_new, double * R2_new, double &W, double &local_energy, 
+				double h, double & expectation_energy,
+				double &MC_rejected_prosent, double &MC_accepted_prosent){
 	// Initialize the seed and call the Mersienne algo
 	random_device rd;
 	mt19937_64 gen(rd());
@@ -126,9 +132,11 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 			}
 	MC_counter++;
 	}
+	MC_accepted_prosent = MC_accepted*100.0/MC_samples; 
+	MC_rejected_prosent = MC_rejected*100.0/MC_samples; 
 	cout << "Total MC " << MC_samples << endl;
-	cout << "Accept " << MC_accepted <<" "<< MC_accepted*100.0/MC_samples << "%"<<endl;
-	cout << "Reject " << MC_rejected <<" "<< MC_rejected*100.0/MC_samples << "%"<<endl;
+	cout << "Accept " << MC_accepted <<" "<< MC_accepted_prosent << "%"<<endl;
+	cout << "Reject " << MC_rejected <<" "<< MC_rejected_prosent << "%"<<endl;
 	cout << "Local energy " << mean_energy/MC_samples << endl;
 }
 
