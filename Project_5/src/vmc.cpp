@@ -11,7 +11,7 @@ void transition_probability(double, double, double *, double *, double *, double
 void update_local_energy(double, double *, double *, double, double &); 
 void Metropolis(int, double, double, double *, double *,double *, double *, double &, double &, double, double &);
 
-
+//MC step omega alpha beta
 
 int main(int argc, char* argv[]){
 	/*
@@ -21,6 +21,9 @@ int main(int argc, char* argv[]){
 
 	int MC_samples = atof(argv[1]);
 	double h = atof(argv[2]);       // step
+	double omega = atof(argv[3]);   // HO strenth 
+	double alpha = atof(argv[4]);   // variational parmeter #1
+	//double beta = atof(argv[5]);   // variational parmeter #2
 	
 	// Initialize the seed and call the Mersienne algo
 	//random_device rd;
@@ -34,9 +37,6 @@ int main(int argc, char* argv[]){
 	double * R2_new = new double[3]; 
 	//Metropolis transition probability
 	double W = 0.0;
-	// physics comes here
-	double omega = 1.0;   // from keyboard
-	double alpha = 1.0;   // AAAAAA!!!!!!
 	double local_energy = 0.0;
 	double expectation_energy = 0.0;
 	R1[0] = 1.0;
