@@ -10,9 +10,11 @@ using namespace std;
 void transition_probability(double, double, double *, double *, double *, double *, double &);
 void update_local_energy(double, double *, double *, double, double &); 
 void Metropolis(int, double, double, double *, double *,double *, double *, double &, double &, double, double &, double &, double &);
+void file_writer(char*, double, double);
 
 //MC step omega alpha beta
-
+//0.84-0.90 - alpha with Coul/without Jas
+//0.9 beta guess
 int main(int argc, char* argv[]){
 	/*
 	 * Args:
@@ -25,18 +27,19 @@ int main(int argc, char* argv[]){
 	double alpha = atof(argv[4]);   // variational parmeter #1
 	//double beta = atof(argv[5]);   // variational parmeter #2
 	
-	// Initialize the seed and call the Mersienne algo
-	//random_device rd;
-	//mt19937_64 gen(rd());
-	//uniform_real_distribution<double> RandomNumberGenerator(-1.0,1.0);
-	
+	char *output_filename;
+	output_filename=argv[5];
+
+
+
+
 	// coordinates for two particles
 	double * R1 = new double[3]; 
 	double * R2 = new double[3]; 
 	double * R1_new = new double[3]; 
 	double * R2_new = new double[3]; 
 	//Metropolis transition probability
-	double W = 0.0;
+	double W =  0.0;
 	double local_energy = 0.0;
 	double expectation_energy = 0.0;
 	double MC_rejected_prosent = 0;
@@ -48,11 +51,56 @@ int main(int argc, char* argv[]){
 	R2[1] = -1.0;
 	R2[2] = 1.0;
 
-	//while (T <= T_finish){ here should be alpha-loop
-	Metropolis(MC_samples, omega, alpha, R1, R2, R1_new, R2_new, 
+
+	//find optimal step
+	const int n = 500; // Number of iterations to find step
+	double step = 0.01;
+	int h0 = 0.1;
+	int MC_samples_step = 1000;
+	double mean_h = 0;
+	for (int j=0; j < 10; j++) {
+	for ( int i=0; i < n; i++ ){
+		Metropolis(MC_samples_step, omega, alpha, R1, R2, R1_new, R2_new, 
 				W, local_energy, h, expectation_energy,
 				MC_rejected_prosent, MC_accepted_prosent);
-	//new appha
+		//cout << "rejected  " << MC_rejected_prosent << endl;
+		if (abs(MC_rejected_prosent - 50.0) < 1.0 ){ 
+			//cout << "optimal h  " << h << endl;
+			break;
+		}
+		h = h0 + step*i;
+	}
+	mean_h += h;
+	}
+	mean_h = mean_h/10.0;
+	
+	cout << " Last optimal h  " << mean_h << endl;
+	//null all indexes
+	//start Metropolis with optimal step
+	//
+	//
+	//while (T <= T_finish){ here should be alpha-loop
+	
+	//############################# reset all initial values
+	W =  0.0;
+	local_energy = 0.0;
+	expectation_energy = 0.0;
+	MC_rejected_prosent = 0;
+	MC_accepted_prosent = 0;
+	R1[0] = 1.0;
+	R1[1] = 1.0;
+	R1[2] = 1.0;
+	R2[0] = -1.0;
+	R2[1] = -1.0;
+	R2[2] = 1.0;
+	//##############################
+	Metropolis(MC_samples, omega, alpha, R1, R2, R1_new, R2_new, 
+				W, local_energy, mean_h, expectation_energy,
+				MC_rejected_prosent, MC_accepted_prosent);
+	cout << "Final rejected  " << MC_rejected_prosent << endl;
+	cout << "Expectation energy: " << expectation_energy << endl;
+	file_writer(output_filename,  expectation_energy, alpha);;
+//new appha
 	//}
 	
 	delete[] R1;
@@ -133,11 +181,18 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 	MC_counter++;
 	}
 	MC_accepted_prosent = MC_accepted*100.0/MC_samples; 
-	MC_rejected_prosent = MC_rejected*100.0/MC_samples; 
-	cout << "Total MC " << MC_samples << endl;
-	cout << "Accept " << MC_accepted <<" "<< MC_accepted_prosent << "%"<<endl;
-	cout << "Reject " << MC_rejected <<" "<< MC_rejected_prosent << "%"<<endl;
-	cout << "Local energy " << mean_energy/MC_samples << endl;
+	MC_rejected_prosent = MC_rejected*100.0/MC_samples;
+	expectation_energy = mean_energy/MC_samples; 
+//	cout << "Total MC " << MC_samples << endl;
+//	cout << "Accept " << MC_accepted <<" "<< MC_accepted_prosent << "%"<<endl;
+//	cout << "Reject " << MC_rejected <<" "<< MC_rejected_prosent << "%"<<endl;
+//	cout << "Local energy " << mean_energy/MC_samples << endl;
 }
 
+void file_writer(char* filename, double expectation_energy, double alpha ){
+	ofstream ofile;
+	ofile.open(filename, ios::app);
+	ofile << alpha << "," << expectation_energy << endl;
+	ofile.close();
+}
 
