@@ -31,7 +31,7 @@ int main(int argc, char* argv[]){
 	double omega = atof(argv[3]);   // HO strenth
 	double alpha = atof(argv[4]);   // variational parmeter #1
 	//double beta = atof(argv[5]);  // variational parmeter #2
-	double beta = 0.0;
+	double beta = 2.0;
 	char *output_filename;
 	output_filename=argv[5];
 	// coordinates for two particles
@@ -129,7 +129,7 @@ void update_local_energy(double omega, double * R1, double * R2, double alpha, d
 	double R2_sq = R2[0]*R2[0] + R2[1]*R2[1] + R2[2]*R2[2];
 	double R12 = sqrt(abs(R1_sq - R2_sq));
 	local_energy = 0.5*omega*omega*(R1_sq + R2_sq)*(1.0 - alpha*alpha) + 3.0*alpha*omega + 1/R12 +
-			+ (1/(2*(1+beta*R12)*(1+beta*R12)))*(alpha*omega*R12 - 1/(2*(1+beta*R12)*(1+beta*R12)) - 2/R12 + 2*beta/(1+beta*R12));
+			+ 1/(2*(1+beta*R12)*(1+beta*R12))*(alpha*omega*R12 - 1/(2*(1+beta*R12)*(1+beta*R12)) - 2/R12 + 2*beta/(1+beta*R12));
 }
 
 
