@@ -9,8 +9,9 @@ using namespace std;
 
 void transition_probability(double, double, double *, double *, double *, double *, double &);
 void update_local_energy(double, double *, double *, double, double &);
-void Metropolis(int, double, double, double *, double *,double *, double *, double &, double &, double, double &, double &, double &, double &, double &);
+void Metropolis(int, double, double, double *, double *,double *, double *, double &, double &, double, double &, double &, double &, double &, double &, double &, double &);
 void file_writer(char*, double, double, double);
+void compute_distance(double *, double *, double &);
 
 //MC step omega alpha beta
 //0.84-0.90 - alpha with Coul/without Jas
@@ -52,8 +53,8 @@ int main(int argc, char* argv[]){
 	R2[0] = -1.0;
 	R2[1] = -1.0;
 	R2[2] = 1.0;
-
-
+	double R12 = sqrt(abs(R1[0]*R1[0] + R1[1]*R1[1] + R1[2]*R1[2] - R2[0]*R2[0] + R2[1]*R2[1] + R2[2]*R2[2]));
+	double mean_distance = 0;
 	//find optimal step
 	const int n = 500; // Number of iterations to find step
 	double step = 0.01;
@@ -64,7 +65,7 @@ int main(int argc, char* argv[]){
 	for ( int i=0; i < n; i++ ){
 		Metropolis(MC_samples_step, omega, alpha, R1, R2, R1_new, R2_new,
 				W, local_energy, h, expectation_energy, expectation_energy_squared,
-				MC_rejected_prosent, MC_accepted_prosent, variance);
+				MC_rejected_prosent, MC_accepted_prosent, variance, R12, mean_distance);
 		//cout << "rejected  " << MC_rejected_prosent << endl;
 		if (abs(MC_rejected_prosent - 50.0) < 1.0 ){
 			//cout << "optimal h  " << h << endl;
@@ -100,9 +101,10 @@ int main(int argc, char* argv[]){
 	//##############################
 	Metropolis(MC_samples, omega, alpha, R1, R2, R1_new, R2_new,
 				W, local_energy, mean_h, expectation_energy, expectation_energy_squared,
-				MC_rejected_prosent, MC_accepted_prosent, variance);
+				MC_rejected_prosent, MC_accepted_prosent, variance, R12, mean_distance);
 	cout << "Final rejected  " << MC_rejected_prosent << endl;
 	cout << "Expectation energy: " << expectation_energy << endl;
+	cout << "Relative distance expectation " << R12/MC_samples << endl;
 	file_writer(output_filename,  expectation_energy, variance, alpha);
 //new appha
 	//}
@@ -111,6 +113,7 @@ int main(int argc, char* argv[]){
 	delete[] R2;
 	delete[] R1_new;
 	delete[] R2_new;
+	
 }
 
 
@@ -129,6 +132,13 @@ void update_local_energy(double omega, double * R1, double * R2,
 	double R1_sqrt = R1[0]*R1[0] + R1[1]*R1[1] + R1[2]*R1[2];
 	double R2_sqrt = R2[0]*R2[0] + R2[1]*R2[1] + R2[2]*R2[2];
 	local_energy = 0.5*omega*omega*(R1_sqrt + R2_sqrt)*(1.0 - alpha*alpha) + 3.0*alpha*omega;
+}
+
+void compute_distance(double * R1, double * R2,  double & R12){
+	double R1_sqrt = R1[0]*R1[0] + R1[1]*R1[1] + R1[2]*R1[2];
+	double R2_sqrt = R2[0]*R2[0] + R2[1]*R2[1] + R2[2]*R2[2];
+	R12 = sqrt(abs(R1_sqrt - R2_sqrt));
+	
 
 }
 
@@ -136,7 +146,7 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 				double * R1_new, double * R2_new, double &W, double &local_energy,
 				double h, double & expectation_energy, double & expectation_energy_squared,
 				double &MC_rejected_prosent, double &MC_accepted_prosent,
-				double &variance){
+				double &variance, double & R12, double & mean_distance){
 	// Initialize the seed and call the Mersienne algo
 	random_device rd;
 	mt19937_64 gen(rd());
@@ -164,6 +174,8 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 				R2[1] = R2_new[1];
 				R2[2] = R2_new[2];
 				update_local_energy(omega, R1, R2, alpha, local_energy);
+				compute_distance(R1, R2, R12);
+				mean_distance += R12;
 				mean_energy += local_energy;
 				mean_energy_squared += local_energy*local_energy;
 	//cout << "mean energy " << mean_energy << endl;
@@ -173,6 +185,7 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 				double sampling_parameter = RandomNumberGenerator1(gen);
 				if (W < sampling_parameter){
 					update_local_energy(omega, R1, R2, alpha, local_energy);
+					mean_distance += R12;
 					mean_energy += local_energy;
 					mean_energy_squared += local_energy*local_energy;
 					MC_rejected++;
@@ -184,6 +197,8 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 					R2[1] = R2_new[1];
 					R2[2] = R2_new[2];
 					update_local_energy(omega, R1, R2, alpha, local_energy);
+					compute_distance(R1, R2, R12);
+					mean_distance += R12;
 					mean_energy += local_energy;
 					mean_energy_squared += local_energy*local_energy;
 					MC_accepted++;
