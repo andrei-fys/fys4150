@@ -165,7 +165,7 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 				R2[2] = R2_new[2];
 				update_local_energy(omega, R1, R2, alpha, local_energy);
 				mean_energy += local_energy;
-				mean_energy_squared += mean_energy*mean_energy;
+				mean_energy_squared += local_energy*local_energy;
 	//cout << "mean energy " << mean_energy << endl;
 	//cout << "mean energy squared " << mean_energy_squared << endl;
 				MC_accepted++;
@@ -174,7 +174,7 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 				if (W < sampling_parameter){
 					update_local_energy(omega, R1, R2, alpha, local_energy);
 					mean_energy += local_energy;
-					mean_energy_squared += mean_energy*mean_energy;
+					mean_energy_squared += local_energy*local_energy;
 					MC_rejected++;
 				} else {
 					R1[0] = R1_new[0];
@@ -185,7 +185,7 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 					R2[2] = R2_new[2];
 					update_local_energy(omega, R1, R2, alpha, local_energy);
 					mean_energy += local_energy;
-					mean_energy_squared += mean_energy*mean_energy;
+					mean_energy_squared += local_energy*local_energy;
 					MC_accepted++;
 				}
 			}
@@ -199,7 +199,7 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 	MC_rejected_prosent = MC_rejected*100.0/MC_samples;
 	expectation_energy = (double) mean_energy/MC_samples;
 	expectation_energy_squared = (double) mean_energy_squared/(MC_samples*MC_samples);
-	variance = expectation_energy_squared - expectation_energy*expectation_energy;
+	variance = (mean_energy_squared/MC_samples - (mean_energy/MC_samples)*(mean_energy/MC_samples))/MC_samples;
 //	cout << "Total MC " << MC_samples << endl;
 //	cout << "Accept " << MC_accepted <<" "<< MC_accepted_prosent << "%"<<endl;
 //	cout << "Reject " << MC_rejected <<" "<< MC_rejected_prosent << "%"<<endl;
