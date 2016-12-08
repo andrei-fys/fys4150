@@ -1,0 +1,211 @@
+\documentclass[10pt]{article}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{flexisym}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{amsthm}
+\usepackage{subcaption}
+\newtheorem*{theorem}{Theorem}
+
+\begin{document}
+\setlength\parindent{1pt}
+\title{Quantum Monte Carlo of confined electrons }
+\author{Andrei Kukharenka and Anna Gribkovskaya \\  
+FYS 4150 
+}
+
+\maketitle
+\begin{abstract}
+This is final project in FYS4150 course. The aim was to use Variational Monte Carlo (VMC) method to determine the ground state energy of the quantum systems. The considered system were two electrons confined in quantum dots. The quantum dot is approximated with a three-dimensional harmonic oscillator potential. Apart of ground state energy the relative distance between two electrons and expectation values of the kinetic and potential energies were evaluated. The obtained results were compared with those obtained in second project and analytical results from Taut \cite{three}. 
+\end{abstract}
+\clearpage 
+
+
+\section{Introduction}
+System under consideration is a three-dimensional harmonic oscillator potential with two electrons. Such potential trap electrons inside and prevent them to move apart. Such a trap called quantum dot and it has a large application in science \cite{four}, industry\cite{five} and medicine \cite{med}. \\
+We already study such system in Project 2 using the eigenvalue solver (Jacoby method), so we are able to compare results from different methods. The advantage of VMC method is that we can use Cartesian coordinates and do not need to transform the equations. \\ 
+VMC is a method for solving Schr\"{o}dinger's equation by using Metropolis sampling to simulate Markov processes. This method may seem not as straightforward as the one we used in project 2, but it is much closer to the "nature" of quantum mechanics. The quantum world is a world of probabilities and stochastic methods are much more appropriate to study the problem, even though we are limited to find only one most probable state \cite{one}. \\
+All equations presented in the report are in atomic units, which means that all constants, such as speed of light or Planck's constant, are set to 1.
+The report has the following structure:\\*
+We begin with discussing the nature of the problem in \ref{Part1}.
+In results and discussion section \ref{results} we presented all the data, plots and analysis for obtained results. 
+In conclusion \ref{conc} we made a brief overview of obtained results and discuss possibilities for further research. 
+
+\newpage
+\section{Physics behind  VMC}\label{Part1}
+Variational methods are widely used in quantum physics. The idea behind such method is to use some trial wave function which depend on many parameters and try to vary this parameters in order to minimize the expectation value of the energy. This method is applied in many other methods, for example the Hartree–Fock method. ADD CITATION!\\
+In this project we consider simulations for the Markov chains (or random walkers). The essence of such process is that it depend only on a previous move and do not have "memory" about the all previous.
+
+
+As all other variational methods the VMC uses the so-called trial functions. 
+
+
+
+
+\newpage
+\section{Results and discussion}\label{results}
+
+In this project we start with non interacting system. We use first trial wave function to determine the optimal value of variational parameter $\alpha$ and also to check the result against the one we got analytically in the section above. From \ref{fig:fig1} one can see that the optimal variational parameter $\alpha$ for this case is 1. In Table \ref{tab:one} we presented the mean distance at the energy minimum for the first trial wave function. As one can see from the table the mean distance between two electrons become bigger as the harmonic oscillator strength $\omega$ decreases. \\
+ADD EXPLANATION!!!!
+
+\begin{table}[h!]
+  \caption{}
+  \label{tab:one}
+  \begin{center}
+    \begin{tabular}{c|c|c}
+    \hline
+		$\omega$ & $\alpha$ & Relative distance $R12$ \\
+    \hline
+	$	1 $  & $ 1 $ & $1.59638$  \\
+	$	0.5$  & $ 1 $ & $2.25645$   \\
+	$	0.01$  & $ 1 $ & $15.977$   \\
+	\end{tabular}
+  \end{center}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+Table \ref{tab:two} presents data for the first three eigenvalues for two electrons in the harmonic oscillator potential for different values of $\omega$ or in other words oscillator strengths. Results are in agreement with those in \cite{three}. For example, for $\omega=1$ we have the relative error less then $2\%$ for the first eigenvalue. If we consider harmonic oscillator as an area where electrons are confined, the smaller the $\omega$ is the wider the area of electron localization. In particular it means that we need to pick different $\rho_{max}$ for different $\omega$. This is quite obvious from the Figure \ref{fig1}. On Figure \ref{fig1:a} the oscillator strength $\omega$ is small and this corresponds to much bigger values for radial coordinate $\rho$. On the other hand for the case of strong harmonic oscillator potential (large $\omega$) the values for radial coordinate $\rho$ are much smaller.\\*
+Let's now consider the case with interaction between particles. One can expect that relative distance between particles become larger in this case. This is true, because the Coulomb potential for to electrons make them repel each other. If we now remember what we have already find out for the strength of harmonic oscillator field  $\omega$, one can expect that for different $\omega$ the difference in relative distance will be also different. This is so, but not the way one may expect using "common sense". Stronger fields result in smaller   $\rho_{max}$ and though we can expect the larger influence of Coulomb repulsion when it comes to the increase of relative distance. However this is not what we have found after plotting both wave functions on the same plot. As we can see from \ref{fig2} the situation is the opposite. On this figure we have plotted only the eigenvectors for the first energy state (first $\lambda$) for two different cases - with and without Coulomb interaction. As we can see from the plot \ref{fig2:a} for small value of $\omega$ the difference between two cases is quite large. On the plots for larger values of $\omega$ the difference is smaller and on plot \ref{fig2:d} probability functions are very close to each other despite the relative distance between the particles is much smaller. Why is it like this? This is true due to the different types of potentials we have here. Both harmonic oscillator and Coulomb potentials depend on $\rho$, but the harmonic oscillator potential is "stronger" because it's proportional to the $\rho^{2}$ while the Coulomb potential is just $\rho^{-1}$. So, for large $\omega$ the influence of the harmonic oscillator potential is stronger then Coulomb, even if relative distance become smaller.
+Wigner predicted\cite{wigner} that electrons can localize forming an ordered spatial structure to minimize potential energy which dominates kinetic energy at low densities. Such structures are called Wigner molecules and can be a possible topic for further research.
+
+
+
+\begin{figure}[h!] 
+  \begin{subfigure}[b]{0.6\linewidth}
+    \centering
+    \includegraphics[width=1.1\linewidth]{energy_on_alpha_001} 
+    \caption{The $\omega$ is 0.01} 
+    \label{fig1:a} 
+    \vspace{1ex}
+  \end{subfigure}%% 
+  \begin{subfigure}[b]{0.6\linewidth}
+    \centering
+    \includegraphics[width=1.1\linewidth]{energy_on_alpha_05} 
+    \caption{The $\omega$ is 0.5} 
+    \label{fig1:b} 
+    \vspace{1ex}
+  \end{subfigure} 
+  \begin{subfigure}[b]{0.6\linewidth}
+    \centering
+    \includegraphics[width=1.1\linewidth]{energy_on_alpha_1} 
+    \caption{The $\omega$ is 1} 
+    \label{fig1:c} 
+  \end{subfigure}%%
+  \begin{subfigure}[b]{0.6\linewidth}
+    \centering
+    \includegraphics[width=1.1\linewidth]{variance_on_alpha} 
+    \caption{The $\omega$ is 1} 
+    \label{fig1:d} 
+  \end{subfigure} 
+  \caption{ Energy a)to c) and energy variance d) as a function of variational parameter $\alpha$.}
+  \label{fig1} 
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+\begin{table}[h!]
+  \caption{Three first eigenvalues for two electrons in harmonic oscillator potential for different values of $\omega$. Results are obtained using Jacobi algorithm. Matrix size is $200 \times 200$, $R$ is number if Jacobi transformations.}
+  \label{tab:two}
+	\begin{center}
+    \begin{tabular}{c|c|c|c|c}
+    \hline
+		$\omega$ & $R$ & $\lambda_1$ & $\lambda_2$ & $\lambda_3$ \\
+        \hline
+		$0.01$ & $59717$ & $0.105776$ & $0.141516$  & $0.178049$ \\ 
+		$0.5$  & $64207$ & $2.25271 $ & $4.17817 $  & $6.13601$ \\ 
+		$1  $  & $64662$ & $4.11774 $ & $8.01741 $  & $11.966$ \\
+		$5  $  & $66625$ & $17.8299 $ & $37.6929 $  & $57.7022$ \\
+
+	\end{tabular}
+  \end{center}
+\end{table}
+\newpage
+
+
+\newpage
+\clearpage
+\section{Conclusion and further research}\label{conc}
+
+In this project we solved the Schr\"{o}dinger's equation for one and two electrons in three dimensional harmonic oscillator well numerically after it has been reformulated in the discretized form with help of Jacobi method of finding eigenvalues and eigenvectors.\\*
+The one electron in harmonic oscillator potential is analytically solvable problem. That's a good problem to test our numerical algorithm to be stable and precise. The results we have obtained numerically turned out to be in a good agreement with analytical solution, that means that our implementation of Jacobi algorithm is correct. \\*
+For two electrons in the harmonic oscillator potential we have analytical solution just for a definite number of oscillator frequencies. Gained results turned to be close to those obtained analytically in \cite{three}. We may say that our discretization method and the Jacobi algorithm provide quite good results for studied problem. Nevertheless Jacobi method is a overkill in our case as matrix has threediagonal form after discretization and eigenvalues can be found in more efficient way\cite{log}. 
+
+\clearpage
+\newpage
+
+\begin{thebibliography} {9}
+\bibitem{three}
+M. Taut. 
+\textit{Two electrons in an external oscillator potential: Particular analytic solutions of a Coulomb correlation problem}.
+Phys. Rev. A, 11.1993.
+
+
+\bibitem{four}
+D. Loss, D. P. DiVincenzo
+\textit{
+Quantum computation with quantum dots
+}
+Phys. Rev. A 57, 120 – Published 1 January 1998.
+
+\bibitem{five}
+P. Patel
+\textit
+{The First Full-Color Display with Quantum Dots
+}
+MIT Technology Review, February 22, 2011.
+
+\bibitem {med}
+Yuri Volkov
+\textit
+{Quantum dots in nanomedicine: recent trends, advances and unresolved issues
+}
+Biochemical and Biophysical Research Communications, Volume 468, Issue 3, 18 December 2015, Pages 419–427
+
+\bibitem{one} 
+Morten Hjorth-Jensen. 
+\textit{Computational Physics
+}. 
+Lecture Notes Fall 2015, August 2015.
+\bibitem{two} 
+W. Press, B. Flannery, S. Teukolsky, W. Vetterling 
+\textit{Numerical Recipes in C++, The art of scientific Computing}. 
+Cambridge University Press, 1999.
+
+
+\bibitem {wigner}
+E.P. Wigner
+\textit
+{On the interaction of electrons in metals
+}
+Phys. Rev. B 46, 1002 (1934) 
+
+\bibitem {log}
+Ed S. Coakley, V. Rokhlin
+\textit
+{A fast divide-and-conquer algorithm for computing the spectra of real
+symmetric tridiagonal matrices
+}
+Appl. Comput. Harmon. Anal. 34 (2013)
+
+\end{thebibliography}
+
+\end{document}
