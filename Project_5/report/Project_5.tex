@@ -29,7 +29,7 @@ This is final project in FYS4150 course. The aim was to use Variational Monte Ca
 System under consideration is a three-dimensional harmonic oscillator potential with two electrons. Such potential trap electrons inside and prevent them to move apart. Such a trap called quantum dot and it has a large application in science \cite{four}, industry\cite{five} and medicine \cite{med}. \\
 We already study such system in Project 2 using the eigenvalue solver (Jacoby method), so we are able to compare results from different methods. The advantage of VMC method is that we can use Cartesian coordinates and do not need to transform the equations. \\ 
 VMC is a method for solving Schr\"{o}dinger's equation by using Metropolis sampling to simulate Markov processes. This method may seem not as straightforward as the one we used in project 2, but it is much closer to the "nature" of quantum mechanics. The quantum world is a world of probabilities and stochastic methods are much more appropriate to study the problem, even though we are limited to find only one most probable state \cite{one}. \\
-All equations presented in the report are in atomic units, which means that all constants, such as speed of light or Planck's constant, are set to 1.
+All equations presented in the report are in atomic units, which means that all constants, such as speed of light or Planck's constant, are set to 1 ($\hbar=c=e=m_e=1$).
 The report has the following structure:\\*
 We begin with discussing the nature of the problem in \ref{Part1}.
 In results and discussion section \ref{results} we presented all the data, plots and analysis for obtained results. 
@@ -41,10 +41,39 @@ Variational methods are widely used in quantum physics. The idea behind such met
 In this project we consider simulations for the Markov chains (or random walkers). The essence of such process is that it depend only on a previous move and do not have "memory" about the all previous.
 
 
-As all other variational methods the VMC uses the so-called trial functions. 
 
+The Hamiltonian of system under consideration is given by
 
+\begin{equation}
+  \label{eq:finalH}
+  \hat{H}=\sum_{i=1}^{N} \left(  -\frac{1}{2} \nabla_i^2 + \frac{1}{2} \omega^2r_i^2  \right)+\sum_{i<j}\frac{1}{r_{ij}},
+\end{equation}
+In our case $N=2$. 
 
+As all other variational methods the VMC uses the so-called trial functions. We will consider two different trial functions. 
+The first wave function
+\[
+   \Psi_{T1}(\mathbf{r}_1,\mathbf{r}_2) = C\exp{\left(-\alpha\omega(r_1^2+r_2^2)/2\right)},
+\]
+here  $\alpha$ is variational parameter.
+
+Inserting this trial wave function into Schr\"{o}dinger's equation and solving it for eigenvalues we get the the local energy in form: 
+\[ 
+E_{L1} = \frac{1}{2}\omega^2\left( r_1^2+r_2^2\right)\left(1-\alpha^2\right) +3\alpha\omega.
+\]
+
+The second trial wave function include so-called Jastrow factor as it has terms containing the relative distance between the particles:
+\[
+    \Psi_{T2}(\mathbf{r}_1,\mathbf{r}_2) =
+    C\exp{\left(-\alpha\omega(r_1^2+r_2^2)/2\right)}
+    \exp{\left(\frac{r_{12}}{2(1+\beta r_{12})}\right)},
+\]
+hare $\beta$ is variational parameter as well.
+Do the same as for first wave function and get the expression for local energy for second wave function
+
+\[ 
+E_{L2} = \frac{1}{2}\omega^2\left( r_1^2+r_2^2\right)\left(1-\alpha^2\right) +3\alpha\omega+\frac{1}{r_{12}}+\frac{1}{2(1+\beta r_{12})^2}\left\{\alpha\omega r_{12}-\frac{1}{2(1+\beta r_{12})^2}-\frac{2}{r_{12}}+\frac{2\beta}{1+\beta r_{12}}\right\}
+\]
 
 \newpage
 \section{Results and discussion}\label{results}

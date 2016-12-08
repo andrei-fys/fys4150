@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.9.3)  8 DEC 2016 20:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.9.3)  8 DEC 2016 20:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -586,61 +586,67 @@ Package caption Info: End \AtBeginDocument code.
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no “ in font cmr10!
- [3]
 
-LaTeX Warning: Reference `fig:fig1' on page 4 undefined on input line 52.
+Overfull \hbox (87.08965pt too wide) detected at line 76
+\OML/cmm/m/it/10 E[] \OT1/cmr/m/n/10 = []\OML/cmm/m/it/10 ![] [] [] \OT1/cmr/m/
+n/10 + 3\OML/cmm/m/it/10 ! \OT1/cmr/m/n/10 + [] + [] []
+ []
 
-<energy_on_alpha_001.pdf, id=53, 578.16pt x 433.62pt>
+[3]
+
+LaTeX Warning: Reference `fig:fig1' on page 4 undefined on input line 81.
+
+<energy_on_alpha_001.pdf, id=60, 578.16pt x 433.62pt>
 File: energy_on_alpha_001.pdf Graphic file (type pdf)
 
 <use energy_on_alpha_001.pdf>
-Package pdftex.def Info: energy_on_alpha_001.pdf used on input line 76.
+Package pdftex.def Info: energy_on_alpha_001.pdf used on input line 105.
 (pdftex.def)             Requested size: 227.70357pt x 170.77185pt.
 
-Overfull \hbox (20.70146pt too wide) in paragraph at lines 76--77
+Overfull \hbox (20.70146pt too wide) in paragraph at lines 105--106
  [][] 
  []
 
-<energy_on_alpha_05.pdf, id=54, 578.16pt x 433.62pt>
+<energy_on_alpha_05.pdf, id=61, 578.16pt x 433.62pt>
 File: energy_on_alpha_05.pdf Graphic file (type pdf)
 
 <use energy_on_alpha_05.pdf>
-Package pdftex.def Info: energy_on_alpha_05.pdf used on input line 83.
+Package pdftex.def Info: energy_on_alpha_05.pdf used on input line 112.
 (pdftex.def)             Requested size: 227.70357pt x 170.77185pt.
 
-Overfull \hbox (20.70146pt too wide) in paragraph at lines 83--84
+Overfull \hbox (20.70146pt too wide) in paragraph at lines 112--113
  [][] 
  []
 
-<energy_on_alpha_1.pdf, id=55, 578.16pt x 433.62pt>
+<energy_on_alpha_1.pdf, id=62, 578.16pt x 433.62pt>
 File: energy_on_alpha_1.pdf Graphic file (type pdf)
 
 <use energy_on_alpha_1.pdf>
-Package pdftex.def Info: energy_on_alpha_1.pdf used on input line 90.
+Package pdftex.def Info: energy_on_alpha_1.pdf used on input line 119.
 (pdftex.def)             Requested size: 227.70357pt x 170.77185pt.
 
-Overfull \hbox (20.70146pt too wide) in paragraph at lines 90--91
+Overfull \hbox (20.70146pt too wide) in paragraph at lines 119--120
  [][] 
  []
 
-<variance_on_alpha.pdf, id=56, 578.16pt x 433.62pt>
+<variance_on_alpha.pdf, id=63, 578.16pt x 433.62pt>
 File: variance_on_alpha.pdf Graphic file (type pdf)
 
 <use variance_on_alpha.pdf>
-Package pdftex.def Info: variance_on_alpha.pdf used on input line 96.
+Package pdftex.def Info: variance_on_alpha.pdf used on input line 125.
 (pdftex.def)             Requested size: 227.70357pt x 170.77185pt.
 
-Overfull \hbox (20.70146pt too wide) in paragraph at lines 96--97
+Overfull \hbox (20.70146pt too wide) in paragraph at lines 125--126
  [][] 
  []
 
 
-Overfull \hbox (69.00421pt too wide) in paragraph at lines 74--100
+Overfull \hbox (69.00421pt too wide) in paragraph at lines 103--129
 [][][]
  []
 
 
-Overfull \hbox (69.00421pt too wide) in paragraph at lines 74--100
+Overfull \hbox (69.00421pt too wide) in paragraph at lines 103--129
 [][] 
  []
 
@@ -668,44 +674,47 @@ Missing character: There is no “ in font cmr10!
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no “ in font cmr10!
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 186.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 215.
  [7
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 186.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 215.
  (./Project_5.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 186.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 186.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 215.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 215.
 Package rerunfilecheck Info: File `Project_5.out' has not changed.
 (rerunfilecheck)             Checksum: BF0F38075E0367A6A2E24092396F3D40;223.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 186.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 215.
  ) 
 Here is how much of TeX's memory you used:
- 15942 strings out of 494910
- 271973 string characters out of 6179837
- 332503 words of memory out of 5000000
- 19097 multiletter control sequences out of 15000+600000
- 10507 words of font info for 38 fonts, out of 8000000 for 9000
+ 15950 strings out of 494910
+ 272053 string characters out of 6179837
+ 332547 words of memory out of 5000000
+ 19101 multiletter control sequences out of 15000+600000
+ 11438 words of font info for 41 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 42i,9n,40p,10381b,524s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,9n,40p,10381b,525s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmti10.pfb>
-Output written on Project_5.pdf (7 pages, 170723 bytes).
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on Project_5.pdf (7 pages, 207828 bytes).
 PDF statistics:
- 231 PDF objects out of 1000 (max. 8388607)
- 139 compressed objects within 2 object streams
- 24 named destinations out of 1000 (max. 500000)
+ 249 PDF objects out of 1000 (max. 8388607)
+ 153 compressed objects within 2 object streams
+ 25 named destinations out of 1000 (max. 500000)
  53 words of extra memory for PDF output out of 10000 (max. 10000000)
 
