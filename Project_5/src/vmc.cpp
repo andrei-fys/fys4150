@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
 	R2[0] = -1.0;
 	R2[1] = -1.0;
 	R2[2] = 1.0;
-	double R12 = sqrt(abs(R1[0]*R1[0] + R1[1]*R1[1] + R1[2]*R1[2] - R2[0]*R2[0] + R2[1]*R2[1] + R2[2]*R2[2]));
+	double R12 = sqrt(abs(R1[0]*R1[0] + R1[1]*R1[1] + R1[2]*R1[2] - R2[0]*R2[0] - R2[1]*R2[1] - R2[2]*R2[2]));
 	double mean_distance = 0;
 	//find optimal step
 	const int n = 500; // Number of iterations to find step
@@ -98,13 +98,15 @@ int main(int argc, char* argv[]){
 	R2[0] = -1.0;
 	R2[1] = -1.0;
 	R2[2] = 1.0;
+	R12 = sqrt(abs(R1[0]*R1[0] + R1[1]*R1[1] + R1[2]*R1[2] - R2[0]*R2[0] - R2[1]*R2[1] - R2[2]*R2[2]));
+	mean_distance = R12;
 	//##############################
 	Metropolis(MC_samples, omega, alpha, R1, R2, R1_new, R2_new,
 				W, local_energy, mean_h, expectation_energy, expectation_energy_squared,
 				MC_rejected_prosent, MC_accepted_prosent, variance, R12, mean_distance);
 	cout << "Final rejected  " << MC_rejected_prosent << endl;
 	cout << "Expectation energy: " << expectation_energy << endl;
-	cout << "Relative distance expectation " << R12/MC_samples << endl;
+	cout << "Relative distance expectation " << mean_distance/MC_samples << endl;
 	file_writer(output_filename,  expectation_energy, variance, alpha);
 //new appha
 	//}
@@ -139,7 +141,6 @@ void compute_distance(double * R1, double * R2,  double & R12){
 	double R2_sqrt = R2[0]*R2[0] + R2[1]*R2[1] + R2[2]*R2[2];
 	R12 = sqrt(abs(R1_sqrt - R2_sqrt));
 	
-
 }
 
 void Metropolis(int MC_samples, double omega, double alpha, double * R1, double * R2,
