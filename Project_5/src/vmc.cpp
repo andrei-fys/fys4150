@@ -53,8 +53,8 @@ int main(int argc, char* argv[]){
 	R2[0] = -1.0;
 	R2[1] = -1.0;
 	R2[2] = 1.0;
-	double R12 = sqrt(abs(R1[0]*R1[0] + R1[1]*R1[1] + R1[2]*R1[2] - R2[0]*R2[0] - R2[1]*R2[1] - R2[2]*R2[2]));
-	double mean_distance = 0;
+	double R12 = sqrt(pow(R1[0]-R2[0],2)+pow(R1[1]-R2[1],2)+pow(R1[2]-R2[2],2));
+	double mean_distance = R12;
 	//find optimal step
 	const int n = 500; // Number of iterations to find step
 	double step = 0.01;
@@ -98,7 +98,7 @@ int main(int argc, char* argv[]){
 	R2[0] = -1.0;
 	R2[1] = -1.0;
 	R2[2] = 1.0;
-	R12 = sqrt(abs(R1[0]*R1[0] + R1[1]*R1[1] + R1[2]*R1[2] - R2[0]*R2[0] - R2[1]*R2[1] - R2[2]*R2[2]));
+	R12 = sqrt(pow(R1[0]-R2[0],2)+pow(R1[1]-R2[1],2)+pow(R1[2]-R2[2],2));
 	mean_distance = R12;
 	//##############################
 	Metropolis(MC_samples, omega, alpha, R1, R2, R1_new, R2_new,
@@ -137,9 +137,7 @@ void update_local_energy(double omega, double * R1, double * R2,
 }
 
 void compute_distance(double * R1, double * R2,  double & R12){
-	double R1_sqrt = R1[0]*R1[0] + R1[1]*R1[1] + R1[2]*R1[2];
-	double R2_sqrt = R2[0]*R2[0] + R2[1]*R2[1] + R2[2]*R2[2];
-	R12 = sqrt(abs(R1_sqrt - R2_sqrt));
+	R12 = sqrt(pow(R1[0]-R2[0],2)+pow(R1[1]-R2[1],2)+pow(R1[2]-R2[2],2));
 	
 }
 
