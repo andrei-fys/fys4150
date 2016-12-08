@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1481223407 "Project_5.tex" "Project_5.pdf" "Project_5" 1481223408
+["pdflatex"] 1481224640 "Project_5.tex" "Project_5.pdf" "Project_5" 1481224640
   "/etc/texmf/web2c/texmf.cnf" 1472747429 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -92,15 +92,15 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1458942643 31351 b32c45dce4a01cb7b53ed90c546614ca ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1472747471 1522025 712255bf90b3ac3b1340c49a49587b87 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1472915153 852978 4ae8c11655cc01917ecb4f4ec012ac4d ""
-  "Project_5.aux" 1481223408 2760 cc5ada330977933cc0b61093698e306d ""
-  "Project_5.out" 1481223408 223 bf0f38075e0367a6a2e24092396f3d40 ""
-  "Project_5.tex" 1481223405 6671 31086d4b5b97f9ff53e6808876d99e9b ""
+  "Project_5.aux" 1481224640 3299 ff6ade5d146e69cbc0e684620687527d ""
+  "Project_5.out" 1481224640 223 bf0f38075e0367a6a2e24092396f3d40 ""
+  "Project_5.tex" 1481224637 7456 9b3403ace6b6c5bfda590d28e2ef3577 ""
   "energy_on_alpha_001.pdf" 1481223081 14178 8aa7f6a8dd8f797d7710d7f4ee6bb1bb ""
   "energy_on_alpha_05.pdf" 1481223317 13579 2cb4468fd8644427fbf0f68cb33d3177 ""
   "energy_on_alpha_1.pdf" 1481217400 13069 49dcf69ef540bcdbf572416c16f21bf0 ""
   "variance_on_alpha.pdf" 1481223183 13551 d1d2b49013700ec2da09e635c22273a7 ""
   (generated)
-  "Project_5.out"
-  "Project_5.log"
-  "Project_5.aux"
   "Project_5.pdf"
+  "Project_5.aux"
+  "Project_5.log"
+  "Project_5.out"
