@@ -9,7 +9,7 @@ using namespace std;
 
 
 
-void file_writer(char*, double, double, double);
+void file_writer(char*, double, double, double, double);
 void compute_distance(double *, double *, double &);
 void transition_probability(double, double, double, double *, double *,double *, double *, double *, double *, double &);
 void compute_new_distance(double *, double *, double &);
@@ -30,10 +30,9 @@ int main(int argc, char* argv[]){
 	double h = atof(argv[2]);       // step
 	double omega = atof(argv[3]);   // HO strenth
 	double alpha = atof(argv[4]);   // variational parmeter #1
-	//double beta = atof(argv[5]);  // variational parmeter #2
-	double beta = 2.0;
+	double beta = atof(argv[5]);  // variational parmeter #2
 	char *output_filename;
-	output_filename=argv[5];
+	output_filename=argv[6];
 	// coordinates for two particles
 	double * R1 = new double[3];
 	double * R2 = new double[3];
@@ -102,7 +101,7 @@ int main(int argc, char* argv[]){
 	cout << "Final rejected  " << MC_rejected_prosent << endl;
 	cout << "Expectation energy: " << expectation_energy << endl;
 	cout << "Relative distance expectation " << mean_distance/MC_samples << endl;
-	file_writer(output_filename,  expectation_energy, variance, alpha);
+	file_writer(output_filename,  expectation_energy, variance, alpha, beta);
 //new appha
 	//}
 	
@@ -203,7 +202,7 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 					R2[0] = R2_new[0];
 					R2[1] = R2_new[1];
 					R2[2] = R2_new[2];
-					update_local_energy(omega, R1, R2, alpha, beta, local_energy);
+			update_local_energy(omega, R1, R2, alpha, beta, local_energy);
 					compute_distance(R1, R2, R12);
 					mean_distance += R12;
 					mean_energy += local_energy;
@@ -227,10 +226,10 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 //	cout << "Reject " << MC_rejected <<" "<< MC_rejected_prosent << "%"<<endl;
 //	cout << "Local energy " << mean_energy/MC_samples << endl;
 }
-void file_writer(char* filename, double expectation_energy, double variance, double alpha ){
+void file_writer(char* filename, double expectation_energy, double variance, double alpha, double beta ){
 	ofstream ofile;
 	ofile.open(filename, ios::app);
-	ofile << alpha << "," << expectation_energy << "," << variance << endl;
+	ofile << alpha << "," << expectation_energy << "," << variance << "," << beta << endl;
 	ofile.close();
 }
 
