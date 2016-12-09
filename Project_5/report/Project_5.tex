@@ -5,10 +5,15 @@
 \usepackage{graphicx}
 \usepackage{flexisym}
 \usepackage{listings}
+\usepackage[most]{tcolorbox}
 \usepackage{xcolor}
 \usepackage{hyperref}
 \usepackage{amsthm}
 \usepackage{subcaption}
+\newtcblisting[auto counter]{pseudolisting}[2][]{sharp corners,
+    fonttitle=\bfseries, colframe=gray, listing only,
+    listing options={basicstyle=\ttfamily,language=c++},
+    title=Listing \thetcbcounter: #2, #1}
 \newtheorem*{theorem}{Theorem}
 
 \begin{document}
@@ -20,15 +25,15 @@ FYS 4150
 
 \maketitle
 \begin{abstract}
-This is final project in FYS4150 course. The aim was to use Variational Monte Carlo (VMC) method to determine the ground state energy of the quantum systems. The considered system were two electrons confined in quantum dots. The quantum dot is approximated with a three-dimensional harmonic oscillator potential. Apart of ground state energy the relative distance between two electrons and expectation values of the kinetic and potential energies were evaluated. The obtained results were compared with those obtained in second project and analytical results from Taut \cite{three}. 
+Aim of this work is to determine the ground state energy of the quantum system using Variational Monte Carlo (VMC) method. The considered system is two electrons confined in quantum dot. Quantum dot is approximated with a three-dimensional harmonic oscillator potential. Apart of ground state energy the relative distance between two electrons and expectation values of the kinetic and potential energies were evaluated. Obtained results are compared with those obtained in second project\cite{proj2} and analytical results from Taut \cite{three}. 
 \end{abstract}
 \clearpage 
 
 
 \section{Introduction}
-System under consideration is a three-dimensional harmonic oscillator potential with two electrons. Such potential trap electrons inside and prevent them to move apart. Such a trap called quantum dot and it has a large application in science \cite{four}, industry\cite{five} and medicine \cite{med}. \\
-We already study such system in Project 2 using the eigenvalue solver (Jacoby method), so we are able to compare results from different methods. The advantage of VMC method is that we can use Cartesian coordinates and do not need to transform the equations. \\ 
-VMC is a method for solving Schr\"{o}dinger's equation by using Metropolis sampling to simulate Markov processes. This method may seem not as straightforward as the one we used in project 2, but it is much closer to the "nature" of quantum mechanics. The quantum world is a world of probabilities and stochastic methods are much more appropriate to study the problem, even though we are limited to find only one most probable state \cite{one}. \\
+System under consideration is a three-dimensional harmonic oscillator potential with two electrons. Such potential traps electrons inside and prevent them to move apart. Such systems are called quantum dots and have a large application in science \cite{four}, industry\cite{five} and medicine \cite{med}. \\
+We already study such system in project two \cite{proj2} emploing brute-force approach -- using the eigenvalue solver, so we are able to compare results from different methods. The advantage of VMC method is that we can use Cartesian coordinates and do not need to transform the equations. \\ 
+VMC is a method for solving Schr\"{o}dinger's equation by using Metropolis sampling to simulate Markov processes. This method may seem not as straightforward as the direct approach of solving eigenvalue problem, but it is much closer to the "nature" of quantum mechanics. The quantum world is a world of probabilities and stochastic methods are much more appropriate to study the system, even though we are limited to find only one most probable state \cite{one}. \\
 All equations presented in the report are in atomic units, which means that all constants, such as speed of light or Planck's constant, are set to 1 ($\hbar=c=e=m_e=1$).
 The report has the following structure:\\*
 We begin with discussing the nature of the problem in \ref{Part1}.
@@ -36,11 +41,26 @@ In results and discussion section \ref{results} we presented all the data, plots
 In conclusion \ref{conc} we made a brief overview of obtained results and discuss possibilities for further research. 
 
 \newpage
-\section{Physics behind  VMC}\label{Part1}
-Variational methods are widely used in quantum physics. The idea behind such method is to use some trial wave function which depend on many parameters and try to vary this parameters in order to minimize the expectation value of the energy. This method is applied in many other methods, for example the Hartree–Fock method. ADD CITATION!\\
+\section{Variational Monte-Carlo method for quantum dot study}\label{Part1}
+\subsection{Motivation}
+Variational methods are widely used in quantum physics. The idea behind this class of methods is to use some trial wave function which depend on many parameters and try to vary this parameters in order to minimize the expectation value of the energy. Many other ways of solving Schr\"{o}dinger's equation are based on this idea, for example the Hartree–Fock method. ADD CITATION!\\
 In this project we consider simulations for the Markov chains (or random walkers). The essence of such process is that it depend only on a previous move and do not have "memory" about the all previous.
-
-
+\subsection{Quantum dots study}
+Random walker in our case jumps in real space. To accept or reject a new move we employ Metropolis algorithm to check transition probability.
+In developed C++ program we move all electrons per one Monte Carlo experiment. To obtain an optimal step for moving electrons we run a electrons jump estimation prosedure before actual calculations. Namely with lower number of Monte Carlo samples we run Metropolis sampling starting with guessed value of step and save step value when we reach roughly 50 $\pm $ 1 \% of accepted/rejected moves ratio. We do ten such experiments and then take mean value of step for set of variational parameters(will be discussed bellow).
+\begin{pseudolisting}{optimal step finding}
+for (int j=0; j < 10; j++) {
+ for ( int i=0; i < 500; i++ ){
+  Metropolis(...);
+   if (abs(MC_rejected_prosent - 50.0) < 1.0 ){
+    break;
+   }
+   h = h0 + step*i;
+ }
+ mean_h += h;
+}
+mean_h = mean_h/10.0;
+\end{pseudolisting}
 
 The Hamiltonian of system under consideration is given by
 
@@ -157,6 +177,15 @@ The second trial wave function depend on two parameters $\alpha$ and $\beta$. In
 \newpage
 
 \begin{thebibliography} {9}
+
+\bibitem {proj2}
+A. Kukharenka, A. Gribkovskaya,
+\textit
+{Schr\"{o}dinger's equation for two electrons in three dimensional harmonic oscillator potential
+}
+https://github.com/andrei-fys/fys4150/blob/master/Project_2/report/Project_2_fys4150_fall_2016.tex (2016)
+
+
 \bibitem{three}
 M. Taut. 
 \textit{Two electrons in an external oscillator potential: Particular analytic solutions of a Coulomb correlation problem}.
@@ -202,13 +231,6 @@ E.P. Wigner
 }
 Phys. Rev. B 46, 1002 (1934) 
 
-\bibitem {log}
-Ed S. Coakley, V. Rokhlin
-\textit
-{A fast divide-and-conquer algorithm for computing the spectra of real
-symmetric tridiagonal matrices
-}
-Appl. Comput. Harmon. Anal. 34 (2013)
 
 \end{thebibliography}
 
