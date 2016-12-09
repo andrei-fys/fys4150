@@ -62,15 +62,45 @@ for (int j=0; j < 10; j++) {
 mean_h = mean_h/10.0;
 \end{pseudolisting}
 
-The Hamiltonian of system under consideration is given by
+The algorithm itself can be described in a following way:
+ \begin{enumerate}
+\item Initialize all values to be updated using the algorithm. In our case we update local energy, kinetic energy, potential energy and distance between the particles.
+\item Start Monte Carlo simulations
+  \begin{enumerate}
+  \item Using a random number generator (RNG), generate a new position $R_{new} = R + r*h$. Here $R$ is old position and value $h$ is an optimal step. We already discussed how to find this value.Value $r$ is a random number in range $[-1,1]$, so our random walker can "jump" in both directions. 
+  \item Here we use the Metropolis sampling to decide wether to accept or reject the move towards new position. In order to do this we neew a transition probability $W$. 
+  \begin{equation}
+  W=\frac{P(R_{new})}{P(R)}
+  \end{equation}
+  here $P(R)$ is probability given by $|\Psi|^2$. So, transition probability $W$ will obviously be different for different trial wave functions.\\
+  If $W \geq 1$ the new position is accepted. If not, we need use RNG again and generate a number $s$ in range $[0,1]$. \\
+  If $W \geq s$ the new position is accepted, else random walker stay at the same place.
+    \item If step was accepted, we update the position by setting $R=R_{new}$.
+    \item After Metropolis test done and decision have been made, we update all values we need (local energy, kinetic energy, potential energy and distance between the particles).
+\end{enumerate}
+\end{enumerate}
 
+\subsection{Some useful formulas and benchmarks }
+
+The Hamiltonian of system under consideration is given by
 \begin{equation}
   \label{eq:finalH}
   \hat{H}=\sum_{i=1}^{N} \left(  -\frac{1}{2} \nabla_i^2 + \frac{1}{2} \omega^2r_i^2  \right)+\sum_{i<j}\frac{1}{r_{ij}},
 \end{equation}
 In our case $N=2$. 
+Any introductory textbook on quantum mechanics, for example \cite{Liboff}, has an expression for the eigenfunctions of the harmonic oscillator in form of Hermitian polynomials.  Our system is a three dimensional harmonic oscillator, which in Cartesian coordinates can be separated into three independent harmonic oscillators. This gives us energy in a form:
+\begin{equation*}
+E=\omega(n_x+n_y+n_z+3/2) = 3/2\omega
+  \end{equation*}
+  The eigenfunctions in a form of Hermitian polynomials are
+\begin{equation*}
+  \phi_{n_x,n_y,n_z}(x,y,z) = A H_{n_x}(\sqrt{\omega}x)H_{n_y}(\sqrt{\omega}y)H_{n_z}(\sqrt{\omega}z)\exp{(-\omega(x^2+y^2+z^2)/2}.
+  \end{equation*}
+ here $A$ is a normalization constant. In the algorithm discussed above we compute the transition probability as a ratio, so we normally do not case about the constants. However this can be calculated using the Slater determinant. 
+ Using the formulas above we can get a lowest-lying energy for the two-electron system which is $3\omega$. We will use this value below in results and discussion section to convince ourselves that our program working correctly.
 
 As all other variational methods the VMC uses the so-called trial functions. We will consider two different trial functions. 
+\subsubsection{First trial wave function and corresponding local energy}
 The first wave function
 \[
    \Psi_{T1}(\mathbf{r}_1,\mathbf{r}_2) = C\exp{\left(-\alpha\omega(r_1^2+r_2^2)/2\right)},
@@ -81,7 +111,7 @@ Inserting this trial wave function into Schr\"{o}dinger's equation and solving i
 \[ 
 E_{L1} = \frac{1}{2}\omega^2\left( r_1^2+r_2^2\right)\left(1-\alpha^2\right) +3\alpha\omega.
 \]
-
+\subsubsection{Second trial wave function and corresponding local energy}
 The second trial wave function include so-called Jastrow factor as it has terms containing the relative distance between the particles:
 \[
     \Psi_{T2}(\mathbf{r}_1,\mathbf{r}_2) =
@@ -90,10 +120,16 @@ The second trial wave function include so-called Jastrow factor as it has terms 
 \]
 hare $\beta$ is variational parameter as well.
 Do the same as for first wave function and get the expression for local energy for second wave function
-
 \[ 
 E_{L2} = \frac{1}{2}\omega^2\left( r_1^2+r_2^2\right)\left(1-\alpha^2\right) +3\alpha\omega+\frac{1}{r_{12}}+\frac{1}{2(1+\beta r_{12})^2}\left\{\alpha\omega r_{12}-\frac{1}{2(1+\beta r_{12})^2}-\frac{2}{r_{12}}+\frac{2\beta}{1+\beta r_{12}}\right\}
 \]
+\subsubsection{Virial theorem}
+This theorem states a relation between the potential and kinetic energies for stable systems. For the harmonic oscillator this result in 
+
+\begin{equation*}
+  \langle T \rangle= \langle V \rangle.
+  \end{equation*}
+here $\langle T \rangle$ is expectation value of the total kinetic energy and   $\langle V \rangle$ expectation value of the total potential energy.
 
 \newpage
 \section{Results and discussion}\label{results}
@@ -230,6 +266,13 @@ E.P. Wigner
 {On the interaction of electrons in metals
 }
 Phys. Rev. B 46, 1002 (1934) 
+
+\bibitem {Liboff}
+Richard L. Liboff
+\textit
+{Introductory Quantum Mechanics
+}
+Pearson, 2007.
 
 
 \end{thebibliography}
