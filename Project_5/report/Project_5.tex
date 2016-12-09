@@ -159,12 +159,12 @@ here $\langle T \rangle$ is expectation value of the total kinetic energy and   
 \newpage
 \section{Results and discussion}\label{results}
 
-In this project we start with non interacting system. We use first trial wave function to determine the optimal value of variational parameter $\alpha$ and also to check the result against the one we got analytically in the section above. For the non-interacting case, using the first trial wave function our program reproduce the same result as obtained analytically. \\
-We also studied the stability of the method against the number of Monte Carlo cycles and find it to be rather stable. We mostly use $10^6$ Monte Carlo cycles for our calculations, but even  $10^3$ can provide a quite good result (at least such computation can be used as a rough one for estimating the optimal variational parameters). 
-From \ref{fig1} one can see that the optimal variational parameter $\alpha$ for this case is 1. In Table \ref{tab:one} we presented the mean distance at the energy minimum for the first trial wave function. As one can see from the table the mean distance between two electrons become bigger as the harmonic oscillator strength $\omega$ decreases. This result agree with that obtained in project 2 \cite{proj2}. The stronger the harmonic oscillator is the closer it keeps the particles together even the repulsion become larger when distance become smaller. 
+In this project we start with non interacting system. We use first trial wave function to determine the optimal value of variational parameter $\alpha$ and also to check the result against the one we got analytically in the section above. For the non-interacting case, using the first trial wave function our program reproduce the same result as obtained analytically, see Table \ref{tab:one}. \\
+We also studied accuracy of method against the number of Monte Carlo cycles and found it to be rather accurate. We use $10^6$ Monte Carlo cycles for all calculations, but even $10^4$ can provide good result (at least such computation can be used as a rough one for estimating the optimal step of random walker jump). 
+From Fig. \ref{fig1} one can see that the optimal variational parameter $\alpha$ for this case is 1. In Table \ref{tab:one} we presented the mean distance at the energy minimum for the non-interaction case. As one can see from the table mean distance between two electrons become bigger as the harmonic oscillator strength $\omega$ decreases. This result agree with that obtained in project two \cite{proj2}. The stronger the harmonic oscillator is the closer it keeps the particles together even the repulsion become larger on relative distance decrease. 
 
 \begin{table}[h!]
-  \caption{Relative distance between two electrons for different values of $\omega$. Variational parameter $\alpha =1$}
+  \caption{Relative distance between two non-interacting electrons for different values of $\omega$. Variational parameter $\alpha =1$}
   \label{tab:one}
   \begin{center}
     \begin{tabular}{c|c|c}
@@ -207,7 +207,7 @@ From \ref{fig1} one can see that the optimal variational parameter $\alpha$ for 
     \caption{The $\omega$ is 1} 
     \label{fig:d} 
   \end{subfigure} 
-  \caption{ Energy a)to c) and energy variance d) as a function of variational parameter $\alpha$.}
+  \caption{ Energy (a) -- (c) and energy variance (d) as a function of variational parameter $\alpha$.}
   \label{fig1} 
 \end{figure}
 
@@ -226,14 +226,14 @@ From \ref{fig1} one can see that the optimal variational parameter $\alpha$ for 
     \label{fig2:b} 
     \vspace{1ex}
   \end{subfigure} 
-  \caption{Ratio for virial theorem }
+  \caption{Virial theorem verification.}
   \label{fig2} 
 \end{figure}
 
 The second trial wave function depend on two parameters $\alpha$ and $\beta$. In this case we need to vary both parameters and fin the minimal energy. All results are presented in Table \ref{tab:two}.
  
 \begin{table}[h!]
-  \caption{Relative distance between two electrons and minimal energy for different values of $\omega$}
+  \caption{Relative distance between two interracting electrons and minimal energy for different values of $\omega$}
   \label{tab:two}
   \begin{center}
     \begin{tabular}{c|c|c|c|c}
@@ -248,13 +248,14 @@ The second trial wave function depend on two parameters $\alpha$ and $\beta$. In
 \end{table}
 
 
-On \ref{fig2} we presented result for studying the virial theorem. In non-interacting case the ratio between expectation  $\langle T \rangle$  and   $\langle V \rangle$ is close to 1. If we consider the Column interaction.
+On Fig. \ref{fig2} we presented result for studying the virial theorem. In non-interacting case the ratio between expectation  $\langle T \rangle$  and   $\langle V \rangle$ is close to 1. If we consider the Column interaction.
 
 \newpage
 \clearpage
 \section{Conclusion and further research}\label{conc}
-In this project we studied two electrons in three-dimensional harmonic oscillator potential. 
-\clearpage
+In this project we studied two electrons in three-dimensional harmonic oscillator potential.
+
+This project is a very first step into a field of science studying behavior of quantum-mechanical many-body systems. To apply used method to a system with larger number of particles object-orientation approach should be used. We used a very naive approach of minimizing local energy and we can mention that such approach can be used just for rough calculation of parameters. One should employ more advanced method to find energy minimum as for example Newton method or even conjugate gradient method which has better convergence. 
 \newpage
 
 \begin{thebibliography} {9}
