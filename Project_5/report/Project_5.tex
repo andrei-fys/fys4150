@@ -47,7 +47,7 @@ Variational methods are widely used in quantum physics. The idea behind this cla
 In this project we consider simulations for the Markov chains (or random walkers). The essence of such process is that it depend only on a previous move and do not have "memory" about the all previous.
 \subsection{Quantum dots study}
 Random walker in our case jumps in real space. To accept or reject a new move we employ Metropolis algorithm to check transition probability.
-In developed C++ program we move all electrons per one Monte Carlo experiment. To obtain an optimal step for moving electrons we run a electrons jump estimation prosedure before actual calculations. Namely with lower number of Monte Carlo samples we run Metropolis sampling starting with guessed value of step and save step value when we reach roughly 50 $\pm $ 1 \% of accepted/rejected moves ratio. We do ten such experiments and then take mean value of step for set of variational parameters(will be discussed bellow).
+In developed C++ program we move all electrons per one Monte Carlo experiment. To obtain an optimal step for moving electrons we run a electrons jump estimation procedure before actual calculations. Namely with lower number of Monte Carlo samples we run Metropolis sampling starting with guessed value of step and save step value when we reach roughly 50 $\pm $ 1 \% of accepted/rejected moves ratio. We do ten such experiments and then take mean value of step for set of variational parameters(will be discussed bellow).
 \begin{pseudolisting}{optimal step finding}
 for (int j=0; j < 10; j++) {
  for ( int i=0; i < 500; i++ ){
@@ -90,7 +90,7 @@ The Hamiltonian of system under consideration is given by
 In our case $N=2$. 
 Any introductory textbook on quantum mechanics, for example \cite{Liboff}, has an expression for the eigenfunctions of the harmonic oscillator in form of Hermitian polynomials.  Our system is a three dimensional harmonic oscillator, which in Cartesian coordinates can be separated into three independent harmonic oscillators. This gives us energy in a form:
 \begin{equation*}
-E=\omega(n_x+n_y+n_z+3/2) = 3/2\omega
+E=\omega(n_x+n_y+n_z+3/2) 
   \end{equation*}
   The eigenfunctions in a form of Hermitian polynomials are
 \begin{equation*}
@@ -134,8 +134,9 @@ here $\langle T \rangle$ is expectation value of the total kinetic energy and   
 \newpage
 \section{Results and discussion}\label{results}
 
-In this project we start with non interacting system. We use first trial wave function to determine the optimal value of variational parameter $\alpha$ and also to check the result against the one we got analytically in the section above. From \ref{fig:fig1} one can see that the optimal variational parameter $\alpha$ for this case is 1. In Table \ref{tab:one} we presented the mean distance at the energy minimum for the first trial wave function. As one can see from the table the mean distance between two electrons become bigger as the harmonic oscillator strength $\omega$ decreases. \\
-ADD EXPLANATION!!!!
+In this project we start with non interacting system. We use first trial wave function to determine the optimal value of variational parameter $\alpha$ and also to check the result against the one we got analytically in the section above. For the non-interacting case, using the first trial wave function our program reproduce the same result as obtained analytically. \\
+We also studied the stability of the method against the number of Monte Carlo cycles and find it to be rather stable. We mostly use $10⁶$ Monte Carlo cycles for our calculations, but even  $10³$ can provide a quite good result (at least such computation can be used as a rough one for estimating the optimal variational parameters). 
+From \ref{fig:fig1} one can see that the optimal variational parameter $\alpha$ for this case is 1. In Table \ref{tab:one} we presented the mean distance at the energy minimum for the first trial wave function. As one can see from the table the mean distance between two electrons become bigger as the harmonic oscillator strength $\omega$ decreases. This result agree with that obtained in project 2 \cite{proj2}. The stronger the harmonic oscillator is the closer it keeps the particles together even the repulsion become larger when distance become smaller. 
 
 \begin{table}[h!]
   \caption{Relative distance between two electrons for different values of $\omega$. Variational parameter $\alpha =1$}
@@ -203,12 +204,25 @@ The second trial wave function depend on two parameters $\alpha$ and $\beta$. In
   \end{center}
 \end{table}
 
+\begin{table}[h!]
+  \caption{Data for cirial non interacting case}
+  \label{tab:two}
+  \begin{center}
+    \begin{tabular}{c|c|c}
+    \hline
+		$\omega$ & Expectation Energy & Expectation relative distance \\
+    \hline
+	$	1 $  & $3.73094$ & $2.46374$  \\
+	$	0.5$  & $2.00473$ & $2.61461$   \\
+	$	0.01$  & $0.100629$ & $41.0782$   \\
+	\end{tabular}
+  \end{center}
+\end{table}
 
 \newpage
 \clearpage
 \section{Conclusion and further research}\label{conc}
-
-
+In this project we studied two electrons in three-dimensional harmonic oscillator potential. 
 \clearpage
 \newpage
 
@@ -254,10 +268,6 @@ Morten Hjorth-Jensen.
 \textit{Computational Physics
 }. 
 Lecture Notes Fall 2015, August 2015.
-\bibitem{two} 
-W. Press, B. Flannery, S. Teukolsky, W. Vetterling 
-\textit{Numerical Recipes in C++, The art of scientific Computing}. 
-Cambridge University Press, 1999.
 
 
 \bibitem {wigner}
