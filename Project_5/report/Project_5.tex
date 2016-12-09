@@ -19,7 +19,7 @@
 \begin{document}
 \setlength\parindent{1pt}
 \title{Quantum Monte Carlo of confined electrons }
-\author{Andrei Kukharenka and Anna Gribkovskaya \\  
+\author{Anna Gribkovskaya and Andrei Kukharenka \\  
 FYS 4150 
 }
 
@@ -43,14 +43,17 @@ In conclusion \ref{conc} we made a brief overview of obtained results and discus
 \newpage
 \section{Variational Monte-Carlo method for quantum dot study}\label{Part1}
 \subsection{Motivation for variational Monte-Carlo}
-Variational methods are widely used in quantum physics. The basis for theese methods is variational principle and a key idea is to use some trial wave function which depend on many parameters and try to vary this parameters in order to minimize the expectation value of the energy. Many other ways of solving Schr\"{o}dinger's equation are based on this idea, for example the Hartree, Hartree–Fock and even density functional methods.\\
+Variational methods are widely used in quantum physics. The basis for these methods is variational principle and a key idea is to use some trial wave function which depend on many parameters. Varying parameters one can minimize the expectation value of the energy. Many other ways of solving Schr\"{o}dinger equation are based on this idea, for example the Hartree, Hartree–Fock and even density functional methods.\\
+However variational principle based methods has a drawback -- one can find only ground state properties. Reader interested in detailed description of
+variational Monte Carlo method can find it in lecture-notes of Hjorth-Jensen \cite{one}. Our goal here is to present basic ideas enough to set up algorithm.
+In this project we consider simulations for the Markov chains (or random walkers) with sampling employed by Metropolis algorithm. The essence of such process is that it depend only on a previous move and do not have "memory" about the all previous.
 To understand how to set algorithm we introduce several quantities. Local energy is expressed as:
 
 \begin{equation*}
 E_L = \frac{1}{\Psi_T(R)} \hat{H} \Psi_T(R)
 \end{equation*}
 
-which represents energy of system after one move. In our case of two electrons it quantity depends on distance between electrons($R$).
+which represents energy of system after one move. In our case of two electrons it quantity depends on distance between them($R$).
 $\Psi_T(R)$ is trial wave function we construct gathering all known physical properties of a system.
 Expectation value of energy becomes:
 \begin{equation*}
@@ -62,12 +65,11 @@ where probability density distribution $\rho(R)$ defined by:
 \end{equation*}
 Trial wave function is varied to get energy minimum. Energy can be obtained as mean of local energy.
 
-In this project we consider simulations for the Markov chains (or random walkers) with sampling employed by Metropolis algorithm. The essence of such process is that it depend only on a previous move and do not have "memory" about the all previous.
 Below we describe how to set up variational Monte Carlo method for system of two electrons and give analytical expression for trial wave functions.
 
 \subsection{Quantum dots study}
 Random walker in our case jumps in real space. To accept or reject a new move we employ Metropolis algorithm to check transition probability.
-In developed C++ program we move all electrons per one Monte Carlo experiment. To obtain an optimal step for moving electrons we run a electrons jump estimation procedure before actual calculations. Namely with lower number of Monte Carlo samples we run Metropolis sampling starting with guessed value of step and save step value when we reach roughly 50 $\pm $ 1 \% of accepted/rejected moves ratio. We do ten such experiments and then take mean value of step for set of variational parameters(will be discussed bellow).
+In developed C++ program we move two electrons per one Monte Carlo experiment. To obtain an optimal step for moving electrons we run a electrons jump estimation procedure before actual calculations. Namely with lower number of Monte Carlo samples we run Metropolis sampling starting with guessed value of step and save step value when we reach roughly 50 $\pm $ 1 \% of accepted/rejected moves ratio. We do ten such experiments and then take mean value of step for set of variational parameters(will be discussed bellow).
 \begin{pseudolisting}{optimal step finding}
 for (int j=0; j < 10; j++) {
  for ( int i=0; i < 500; i++ ){
@@ -84,17 +86,17 @@ mean_h = mean_h/10.0;
 
 
 \subsubsection{Algorithm implementation}
-The algorithm itself can be described in a following way:
+The algorithm itself is rather simple and can be described in a following way:
  \begin{enumerate}
 \item Initialize all values to be updated using the algorithm. In our case we update local energy, kinetic energy, potential energy and distance between the particles.
 \item Start Monte Carlo simulations
   \begin{enumerate}
-  \item Using a random number generator (RNG), generate a new position $R_{new} = R + r*h$. Here $R$ is old position and value $h$ is an optimal step. We already discussed how to find this value.Value $r$ is a random number in range $[-1,1]$, so our random walker can "jump" in both directions. 
-  \item Here we use the Metropolis sampling to decide wether to accept or reject the move towards new position. In order to do this we neew a transition probability $W$. 
+  \item Using a random number generator (RNG), generate a new position $R_{new} = R + r*h$. Here $R$ is old position and value $h$ is an optimal step. We already discussed how to find this value above. Value $r$ is a random number in range $[-1,1]$, so our random walker can "jump" in both directions. 
+  \item Here we use the Metropolis sampling to decide whether to accept or reject the move towards new position. In order to do this we need transition probability $W$. 
   \begin{equation}
   W=\frac{P(R_{new})}{P(R)}
   \end{equation}
-  here $P(R)$ is probability given by $|\Psi|^2$. So, transition probability $W$ will obviously be different for different trial wave functions.\\
+  here $P(R)$ is probability given by $|\Psi_T|^2$. So, transition probability $W$ will obviously be different for different trial wave functions.\\
   If $W \geq 1$ the new position is accepted. If not, we need use RNG again and generate a number $s$ in range $[0,1]$. \\
   If $W \geq s$ the new position is accepted, else random walker stay at the same place.
     \item If step was accepted, we update the position by setting $R=R_{new}$.
@@ -102,7 +104,7 @@ The algorithm itself can be described in a following way:
 \end{enumerate}
 \end{enumerate}
 
-\subsubsection{Some useful formulas and benchmarks }
+\subsubsection{Theoretical background}
 
 The Hamiltonian of system under consideration is given by
 \begin{equation}
@@ -118,32 +120,33 @@ E=\omega(n_x+n_y+n_z+3/2)
 \begin{equation*}
   \phi_{n_x,n_y,n_z}(x,y,z) = A H_{n_x}(\sqrt{\omega}x)H_{n_y}(\sqrt{\omega}y)H_{n_z}(\sqrt{\omega}z)\exp{(-\omega(x^2+y^2+z^2)/2}.
   \end{equation*}
- here $A$ is a normalization constant. In the algorithm discussed above we compute the transition probability as a ratio, so we normally do not case about the constants. However this can be calculated using the Slater determinant. 
- Using the formulas above we can get a lowest-lying energy for the two-electron system which is $3\omega$. We will use this value below in results and discussion section to convince ourselves that our program working correctly.
+ here $A$ is a normalization constant. In the algorithm discussed above we compute the transition probability as a ratio, so we normally do not care about the constants. However this can be calculated using the Slater determinant. 
+ Using the formulas above we can get a lowest-lying energy for the two-electron system which is $3\omega$. We will use this value as a unit test of our program.
 
-As all other variational methods the VMC uses the so-called trial functions. We will consider two different trial functions. 
-\subsubsection{First trial wave function and corresponding local energy}
-The first wave function
+As all other variational methods the VMC uses trial functions. We will consider two different trial functions. 
+First trial wave function have the following form:
 \[
    \Psi_{T1}(\mathbf{r}_1,\mathbf{r}_2) = C\exp{\left(-\alpha\omega(r_1^2+r_2^2)/2\right)},
 \]
-here  $\alpha$ is variational parameter.
+here  $\alpha$ is variational parameter, $\omega$ is strenth of harmonic oscillator potential, $r_1, r_2$ are coordinates of electrons. Total spin of the system in this case is zero because of Pauli exclusion principle.
 
 Inserting this trial wave function into Schr\"{o}dinger's equation and solving it for eigenvalues we get the the local energy in form: 
 \[ 
 E_{L1} = \frac{1}{2}\omega^2\left( r_1^2+r_2^2\right)\left(1-\alpha^2\right) +3\alpha\omega.
 \]
-\subsubsection{Second trial wave function and corresponding local energy}
-The second trial wave function include so-called Jastrow factor as it has terms containing the relative distance between the particles:
+
+If we consider interaction between particles trial wave function should include terms corresponding external potential as well as potential energy from internal interaction. Latter can be introduced by a Jastrow factor:
+The second trial wave function in this case has the following form:
 \[
     \Psi_{T2}(\mathbf{r}_1,\mathbf{r}_2) =
     C\exp{\left(-\alpha\omega(r_1^2+r_2^2)/2\right)}
     \exp{\left(\frac{r_{12}}{2(1+\beta r_{12})}\right)},
 \]
-hare $\beta$ is variational parameter as well.
+hare $\beta$ is variational parameter.
 Do the same as for first wave function and get the expression for local energy for second wave function
 \[ 
-E_{L2} = \frac{1}{2}\omega^2\left( r_1^2+r_2^2\right)\left(1-\alpha^2\right) +3\alpha\omega+\frac{1}{r_{12}}+\frac{1}{2(1+\beta r_{12})^2}\left\{\alpha\omega r_{12}-\frac{1}{2(1+\beta r_{12})^2}-\frac{2}{r_{12}}+\frac{2\beta}{1+\beta r_{12}}\right\}
+E_{L2} = \frac{1}{2}\omega^2\left( r_1^2+r_2^2\right)\left(1-\alpha^2\right) +3\alpha\omega+\frac{1}{r_{12}}+\frac{1}{2(1+\beta r_{12})^2} 
+\left\{\alpha\omega r_{12}-\frac{1}{2(1+\beta r_{12})^2}-\frac{2}{r_{12}}+\frac{2\beta}{1+\beta r_{12}}\right\}
 \]
 \subsubsection{Virial theorem}
 This theorem states a relation between the potential and kinetic energies for stable systems. For the harmonic oscillator this result in 
