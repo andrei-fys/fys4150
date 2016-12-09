@@ -42,9 +42,29 @@ In conclusion \ref{conc} we made a brief overview of obtained results and discus
 
 \newpage
 \section{Variational Monte-Carlo method for quantum dot study}\label{Part1}
-\subsection{Motivation}
-Variational methods are widely used in quantum physics. The idea behind this class of methods is to use some trial wave function which depend on many parameters and try to vary this parameters in order to minimize the expectation value of the energy. Many other ways of solving Schr\"{o}dinger's equation are based on this idea, for example the Hartree–Fock method. ADD CITATION!\\
-In this project we consider simulations for the Markov chains (or random walkers). The essence of such process is that it depend only on a previous move and do not have "memory" about the all previous.
+\subsection{Motivation for variational Monte-Carlo}
+Variational methods are widely used in quantum physics. The basis for theese methods is variational principle and a key idea is to use some trial wave function which depend on many parameters and try to vary this parameters in order to minimize the expectation value of the energy. Many other ways of solving Schr\"{o}dinger's equation are based on this idea, for example the Hartree, Hartree–Fock and even density functional methods.\\
+To understand how to set algorithm we introduce several quantities. Local energy is expressed as:
+
+\begin{equation*}
+E_L = \frac{1}{\Psi_T(R)} \hat{H} \Psi_T(R)
+\end{equation*}
+
+which represents energy of system after one move. In our case of two electrons it quantity depends on distance between electrons($R$).
+$\Psi_T(R)$ is trial wave function we construct gathering all known physical properties of a system.
+Expectation value of energy becomes:
+\begin{equation*}
+E = \int_{}^{} \rho(R)E_L dR
+\end{equation*}
+where probability density distribution $\rho(R)$ defined by:
+\begin{equation*}
+\rho(R) = \frac{|\Psi_T(R)|^2}{\int |\Psi_T(R)|^2\rho(R)E_L dR}
+\end{equation*}
+Trial wave function is varied to get energy minimum. Energy can be obtained as mean of local energy.
+
+In this project we consider simulations for the Markov chains (or random walkers) with sampling employed by Metropolis algorithm. The essence of such process is that it depend only on a previous move and do not have "memory" about the all previous.
+Below we describe how to set up variational Monte Carlo method for system of two electrons and give analytical expression for trial wave functions.
+
 \subsection{Quantum dots study}
 Random walker in our case jumps in real space. To accept or reject a new move we employ Metropolis algorithm to check transition probability.
 In developed C++ program we move all electrons per one Monte Carlo experiment. To obtain an optimal step for moving electrons we run a electrons jump estimation procedure before actual calculations. Namely with lower number of Monte Carlo samples we run Metropolis sampling starting with guessed value of step and save step value when we reach roughly 50 $\pm $ 1 \% of accepted/rejected moves ratio. We do ten such experiments and then take mean value of step for set of variational parameters(will be discussed bellow).
@@ -62,6 +82,8 @@ for (int j=0; j < 10; j++) {
 mean_h = mean_h/10.0;
 \end{pseudolisting}
 
+
+\subsubsection{Algorithm implementation}
 The algorithm itself can be described in a following way:
  \begin{enumerate}
 \item Initialize all values to be updated using the algorithm. In our case we update local energy, kinetic energy, potential energy and distance between the particles.
@@ -80,7 +102,7 @@ The algorithm itself can be described in a following way:
 \end{enumerate}
 \end{enumerate}
 
-\subsection{Some useful formulas and benchmarks }
+\subsubsection{Some useful formulas and benchmarks }
 
 The Hamiltonian of system under consideration is given by
 \begin{equation}
@@ -233,7 +255,7 @@ A. Kukharenka, A. Gribkovskaya,
 \textit
 {Schr\"{o}dinger's equation for two electrons in three dimensional harmonic oscillator potential
 }
-https://github.com/andrei-fys/fys4150/blob/master/Project_2/report/Project_2_fys4150_fall_2016.tex (2016)
+https://github.com/andrei-fys/fys4150/blob/master/Project\_2/report/Project\_2\_fys4150\_fall\_2016.tex (2016)
 
 
 \bibitem{three}
