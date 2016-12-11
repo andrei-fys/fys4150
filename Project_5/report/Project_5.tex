@@ -91,7 +91,7 @@ The algorithm itself is rather simple and can be described in a following way:
 \item Initialize all values to be updated using the algorithm. In our case we update local energy, kinetic energy, potential energy and distance between the particles.
 \item Start Monte Carlo simulations
   \begin{enumerate}
-  \item Using a random number generator (RNG), generate a new position $R_{new} = R + r*h$. Here $R$ is old position and value $h$ is an optimal step. We already discussed how to find this value above. Value $r$ is a random number in range $[-1,1]$, so our random walker can "jump" in both directions. 
+  \item Using a random number generator (RNG), generate a new position $R_{new} = R + r*h$. Here $R$ is old position and value $h$ is an optimal step. We have already discussed above how to find this value. Value $r$ is a random number in range $[-1,1]$, so our random walker can "jump" in both directions. 
   \item Here we use the Metropolis sampling to decide whether to accept or reject the move towards new position. In order to do this we need transition probability $W$. 
   \begin{equation}
   W=\frac{P(R_{new})}{P(R)}
@@ -135,7 +135,7 @@ Inserting this trial wave function into Schr\"{o}dinger's equation and solving i
 E_{L1} = \frac{1}{2}\omega^2\left( r_1^2+r_2^2\right)\left(1-\alpha^2\right) +3\alpha\omega.
 \]
 
-If we consider interaction between particles trial wave function should include terms corresponding external potential as well as potential energy from internal interaction. Latter can be introduced by a Jastrow factor:
+If we consider interaction between particles trial wave function should include terms corresponding external potential as well as potential energy from internal interaction. Latter can be introduced by a Jastrow factor.
 The second trial wave function in this case has the following form:
 \[
     \Psi_{T2}(\mathbf{r}_1,\mathbf{r}_2) =
@@ -161,7 +161,7 @@ here $\langle T \rangle$ is expectation value of the total kinetic energy and   
 
 In this project we start with non interacting system. We use first trial wave function to determine the optimal value of variational parameter $\alpha$ and also to check the result against the one we got analytically in the section above. For the non-interacting case, using the first trial wave function our program reproduce the same result as obtained analytically, see Table \ref{tab:one}. \\
 We also studied accuracy of method against the number of Monte Carlo cycles and found it to be rather accurate. We use $10^6$ Monte Carlo cycles for all calculations, but even $10^4$ can provide good result (at least such computation can be used as a rough one for estimating the optimal step of random walker jump). 
-From Fig. \ref{fig1} one can see that the optimal variational parameter $\alpha$ for this case is 1. In Table \ref{tab:one} we presented the mean distance at the energy minimum for the non-interaction case. As one can see from the table mean distance between two electrons become bigger as the harmonic oscillator strength $\omega$ decreases. This result agree with that obtained in project two \cite{proj2}. The stronger the harmonic oscillator is the closer it keeps the particles together even the repulsion become larger on relative distance decrease. 
+From Fig. \ref{fig1} one can see that the optimal variational parameter $\alpha$ for this case is 1. In Table \ref{tab:one} we presented the mean distance at the energy minimum for the non-interaction case. As one can see from the table mean distance between two electrons become bigger as the harmonic oscillator strength $\omega$ decreases. This result agree with that obtained in project two \cite{proj2}. The stronger the harmonic oscillator is the closer it keeps the particles together even the repulsion is inversely proportional to the distance. As expected, the harmonic oscillator potential dominates the Column potential for large $\omega$. 
 
 \begin{table}[h!]
   \caption{Relative distance between two non-interacting electrons for different values of $\omega$. Variational parameter $\alpha =1$}
@@ -230,10 +230,10 @@ From Fig. \ref{fig1} one can see that the optimal variational parameter $\alpha$
   \label{fig2} 
 \end{figure}
 
-The second trial wave function depend on two parameters $\alpha$ and $\beta$. In this case we need to vary both parameters and find the minimal energy. All results are presented in Table \ref{tab:two}.
+The second trial wave function depend on two parameters $\alpha$ and $\beta$. In this case we need to vary both parameters and find the minimal energy. All results are presented in Table \ref{tab:two}. As one can mention the expectation value of the energy increases in this case and the larger $\omega$ is the larger the difference in the expectation energy is. This is as well quite obvious if we remember that we have added a term inversely proportional to the relative distance and as we already mention above relative distance decreases as $\omega$ increases. Thus for large $\omega$ this addition becomes larger.
  
 \begin{table}[h!]
-  \caption{Relative distance between two interracting electrons and minimal energy for different values of $\omega$}
+  \caption{Relative distance between two interacting electrons and minimal energy for different values of $\omega$.}
   \label{tab:two}
   \begin{center}
     \begin{tabular}{c|c|c|c|c}
