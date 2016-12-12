@@ -8,7 +8,7 @@ Compile with:
 g++ -Wall -std=gnu++11 -o vmc vmc.cpp
 ```
 
-Run with(all examples are in [benchmarks](/Project_5/src/benchmarks) folder):
+Run with(all examples are in [benchmarks](/Project_5/src/benchmark) folder):
 Example for non-interacting case with 1000000 MC-samples for alpha = 1.0 and omega = 1.0 
 ```bash
 $ ./vmc 1000000 0.5 1.0 1.0 10_6_vmc_benchmark
@@ -39,10 +39,3 @@ Relative distance expectation 15.975
 ```
 
 
-
-In [benchmarks](/Project_4/src/task_d/benchmarks) folder you can find output for [20x20](/Project_4/src/task_d/benchmarks/Probability) lattice at 2.4 temperature.
-Files have following format: 
-
-```bash
-Energy of microstate per spin, times appeared during computations
-```
