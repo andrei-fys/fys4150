@@ -13,34 +13,30 @@ void Metropolis(int, double, double, double *, double *,double *, double *, doub
 void file_writer(char*, double, double, double);
 void compute_distance(double *, double *, double &);
 
-//MC step omega alpha beta
-//0.84-0.90 - alpha with Coul/without Jas
-//0.9 beta guess
 int main(int argc, char* argv[]){
 	/*
 	 * Args:
-	 *	MC_samples : number of Monte-Carlo samples
+	 *	MC_samples : number of Monte-Carlo samples,
+	 * 	h : initial steplenght
+	 *	omega : H.O. strenght
+	 *	alpha : variational parameter
+	 * 	output_filename : filename for observables
 	 */
 
 	int MC_samples = atof(argv[1]);
 	double h = atof(argv[2]);       // step
 	double omega = atof(argv[3]);   // HO strenth
 	double alpha = atof(argv[4]);   // variational parmeter #1
-	//double beta = atof(argv[5]);   // variational parmeter #2
-	
 	char *output_filename;
 	output_filename=argv[5];
 
-
-
-
-	// coordinates for two particles
+	// initial/new coordinates for two particles
 	double * R1 = new double[3];
 	double * R2 = new double[3];
 	double * R1_new = new double[3];
 	double * R2_new = new double[3];
-	//Metropolis transition probability
-	double W =  0.0;
+	
+	double W =  0.0; //Metropolis transition probability
 	double variance = 0.0;
 	double local_energy = 0.0;
 	double expectation_energy = 0.0;
@@ -55,6 +51,7 @@ int main(int argc, char* argv[]){
 	R2[2] = 1.0;
 	double R12 = sqrt(pow(R1[0]-R2[0],2)+pow(R1[1]-R2[1],2)+pow(R1[2]-R2[2],2));
 	double mean_distance = R12;
+	
 	//find optimal step
 	const int n = 500; // Number of iterations to find step
 	double step = 0.01;
@@ -62,29 +59,25 @@ int main(int argc, char* argv[]){
 	int MC_samples_step = 10000;
 	double mean_h = 0;
 	for (int j=0; j < 10; j++) {
-	for ( int i=0; i < n; i++ ){
-		Metropolis(MC_samples_step, omega, alpha, R1, R2, R1_new, R2_new,
-				W, local_energy, h, expectation_energy, expectation_energy_squared,
-				MC_rejected_prosent, MC_accepted_prosent, variance, R12, mean_distance);
-		//cout << "rejected  " << MC_rejected_prosent << endl;
-		if (abs(MC_rejected_prosent - 50.0) < 1.0 ){
-			//cout << "optimal h  " << h << endl;
+		for ( int i=0; i < n; i++ ){
+			Metropolis(MC_samples_step, omega, alpha, R1, R2, R1_new, R2_new,
+					W, local_energy, h, expectation_energy, expectation_energy_squared,
+					MC_rejected_prosent, MC_accepted_prosent, variance, R12, mean_distance);
+			if (abs(MC_rejected_prosent - 50.0) < 1.0 ){
 			break;
+			}
+			h = h0 + step*i;
 		}
-		h = h0 + step*i;
-	}
 	mean_h += h;
 	}
 	mean_h = mean_h/10.0;
 	
 	cout << " Last optimal h  " << mean_h << endl;
-	//null all indexes
-	//start Metropolis with optimal step
-	//
-	//
-	//while (T <= T_finish){ here should be alpha-loop
 	
-	//############################# reset all initial values
+	//reset all indexes
+	//start Metropolis with optimal step
+	
+	//########### reset all initial values ############
 	W =  0.0;
 	variance = 0.0;
 	local_energy = 0.0;
@@ -100,7 +93,8 @@ int main(int argc, char* argv[]){
 	R2[2] = 1.0;
 	R12 = sqrt(pow(R1[0]-R2[0],2)+pow(R1[1]-R2[1],2)+pow(R1[2]-R2[2],2));
 	mean_distance = R12;
-	//##############################
+	//############# end reset #############
+	
 	Metropolis(MC_samples, omega, alpha, R1, R2, R1_new, R2_new,
 				W, local_energy, mean_h, expectation_energy, expectation_energy_squared,
 				MC_rejected_prosent, MC_accepted_prosent, variance, R12, mean_distance);
@@ -108,8 +102,6 @@ int main(int argc, char* argv[]){
 	cout << "Expectation energy: " << expectation_energy << endl;
 	cout << "Relative distance expectation " << mean_distance/MC_samples << endl;
 	file_writer(output_filename,  expectation_energy, variance, alpha);
-//new appha
-	//}
 	
 	delete[] R1;
 	delete[] R2;
@@ -177,8 +169,6 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 				mean_distance += R12;
 				mean_energy += local_energy;
 				mean_energy_squared += local_energy*local_energy;
-	//cout << "mean energy " << mean_energy << endl;
-	//cout << "mean energy squared " << mean_energy_squared << endl;
 				MC_accepted++;
 			} else {
 				double sampling_parameter = RandomNumberGenerator1(gen);
@@ -204,20 +194,12 @@ void Metropolis(int MC_samples, double omega, double alpha, double * R1, double 
 				}
 			}
 	MC_counter++;
-	//cout << "mean energy " << mean_energy << endl;
-	//cout << "mean energy squared " << mean_energy_squared << endl;
 	}
-	//cout << "mean energy " << mean_energy*mean_energy << endl;
-	//cout << "mean energy squared " << mean_energy_squared << endl;
 	MC_accepted_prosent = MC_accepted*100.0/MC_samples;
 	MC_rejected_prosent = MC_rejected*100.0/MC_samples;
 	expectation_energy = (double) mean_energy/MC_samples;
-	expectation_energy_squared = (double) mean_energy_squared/(MC_samples*MC_samples);
+	//expectation_energy_squared = (double) mean_energy_squared/(MC_samples*MC_samples);
 	variance = (mean_energy_squared/MC_samples - (mean_energy/MC_samples)*(mean_energy/MC_samples))/MC_samples;
-//	cout << "Total MC " << MC_samples << endl;
-//	cout << "Accept " << MC_accepted <<" "<< MC_accepted_prosent << "%"<<endl;
-//	cout << "Reject " << MC_rejected <<" "<< MC_rejected_prosent << "%"<<endl;
-//	cout << "Local energy " << mean_energy/MC_samples << endl;
 }
 
 void file_writer(char* filename, double expectation_energy, double variance, double alpha ){
